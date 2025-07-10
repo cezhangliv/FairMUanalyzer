@@ -2,3 +2,20 @@ result/
 root
 root/
 ._*
+# 编译输出
+*.o
+*.so
+*.d
+*.pcm
+*.a
+*.root
+*.pdf
+*.log
+
+# 可执行文件
+run_FairMUanalyzer
+batch_run
+
+# 生成目录
+result/
+
