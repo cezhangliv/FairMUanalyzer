@@ -1,4 +1,7 @@
 result/
+.DS_*
+**/.DS_Store
+
 root
 root/
 ._*
