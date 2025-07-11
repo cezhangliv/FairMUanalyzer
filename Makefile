@@ -19,7 +19,7 @@ LDFLAGS = $(shell root-config --libs) \
 SRCS = $(wildcard src/*.cpp)
 OBJS = $(SRCS:src/%.cpp=build/%.o)
 
-BATCH_OBJS = build/FairMUanalyzer.o build/FairMUanalyzer_Analyze.o build/batch_run.o
+BATCH_OBJS = build/FairMUanalyzer.o build/FairMUanalyzer_MF.o build/batch_run.o
 
 TARGET = run_FairMUanalyzer
 BATCH  = batch_run
