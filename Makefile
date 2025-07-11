@@ -1,6 +1,6 @@
 # === FairSoft and FairRoot paths ===
 FAIRSOFT_BASE  = /cvmfs/fairsoft.gsi.de/centos8/fairsoft/nov22p1
-FAIRROOT_BASE  = /afs/cern.ch/user/c/cez/eos/Soft/fair_install/FairRoot/install_8July25
+FAIRROOT_BASE  = /afs/cern.ch/user/c/cez/eos/Soft/fair_install/FairRoot/install_11July25
 
 # === Compiler and Flags ===
 CXX = g++
@@ -19,7 +19,7 @@ LDFLAGS = $(shell root-config --libs) \
 SRCS = $(wildcard src/*.cpp)
 OBJS = $(SRCS:src/%.cpp=build/%.o)
 
-BATCH_OBJS = build/FairMUanalyzer.o build/FairMUanalyzer_MF.o build/batch_run.o
+BATCH_OBJS = build/FairMUanalyzer.o build/FairMUanalyzer_MF.o build/FairMUanalyzer_TRK.o build/batch_run.o
 
 TARGET = run_FairMUanalyzer
 BATCH  = batch_run

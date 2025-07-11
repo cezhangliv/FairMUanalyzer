@@ -8,11 +8,11 @@ A modular C++ analysis framework for MUonE ROOT files using FairRoot/MUonEReco i
 
 - ROOT (via `root-config`)
 - FairSoft (nov22p1): [CVMFS path] `/cvmfs/fairsoft.gsi.de/centos8/fairsoft/nov22p1`
-- FairRoot (custom build): [set your path] e.g. `/afs/cern.ch/user/c/cez/eos/Soft/fair_install/FairRoot/install_8July25`
+- FairRoot (custom build): [set your path] e.g. `/afs/cern.ch/user/c/cez/eos/Soft/fair_install/FairRoot/install_11July25`
 
 Before building or running, source your environment:
 ```bash
-source /afs/cern.ch/user/c/cez/eos/Soft/fair_install/FairRoot/install_8July25/bin/FairRootConfig.sh
+source /afs/cern.ch/user/c/cez/eos/Soft/fair_install/FairRoot/install_11July25/bin/FairRootConfig.sh
 ```
 
 ---
@@ -116,21 +116,21 @@ Linking requires:
 
 ## g++
 ```bash
-source /afs/cern.ch/user/c/cez/eos/Soft/fair_install/FairRoot/install_8July25/bin/FairRootConfig.sh
+source /afs/cern.ch/user/c/cez/eos/Soft/fair_install/FairRoot/install_11July25/bin/FairRootConfig.sh
 ```
 
 ```bash
 g++ -std=c++17 -O2 -Wall \
   -Iinclude \
   -I/cvmfs/fairsoft.gsi.de/centos8/fairsoft/nov22p1/include \
-  -I/afs/cern.ch/user/c/cez/eos/Soft/fair_install/FairRoot/install_8July25/include \
+  -I/afs/cern.ch/user/c/cez/eos/Soft/fair_install/FairRoot/install_11July25/include \
   $(root-config --cflags) \
   src/FairMUanalyzer.cpp \
   src/FairMUanalyzer_Analyze.cpp \
   src/run_FairMUanalyzer.cpp \
   -o run_FairMUanalyzer \
   $(root-config --libs) \
-  -L/afs/cern.ch/user/c/cez/eos/Soft/fair_install/FairRoot/install_8July25/lib64 \
+  -L/afs/cern.ch/user/c/cez/eos/Soft/fair_install/FairRoot/install_11July25/lib64 \
   -lMUonEReconstruction -lMUonEReconstructedEventsFilter -lMUonEReconstructionConfiguration \
   -lstdc++fs
 ```
@@ -138,14 +138,14 @@ g++ -std=c++17 -O2 -Wall \
 g++ -std=c++17 -O2 -Wall -pthread \
   -Iinclude \
   -I/cvmfs/fairsoft.gsi.de/centos8/fairsoft/nov22p1/include \
-  -I/afs/cern.ch/user/c/cez/eos/Soft/fair_install/FairRoot/install_8July25/include \
+  -I/afs/cern.ch/user/c/cez/eos/Soft/fair_install/FairRoot/install_11July25/include \
   $(root-config --cflags) \
   src/FairMUanalyzer.cpp \
   src/FairMUanalyzer_Analyze.cpp \
   batch_run.cpp \
   -o batch_run \
   $(root-config --libs) \
-  -L/afs/cern.ch/user/c/cez/eos/Soft/fair_install/FairRoot/install_8July25/lib64 \
+  -L/afs/cern.ch/user/c/cez/eos/Soft/fair_install/FairRoot/install_11July25/lib64 \
   -lMUonEReconstruction -lMUonEReconstructedEventsFilter -lMUonEReconstructionConfiguration \
   -lstdc++fs
 ```

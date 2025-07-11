@@ -6,9 +6,39 @@
 #include <set>
 #include <algorithm>
 #include <cmath>
+/*
+double me=0.51099906e-3;
+double mu=105.65836900e-3;
+double Ebeam=160;
+
+double Eevsth(double *x, double *par){
+    double th = *x;
+    double Emu = par[0];
+    double r = sqrt(Emu*Emu-mu*mu)/(Emu+me);
+    return  me*(1.+r*r*cos(th)*cos(th))/(1-r*r*cos(th)*cos(th));
+}
+
+
+double thmu_vs_the(double *x, double *par){
+    //double th = *x/1000.;
+    double th = *x/1.;
+    double Emu = par[0];
+    double pmu = sqrt(Emu*Emu-mu*mu);
+    double Ee = Eevsth(&th, par);
+    double pe = sqrt(Ee*Ee-me*me);
+    //return 1000.*acos((pmu-pe*cos(th))/sqrt(pe*pe+pmu*pmu-2*pmu*pe*cos(th)));
+    return 1.*acos((pmu-pe*cos(th))/sqrt(pe*pe+pmu*pmu-2*pmu*pe*cos(th)));
+}
+*/
 
 FairMUanalyzer::FairMUanalyzer() : inputFile_(nullptr), cbmsim_(nullptr), reco_(nullptr), MuonFilterHits_(3), outputPrefix_("result/FairMUanalyzer"), savepdf_(true) {
     
+    goldenevents_ = 0;
+
+    f_elastic = new TF1("f_elastic", thmu_vs_the,  0., 0.032,1);
+    f_elastic->SetParameter(0, Ebeam_);
+    f_elastic->SetNpx(1e5);
+
     TH1::AddDirectory(kFALSE);
     gStyle->SetOptStat(1111);
 
@@ -42,6 +72,25 @@ FairMUanalyzer::FairMUanalyzer() : inputFile_(nullptr), cbmsim_(nullptr), reco_(
             h_residual_hitAllTrackModule[i][j] = new TH1F(Form("h_res_allTrack_st%dModule%d", i, j), Form("Residual (AllTracks) - Station %d, Module %d;Distance [cm];Entries", i, j), 200, -2, 2);
         }
     }
+
+    h_2d = new TH2D("h_2d","Electron VS Muon angle; Electron [rad]; Muon [rad]" ,500,0.,0.032,500,0.,0.005);
+    h_2d_ref = new TH2D("h_2d_ref","Electron VS Muon angle; Electron [rad]; Muon [rad]" ,500,0.,0.032,500,0.,0.005);
+}
+
+double FairMUanalyzer::Eevsth(double* x, double* par) {
+    double th = *x;
+    double Emu = par[0];
+    double r = sqrt(Emu*Emu - mu_*mu_) / (Emu + me_);
+    return me_ * (1. + r*r * cos(th) * cos(th)) / (1. - r*r * cos(th) * cos(th));
+}
+
+double FairMUanalyzer::thmu_vs_the(double* x, double* par) {
+    double th = *x;  // in rad
+    double Emu = par[0];
+    double pmu = sqrt(Emu*Emu - mu_*mu_);
+    double Ee = Eevsth(&th, par);
+    double pe = sqrt(Ee*Ee - me_*me_);
+    return acos((pmu - pe * cos(th)) / sqrt(pe*pe + pmu*pmu - 2 * pmu * pe * cos(th)));
 }
 
 FairMUanalyzer::~FairMUanalyzer() {
@@ -102,6 +151,8 @@ TVector3 FairMUanalyzer::getXYfromHitMF(const MUonERecoOutputHitAnalysis& hit) {
     return TVector3(x, y, hit.z());
 }
 
+
+
 double FairMUanalyzer::computeSigned2DResidualMF(const TVector3& p3D, const TVector3& x0, const TVector3& h, int moduleID) {
     TVector3 p = p3D;
     TVector3 delta = h - x0;
@@ -123,7 +174,8 @@ double FairMUanalyzer::computeSigned2DResidualMF(const TVector3& p3D, const TVec
 }
 
 void FairMUanalyzer::Analyze() {
-    AnalyzeMF();
+    //AnalyzeMF();
+    AnalyzeTRK();
 }
 
 void FairMUanalyzer::SaveResults() {
@@ -140,6 +192,28 @@ void FairMUanalyzer::SaveResults() {
     fout->Close();
 
     if(!savepdf_)return;
+
+
+    TCanvas* c10 = new TCanvas(Form("c10_%s", outputPrefix_.Data()), "Theta_e_theta_mu", 600, 400);
+    h_2d->Draw("colz");
+    double k = 1; 
+    double b = 0.0; 
+
+    for (int i = 1; i <= h_2d_ref->GetNbinsX(); ++i) {
+        double x = h_2d_ref->GetXaxis()->GetBinCenter(i);
+        double y = k * x + b;
+        
+        int j = h_2d_ref->GetYaxis()->FindBin(y);
+        if (j >= 1 && j <= h_2d_ref->GetNbinsY()) {
+            h_2d_ref->SetBinContent(i, j, 1.0); 
+        }
+    }
+    h_2d_ref->Draw("same");
+    f_elastic->SetLineWidth(1);
+    f_elastic->SetLineColor(kRed);
+    f_elastic->Draw("same");
+
+    c10->SaveAs(Form("%s_theta_e_theta_mu.pdf", outputPrefix_.Data()));
 
     TCanvas* c0 = new TCanvas(Form("c0_%s", outputPrefix_.Data()), "Tracks multiplicity", 600, 400);
     h_Ntracks->GetYaxis()->SetRangeUser(0, h_Ntracks->GetMaximum() * 1.2);
