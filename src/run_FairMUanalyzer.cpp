@@ -13,22 +13,22 @@
 //    -o run_FairMUanalyzer
 
 
-//./run_FairMUanalyzer root/myfile.root result/outputName 3
+//./run_FairMUanalyzer myfile result/outputName endscan
 
+//"root/passing_muon_muedaq04-1750192160_CDbugfix8July25_MuonFilterHits1.root"
 
 int main(int argc, char** argv) {
     
-    if (argc < 1) {
-        std::cerr << "Usage: " << argv[0] << " [input.root] [MuonFilterHits] [output_prefix]" << std::endl;
+    if (argc < 2) {
+        std::cerr << "Usage: " << argv[0] << " input.root [output_prefix] [MuonFilterHits]" << std::endl;
         return 1;
     }
 
-    TString singlefile = (argc > 1) ? argv[1]:"passing_muon_muedaq04-1750192160_MuonFilterHits";
-    int muonFilterHits = (argc > 2) ? std::stoi(argv[2]) : 3;
-    
-    std::string inputFile = Form("root/%s%i_CDbugfix8July25.root",singlefile.Data(), muonFilterHits);
-    std::string outputPrefix = (argc > 3) ? argv[3] : Form("result/FairMUanalyzer_%s%i",singlefile.Data(),muonFilterHits);
+    std::string inputFile = argv[1];
+    std::string outputPrefix = (argc > 2) ? argv[2] : "result/FairMUanalyzer";
+    int muonFilterHits = (argc > 3) ? std::stoi(argv[3]) : 3;
 
+    // 创建分析器
     FairMUanalyzer analyzer;
     analyzer.SetInputFile(inputFile);
     analyzer.SetOutputPrefix(outputPrefix);

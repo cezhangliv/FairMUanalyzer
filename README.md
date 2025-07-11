@@ -52,7 +52,7 @@ This produces:
 
 ### Analyze a single file:
 ```bash
-./run_FairMUanalyzer input.root
+./run_FairMUanalyzer [input.root]
 ```
 
 ### Analyze all `.root` files in a directory with 4 threads:
