@@ -115,6 +115,53 @@ Linking requires:
 -lstdc++fs  # for GCC < 10
 ```
 
+## g++
+```bash
+source /afs/cern.ch/user/c/cez/eos/Soft/fair_install/FairRoot/install_8July25/bin/FairRootConfig.sh
+```
+
+```bash
+g++ -std=c++17 -O2 -Wall \
+  -Iinclude \
+  -I/cvmfs/fairsoft.gsi.de/centos8/fairsoft/nov22p1/include \
+  -I/afs/cern.ch/user/c/cez/eos/Soft/fair_install/FairRoot/install_8July25/include \
+  $(root-config --cflags) \
+  src/FairMUanalyzer.cpp \
+  src/FairMUanalyzer_Analyze.cpp \
+  src/run_FairMUanalyzer.cpp \
+  -o run_FairMUanalyzer \
+  $(root-config --libs) \
+  -L/afs/cern.ch/user/c/cez/eos/Soft/fair_install/FairRoot/install_8July25/lib64 \
+  -lMUonEReconstruction -lMUonEReconstructedEventsFilter -lMUonEReconstructionConfiguration \
+  -lstdc++fs
+```
+```bash
+g++ -std=c++17 -O2 -Wall -pthread \
+  -Iinclude \
+  -I/cvmfs/fairsoft.gsi.de/centos8/fairsoft/nov22p1/include \
+  -I/afs/cern.ch/user/c/cez/eos/Soft/fair_install/FairRoot/install_8July25/include \
+  $(root-config --cflags) \
+  src/FairMUanalyzer.cpp \
+  src/FairMUanalyzer_Analyze.cpp \
+  batch_run.cpp \
+  -o batch_run \
+  $(root-config --libs) \
+  -L/afs/cern.ch/user/c/cez/eos/Soft/fair_install/FairRoot/install_8July25/lib64 \
+  -lMUonEReconstruction -lMUonEReconstructedEventsFilter -lMUonEReconstructionConfiguration \
+  -lstdc++fs
+```
+
+
+```bash
+-std=c++17  支持 std::filesystem 和 modern C++
+-I$(root-config --incdir) 引入 ROOT 头文件，例如 TFile.h, TTree.h 等
+-I/cvmfs/...  引入 FairSoft 相关头文件
+-I/afs/...  引入你的 MUonE 安装头文件
+-lMUonEReconstruction 等 你的项目所需的 MUonE .so
+-lstdc++fs  GCC <10 时需要手动链接 std::filesystem
+$(root-config --libs) 链接所有标准 ROOT 库
+```
+
 ---
 
 ## Drafts
@@ -126,37 +173,6 @@ make         # 编译 run_FairMUanalyzer 和 batch_run
 ./batch_run root/ 3 4
 
 如你升级到 GCC ≥ 10，则 std::filesystem 无需 -lstdc++fs，但 CERN 环境多为 8.x/9.x，建议始终保留以确保兼容性。
-
-g++ -O2 -Wall -std=c++17 -pthread \
-  -I$(root-config --incdir) \
-  -I/cvmfs/fairsoft.gsi.de/centos8/fairsoft/nov22p1/include \
-  -I/afs/cern.ch/user/c/cez/eos/Soft/fair_install/FairRoot/install_8July25/include \
-  FairMUanalyzer.cpp batch_run.cpp \
-  -L/afs/cern.ch/user/c/cez/eos/Soft/fair_install/FairRoot/install_8July25/lib64 \
-  -lMUonEReconstruction -lMUonEReconstructedEventsFilter -lMUonEReconstructionConfiguration \
-  $(root-config --libs) \
-  -lstdc++fs \
-  -o batch_run
-
-
-g++ -O2 -Wall -std=c++17 \
-  -I$(root-config --incdir) \
-  -I/cvmfs/fairsoft.gsi.de/centos8/fairsoft/nov22p1/include \
-  -I/afs/cern.ch/user/c/cez/eos/Soft/fair_install/FairRoot/install_8July25/include \
-  FairMUanalyzer.cpp run_FairMUanalyzer.cpp \
-  -L/afs/cern.ch/user/c/cez/eos/Soft/fair_install/FairRoot/install_8July25/lib64 \
-  -lMUonEReconstruction -lMUonEReconstructedEventsFilter -lMUonEReconstructionConfiguration \
-  $(root-config --libs) \
-  -lstdc++fs \
-  -o run_FairMUanalyzer
-
--std=c++17  支持 std::filesystem 和 modern C++
--I$(root-config --incdir) 引入 ROOT 头文件，例如 TFile.h, TTree.h 等
--I/cvmfs/...  引入 FairSoft 相关头文件
--I/afs/...  引入你的 MUonE 安装头文件
--lMUonEReconstruction 等 你的项目所需的 MUonE .so
--lstdc++fs  GCC <10 时需要手动链接 std::filesystem
-$(root-config --libs) 链接所有标准 ROOT 库
 
 运行示例
 
