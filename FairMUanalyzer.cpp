@@ -7,7 +7,7 @@
 #include <algorithm>
 #include <cmath>
 
-FairMUanalyzer::FairMUanalyzer() : inputFile_(nullptr), cbmsim_(nullptr), reco_(nullptr), MuonFilterHits_(3), outputPrefix_("result/FairMUanalyzer") {
+FairMUanalyzer::FairMUanalyzer() : inputFile_(nullptr), cbmsim_(nullptr), reco_(nullptr), MuonFilterHits_(3), outputPrefix_("result/FairMUanalyzer"), savepdf_(true) {
     gStyle->SetOptStat(1111);
     for (int i = 0; i < 3; ++i) {
         h_residual_hitOnTrack[i] = new TH1F(Form("h_res_onTrack_st%d", i), Form("Residual (OnTrack) - Station %d;Distance [cm];Entries", i), 200, -2, 2);
@@ -170,6 +170,8 @@ void FairMUanalyzer::SaveResults() {
         }
     }
     fout->Close();
+
+    if(!savepdf_)return;
 
     TCanvas* c3 = new TCanvas("c3", "Residuals by station", 1800, 400);
     c3->Divide(3, 1);

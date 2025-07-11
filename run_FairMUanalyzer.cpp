@@ -18,16 +18,19 @@
 
 int main(int argc, char** argv) {
     
-    if (argc < 2) {
+    if (argc < 1) {
         std::cerr << "Usage: " << argv[0] << " input.root [output_prefix] [MuonFilterHits]" << std::endl;
         return 1;
     }
 
-    std::string inputFile = argv[1];
-    std::string outputPrefix = (argc > 2) ? argv[2] : "result/FairMUanalyzer";
+    int MuonFilterHits=3;
+    TString singlefile = "passing_muon_muedaq04-1750192160_MuonFilterHits";
+
+    std::string inputFile = (argc > 2) ? argv[1]: 
+        Form("root/%s%i_CDbugfix8July25.root",singlefile.Data(), MuonFilterHits);
+    std::string outputPrefix = (argc > 2) ? argv[2] : Form("result/FairMUanalyzer_%s",singlefile.Data());
     int muonFilterHits = (argc > 3) ? std::stoi(argv[3]) : 3;
 
-    // 创建分析器
     FairMUanalyzer analyzer;
     analyzer.SetInputFile(inputFile);
     analyzer.SetOutputPrefix(outputPrefix);

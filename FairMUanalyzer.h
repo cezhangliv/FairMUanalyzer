@@ -27,6 +27,7 @@ private:
     std::string inputFilePath_;
     TString outputPrefix_;
     int MuonFilterHits_;
+    bool savepdf_;
 
     TFile* inputFile_;
     TTree* cbmsim_;

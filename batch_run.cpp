@@ -87,25 +87,4 @@ int main(int argc, char** argv) {
 }
 #endif
 
-// ----------------------------
-// 2. ROOT macro entry
-// ----------------------------
-void batch_run() {
-    std::vector<std::string> inputFiles = {
-        "root/input1.root",
-        "root/input2.root",
-        "root/input3.root"
-    };
 
-    for (const auto& infile : inputFiles) {
-        TString base = gSystem->BaseName(infile.c_str());
-        base.ReplaceAll(".root", "");
-        TString prefix = TString("result/") + base;
-
-        FairMUanalyzer analyzer;
-        analyzer.SetInputFile(infile);
-        analyzer.SetOutputPrefix(std::string(prefix.Data()));  // <--- fix this
-        analyzer.SetMuonFilterHits(3);
-        analyzer.Run();
-    }
-}
