@@ -12,6 +12,27 @@ FairMUanalyzer::FairMUanalyzer() : inputFile_(nullptr), cbmsim_(nullptr), reco_(
     TH1::AddDirectory(kFALSE);
     gStyle->SetOptStat(1111);
 
+    h_hits_zcut = new TH1F("h_hits_zcut", "Number of hits in MF; Hits;Entries", 20, 0, 20);
+    h_isMuon = new TH1F("h_isMuon", "Number of 'Muon' tracks; isMuon tracks per event;Entries", 20, 0, 20);
+    h_Ntracks = new TH1F("h_Ntracks", "Tracks multiplicity; tracks per event;Entries", 20, 0, 20);
+    
+    h_hitsModuleID_zcut[5];
+    h_hitsPerMuonTrack_zcut[5];
+
+    for (int i = 1; i <= 4; i++) {
+        h_hitsModuleID_zcut[i] = new TH1F(Form("h_hitsModuleID_zcut_%imu", i),
+                                              Form("MF hits module ID related to muon track (%i muti trks);Module ID;Entries", i),
+                                              5, 0, 5);
+        h_hitsPerMuonTrack_zcut[i] = new TH1F(Form("h_hits_muon_%imu", i),
+                                              Form("MF hits related to muon track (%i muti trks);N hits;Entries", i),
+                                              10, 0, 10);
+    }
+
+    h_goldenMuon_isMuon[3];
+    for (int i = 0; i < 3; i++) {
+        h_goldenMuon_isMuon[i] = new TH1F( Form("h_goldenMuon_isMuon_atStat%i",i), Form("golden muon isMuon? at station %i;isMuon;Entries",i), 2, 0, 2);
+    }
+
     for (int i = 0; i < 3; ++i) {
         h_residual_hitOnTrack[i] = new TH1F(Form("h_res_onTrack_st%d", i), Form("Residual (OnTrack) - Station %d;Distance [cm];Entries", i), 200, -2, 2);
         h_residual_hitOffTrack[i] = new TH1F(Form("h_res_offTrack_st%d", i), Form("Residual (OffTrack) - Station %d;Distance [cm];Entries", i), 200, -2, 2);
@@ -120,6 +141,56 @@ void FairMUanalyzer::SaveResults() {
 
     if(!savepdf_)return;
 
+    TCanvas* c0 = new TCanvas(Form("c0_%s", outputPrefix_.Data()), "Tracks multiplicity", 600, 400);
+    h_Ntracks->GetYaxis()->SetRangeUser(0, h_Ntracks->GetMaximum() * 1.2);
+    h_Ntracks->Draw();
+    auto legend = new TLegend(0.4, 0.7, 0.9, 0.9);
+    legend->AddEntry(h_Ntracks, "(all) tracks multiplicity", "l");
+    legend->Draw();
+    c0->SaveAs(Form("%s_all_tracksMulti.pdf", outputPrefix_.Data()));
+
+    
+
+    TCanvas* c11 = new TCanvas(Form("c11_%s", outputPrefix_.Data()), "Muon tracks multiplicity", 1200, 400);
+    c11->Divide(2,1);
+    c11->cd(1);
+    h_hits_zcut->Draw();
+    c11->cd(2);
+    h_isMuon->GetYaxis()->SetRangeUser(0, h_isMuon->GetMaximum() * 1.2);
+    h_isMuon->SetLineColor(kRed);
+    h_isMuon->Draw("");
+    auto legend11 = new TLegend(0.4, 0.7, 0.9, 0.9);
+    legend11->AddEntry(h_isMuon, "muon tracks multiplicity by MF", "l");
+    legend11->Draw();
+    std::cout<<outputPrefix_.Data()<<", isMuon==0: "<<h_isMuon->GetBinContent(1)<<std::endl;
+    c11->SaveAs(Form("%s_all_tracksMulti.pdf", outputPrefix_.Data()));
+
+    
+    TCanvas* c1 = new TCanvas(Form("c1_%s", outputPrefix_.Data()), "Hit distributions", 2400, 800);
+    c1->Divide(4, 2);
+    for (int i = 1; i <= 4; i++) {
+        c1->cd(i);
+        h_hitsPerMuonTrack_zcut[i]->SetLineColor(kRed);
+        h_hitsPerMuonTrack_zcut[i]->Draw();
+    }
+    for (int i = 5; i <= 8; i++) {
+        c1->cd(i);
+        h_hitsModuleID_zcut[i-4]->SetLineColor(kRed);
+        h_hitsModuleID_zcut[i-4]->Draw();
+    }
+    c1->SaveAs(Form("%s_hit_module.pdf", outputPrefix_.Data()));
+
+    
+    TCanvas* c2 = new TCanvas(Form("c2_%s", outputPrefix_.Data()), "Golden muon identified", 1800, 400);
+    c2->Divide(3,1);
+    for (int i = 1; i <= 3; i++) {
+        c2->cd(i);
+        h_goldenMuon_isMuon[i-1]->GetYaxis()->SetRangeUser(0, h_goldenMuon_isMuon[i-1]->GetMaximum() * 1.2);
+        h_goldenMuon_isMuon[i-1]->Draw();
+        std::cout<<outputPrefix_.Data()<<", "<<i<<" station golden muon failed: "<<h_goldenMuon_isMuon[i-1]->GetBinContent(1)<<std::endl;
+    }
+    c2->SaveAs(Form("%s_golden_muon.pdf", outputPrefix_.Data()));
+
     TCanvas* c3 = new TCanvas(Form("c3_%s", outputPrefix_.Data()), "Residuals by station", 1800, 400);
     c3->Divide(3, 1);
     for (int i = 0; i < 3; ++i) {
@@ -129,10 +200,26 @@ void FairMUanalyzer::SaveResults() {
         h_residual_hitOnTrack[i]->Draw();
         h_residual_hitOffTrack[i]->Draw("sames");
 
-        auto legend = new TLegend(0.7, 0.6, 0.9, 0.7);
-        legend->AddEntry(h_residual_hitOnTrack[i], "On Track", "l");
-        legend->AddEntry(h_residual_hitOffTrack[i], "Off Track", "l");
-        legend->Draw();
+        c3->Update();  
+        TPaveStats* stats1 = (TPaveStats*)h_residual_hitOnTrack[i]->FindObject("stats");
+        TPaveStats* stats2 = (TPaveStats*)h_residual_hitOffTrack[i]->FindObject("stats");
+
+        if (stats1) {
+            stats1->SetTextColor(kRed);
+            stats1->SetX1NDC(0.70); stats1->SetX2NDC(0.85);
+            stats1->SetY1NDC(0.75); stats1->SetY2NDC(0.90);
+        }
+
+        if (stats2) {
+            stats2->SetTextColor(kBlue);
+            stats2->SetX1NDC(0.85); stats2->SetX2NDC(1.00);
+            stats2->SetY1NDC(0.75); stats2->SetY2NDC(0.90);
+        }
+
+        auto legend2 = new TLegend(0.7, 0.6, 0.9, 0.7);
+        legend2->AddEntry(h_residual_hitOnTrack[i], "On Track", "l");
+        legend2->AddEntry(h_residual_hitOffTrack[i], "Off Track", "l");
+        legend2->Draw();
     }
     c3->SaveAs(Form("%s_residuals_station.pdf", outputPrefix_.Data()));
 
@@ -147,10 +234,52 @@ void FairMUanalyzer::SaveResults() {
         h_residual_hitOnTrackModule[jj][ii]->Draw();
         h_residual_hitOffTrackModule[jj][ii]->Draw("sames");
 
-        auto legend = new TLegend(0.7, 0.6, 0.9, 0.7);
-        legend->AddEntry(h_residual_hitOnTrackModule[jj][ii], "On Track", "l");
-        legend->AddEntry(h_residual_hitOffTrackModule[jj][ii], "Off Track", "l");
-        legend->Draw();
+        c4->Update();  
+        TPaveStats* stats1 = (TPaveStats*)h_residual_hitOnTrackModule[jj][ii]->FindObject("stats");
+        TPaveStats* stats2 = (TPaveStats*)h_residual_hitOffTrackModule[jj][ii]->FindObject("stats");
+
+        if (stats1) {
+            stats1->SetTextColor(kRed);
+            stats1->SetX1NDC(0.70); stats1->SetX2NDC(0.85);
+            stats1->SetY1NDC(0.75); stats1->SetY2NDC(0.90);
+        }
+
+        if (stats2) {
+            stats2->SetTextColor(kBlue);
+            stats2->SetX1NDC(0.85); stats2->SetX2NDC(1.00);
+            stats2->SetY1NDC(0.75); stats2->SetY2NDC(0.90);
+        }
+
+        auto legend3 = new TLegend(0.7, 0.6, 0.9, 0.7);
+        legend3->AddEntry(h_residual_hitOnTrackModule[jj][ii], "On Track", "l");
+        legend3->AddEntry(h_residual_hitOffTrackModule[jj][ii], "Off Track", "l");
+        legend3->Draw();
     }
     c4->SaveAs(Form("%s_residuals_station_module.pdf", outputPrefix_.Data()));
+
+    TCanvas* c5 = new TCanvas(Form("c5_%s", outputPrefix_.Data()), "Residuals by station", 2400, 1200);
+    c5->Divide(4,3);
+
+    for (int i = 0; i < 12; ++i) {
+        c5->cd(i + 1);
+        
+        int ii = i%4;//module
+        int jj = i/4;//station
+        h_residual_hitAllTrackModule[jj][ii]->SetName(Form("hAll_%d", i));
+        h_residual_hitAllTrackModule[jj][ii]->SetLineColor(kGreen+1);
+        h_residual_hitAllTrackModule[jj][ii]->Draw();
+
+        c5->Update();  
+        TPaveStats* stats1 = (TPaveStats*)h_residual_hitAllTrackModule[jj][ii]->FindObject("stats");
+        if (stats1) {
+            stats1->SetTextColor(kBlack);
+            stats1->SetX1NDC(0.60); stats1->SetX2NDC(0.85);
+            stats1->SetY1NDC(0.65); stats1->SetY2NDC(0.90);
+        }
+
+        auto legend4 = new TLegend(0.7, 0.5, 0.9, 0.6);
+        legend4->AddEntry(h_residual_hitAllTrackModule[jj][ii], "All Track", "l");
+        legend4->Draw();
+    }
+    c5->SaveAs(Form("%s_alltracks_residuals_station_module.pdf", outputPrefix_.Data()));
 }

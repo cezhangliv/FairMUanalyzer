@@ -40,6 +40,13 @@ private:
     TH1F* h_residual_hitOffTrackModule[3][4];
     TH1F* h_residual_hitAllTrackModule[3][4];
 
+    TH1F* h_hits_zcut;// = new TH1F("h_hits_zcut", "Number of hits in MF; Hits;Entries", 20, 0, 20);
+    TH1F* h_hitsModuleID_zcut[5];
+    TH1F* h_hitsPerMuonTrack_zcut[5];
+    TH1F* h_isMuon;// = new TH1F("h_isMuon", "Number of 'Muon' tracks; isMuon tracks per event;Entries", 20, 0, 20);
+    TH1F* h_Ntracks;// = new TH1F("h_Ntracks", "Tracks multiplicity; tracks per event;Entries", 20, 0, 20);
+    TH1F* h_goldenMuon_isMuon[3];
+
     void Init();
     void Analyze();
     void AnalyzeMF();
