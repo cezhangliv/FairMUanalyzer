@@ -6,41 +6,44 @@ FAIRROOT_BASE  = /afs/cern.ch/user/c/cez/eos/Soft/fair_install/FairRoot/install_
 CXX = g++
 CXXFLAGS = -O2 -Wall -std=c++17 $(shell root-config --cflags) \
            -I$(FAIRSOFT_BASE)/include \
-           -I$(FAIRROOT_BASE)/include
+           -I$(FAIRROOT_BASE)/include \
+           -Iinclude
 CXXFLAGS += -I$(shell root-config --incdir)
 
 LDFLAGS = $(shell root-config --libs) \
-  -L/afs/cern.ch/user/c/cez/eos/Soft/fair_install/FairRoot/install_8July25/lib64 \
+  -L$(FAIRROOT_BASE)/lib64 \
   -lMUonEReconstruction -lMUonEReconstructedEventsFilter -lMUonEReconstructionConfiguration \
   -lstdc++fs
 
+# === Sources and Objects ===
+SRCS = $(wildcard src/*.cpp)
+OBJS = $(SRCS:src/%.cpp=build/%.o)
 
-# === File Lists ===
-HEADERS = FairMUanalyzer.h
-SRCS    = FairMUanalyzer.cpp run_FairMUanalyzer.cpp
-BATCH_SRCS = FairMUanalyzer.cpp batch_run.cpp
-
-OBJS       = $(SRCS:.cpp=.o)
-BATCH_OBJS = $(BATCH_SRCS:.cpp=.o)
+BATCH_OBJS = build/FairMUanalyzer.o build/FairMUanalyzer_Analyze.o build/batch_run.o
 
 TARGET = run_FairMUanalyzer
 BATCH  = batch_run
 
-# === Default build ===
+# === Targets ===
 all: $(TARGET) $(BATCH)
 
-# === Main Analyzer Executable ===
 $(TARGET): $(OBJS)
 	$(CXX) -o $@ $^ $(LDFLAGS)
 
-# === Batch Mode Executable (multi-threaded) ===
 $(BATCH): $(BATCH_OBJS)
 	$(CXX) -o $@ $^ $(LDFLAGS) -pthread
 
-# === Generic Compilation Rule ===
-%.o: %.cpp $(HEADERS)
+# === Compilation Rules ===
+build/%.o: src/%.cpp include/FairMUanalyzer.h | build
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
-# === Clean Target ===
+build/batch_run.o: batch_run.cpp include/FairMUanalyzer.h | build
+	$(CXX) $(CXXFLAGS) -c $< -o $@
+
+# === Create build directory if missing ===
+build:
+	mkdir -p build
+
+# === Clean ===
 clean:
-	rm -f *.o $(TARGET) $(BATCH)
+	rm -rf build $(TARGET) $(BATCH)

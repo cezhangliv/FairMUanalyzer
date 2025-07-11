@@ -1,70 +1,76 @@
 # FairMUanalyzer
 
-A C++ analysis tool designed to process MUonE `cbmsim` ROOT files and extract hit residuals from golden muon tracks. Built for use within the MUonE environment (FairRoot + MUonEReco* classes), it supports both single-file and multi-file batch processing with multithreading.
+A modular C++ analysis framework for MUonE ROOT files using FairRoot/MUonEReco infrastructure.
 
 ---
 
-## 🔧 Environment Setup
+## Requirements
 
-You must have the MUonE and FairRoot environments loaded. Typically:
+- ROOT (via `root-config`)
+- FairSoft (nov22p1): [CVMFS path] `/cvmfs/fairsoft.gsi.de/centos8/fairsoft/nov22p1`
+- FairRoot (custom build): [set your path] e.g. `/afs/cern.ch/user/c/cez/eos/Soft/fair_install/FairRoot/install_8July25`
 
+Before building or running, source your environment:
 ```bash
-export SIMPATH=/cvmfs/fairsoft.gsi.de/centos8/fairsoft/nov22p1
 source /afs/cern.ch/user/c/cez/eos/Soft/fair_install/FairRoot/install_8July25/bin/FairRootConfig.sh
 ```
 
-Ensure `root-config` and MUonE shared libraries are available.
+---
+
+## Directory Structure
+
+```
+FairMUanalyzer/
+├── include/                        # Contains FairMUanalyzer.h
+├── src/                            # Contains core analysis code
+│   ├── FairMUanalyzer.cpp
+│   ├── FairMUanalyzer_MF/TRK/OTHERS.cpp
+│   └── run_FairMUanalyzer.cpp
+├── batch_run.cpp                   # Multi-threaded runner
+├── Makefile
+└── README.md
+```
 
 ---
 
-## ⚙️ Build Instructions
+## Build
 
-To build everything:
-
-```bash
-make
-```
-
-This creates:
-
-- `run_FairMUanalyzer`: for analyzing one file at a time
-- `batch_run`: for multithreaded batch processing over many `.root` files in a directory
-
-If needed, clean with:
+Compile both single-run and batch-run modes:
 
 ```bash
 make clean
+make -j
+```
+
+This produces:
+- `run_FairMUanalyzer`: run a single ROOT file
+- `batch_run`: multi-threaded batch processor over directory
+
+---
+
+## Usage
+
+### Analyze a single file:
+```bash
+./run_FairMUanalyzer input.root
+```
+
+### Analyze all `.root` files in a directory with 4 threads:
+```bash
+./batch_run root/ 3 4
+```
+- `root/` is the input directory
+- `3` is the MuonFilterHits parameter
+- `4` is the number of threads
+
+Each output is saved in:
+```
+result/<basename>/
 ```
 
 ---
 
-## 🚀 Usage
-
-### 1. Single-file analysis
-
-```bash
-./run_FairMUanalyzer input.root result/output_name 3
-```
-
-- `input.root`: path to ROOT file with `cbmsim` TTree
-- `result/output_name`: output prefix, creates `output_name_output.root` and `.pdf` in `result/`
-- `3`: (optional) required number of hits to identify muon (default: 3)
-
-### 2. Batch processing with multithreading
-
-```bash
-./batch_run root_directory 3 4
-```
-
-- `root_directory`: folder containing multiple `.root` files
-- `3`: required number of hits for muon
-- `4`: number of threads to use
-
-Outputs will be saved under `result/<basename>/`.
-
----
-
-## 📁 Output Contents
+## Output Contents
 
 Each processed file produces:
 
@@ -76,20 +82,25 @@ These are useful for studying tracking residuals and module performance.
 
 ---
 
-## 📚 Class Overview: `FairMUanalyzer`
+## Notes
 
-Key methods:
-
-```cpp
-void SetInputFile(const std::string& path);
-void SetOutputPrefix(const std::string& prefix);
-void SetMuonFilterHits(int val);  // default = 3
-void Run();  // calls Init(), Analyze(), SaveResults()
-```
+- You can add more `AnalyzeXXX()` modules inside `FairMUanalyzer_SOMETHING.cpp`.
+- `.DS_Store`, build artifacts, and result folders are ignored by default via `.gitignore`.
 
 ---
 
-## 🧪 Dependencies
+## Debugging
+
+If compilation fails:
+- Check `Makefile` paths to `FairRoot` and `FairSoft`
+- Ensure `MUonERecoOutputAnalysis.h` is found under `include/`
+- Ensure ROOT is properly initialized with `root-config`
+
+---
+
+---
+
+## Dependencies
 
 - ROOT (via `root-config`)
 - MUonE reconstruction libraries:
@@ -153,8 +164,3 @@ $(root-config --libs) 链接所有标准 ROOT 库
 ./run_FairMUanalyzer root/single.root result/output 3
 
 
-
-
-## 📝 License
-
-Internal use only — maintained by Ce Zhang at Liverpool / CERN.
