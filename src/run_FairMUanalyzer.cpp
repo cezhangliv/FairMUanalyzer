@@ -9,15 +9,24 @@
 // output to custom/output/path/myresult.root
 
 int main(int argc, char** argv) {
+    
+    std::string inputFile;
     if (argc < 2) {
-        std::cerr << "Usage: " << argv[0] << " input.root [output_prefix]" << std::endl;
-        return 1;
+        //inputFile = "root/passing_muon_muedaq04-1750192160_CDbugfix8July25_MuonFilterHits3.root";
+        inputFile = "root/exampleProductionJob_passingmuon_perfectalign_5000_minMuonFilterHits3.root";
+        
+        //std::cerr << "Usage: " << argv[0] << " input.root [output_prefix]" << std::endl;
+        //return 1;
     }
+    else inputFile = argv[1];
 
-    std::string inputFile = argv[1];
+    
     TString base = gSystem->BaseName(inputFile.c_str());
     base.ReplaceAll(".root", "");
     std::string outputPrefix = (argc > 2) ? argv[2] : "result/FairMUanalyzer_" + std::string(base.Data());
+
+    std::cout<<"inputFile: "<<inputFile<<std::endl;
+    std::cout<<"outputPrefix: "<<outputPrefix<<std::endl;
 
     FairMUanalyzer analyzer;
     analyzer.SetInputFile(inputFile);

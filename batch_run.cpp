@@ -11,6 +11,9 @@
 //./batch_run root/
 //./batch_run root/ 8
 
+//./batch_run root/         # all root/*.root
+//./batch_run root/example  # all root/example*.root
+
 namespace fs = std::filesystem;
 std::mutex printMutex;
 
@@ -48,11 +51,27 @@ int main(int argc, char** argv) {
     int numThreads = (argc > 2) ? std::stoi(argv[2]) : 4;
 
     std::vector<std::string> files;
-    for (const auto& entry : fs::directory_iterator(inputDir)) {
+
+
+    std::string searchDir = inputDir;
+    std::string prefix;
+
+    if (!fs::is_directory(inputDir)) {
+        // Separate path into directory and prefix
+        fs::path full(inputDir);
+        searchDir = full.parent_path().string();
+        prefix = full.filename().string(); // prefix match
+    }
+
+    for (const auto& entry : fs::directory_iterator(searchDir)) {
         if (entry.path().extension() == ".root") {
-            files.push_back(entry.path().string());
+            std::string filename = entry.path().filename().string();
+            if (prefix.empty() || filename.rfind(prefix, 0) == 0) {
+                files.push_back(entry.path().string());
+            }
         }
     }
+
 
     std::cout << "Found " << files.size() << " ROOT files in " << inputDir << std::endl;
 
