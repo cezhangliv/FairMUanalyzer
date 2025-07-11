@@ -1,14 +1,3 @@
-//make all
-//make batch
-
-//运行示例：处理某个路径下的所有 ROOT 文件，用 4 个线程，并设置 MuonFilterHits = 3
-//./batch_run root/ 3 4
-
-//or
-
-//root -l -q 'batch_run.C+'
-
-
 #include "FairMUanalyzer.h"
 #include <filesystem>
 #include <vector>
@@ -18,15 +7,19 @@
 #include <mutex>
 #include <TSystem.h>
 
+//./batch_run <input_dir> [num_threads=4]
+//./batch_run root/
+//./batch_run root/ 8
+
 namespace fs = std::filesystem;
 std::mutex printMutex;
 
-void processFile(const std::string& infile, int muonFilterHits) {
-    TString base = gSystem->BaseName(infile.c_str());  // e.g. input1.root
-    base.ReplaceAll(".root", "");                      // → input1
+void processFile(const std::string& infile) {
+    TString base = gSystem->BaseName(infile.c_str());
+    base.ReplaceAll(".root", "");
     std::string outdir = "result/" + std::string(base.Data());
 
-    // 创建 result/input1/ 子目录
+    // 创建输出目录
     std::error_code ec;
     std::filesystem::create_directories(outdir, ec);
     if (ec) {
@@ -37,28 +30,22 @@ void processFile(const std::string& infile, int muonFilterHits) {
 
     FairMUanalyzer analyzer;
     analyzer.SetInputFile(infile);
-    analyzer.SetOutputPrefix(outdir + "/" + base.Data());  // output path with prefix
-    analyzer.SetMuonFilterHits(muonFilterHits);
+    analyzer.SetOutputPrefix(outdir + "/FairMUanalyzer_" + std::string(base.Data()));
     analyzer.Run();
 
     std::lock_guard<std::mutex> lock(printMutex);
     std::cout << "[✓] Finished processing: " << infile << std::endl;
 }
 
-
-// ----------------------------
-// 1. C++ main entry
-// ----------------------------
 #ifndef __CINT__
 int main(int argc, char** argv) {
     if (argc < 2) {
-        std::cerr << "Usage: " << argv[0] << " <input_dir> [MuonFilterHits=3] [threads=4]" << std::endl;
+        std::cerr << "Usage: " << argv[0] << " <input_dir> [threads=4]" << std::endl;
         return 1;
     }
 
     std::string inputDir = argv[1];
-    int muonFilterHits = (argc > 2) ? std::stoi(argv[2]) : 3;
-    int numThreads = (argc > 3) ? std::stoi(argv[3]) : 4;
+    int numThreads = (argc > 2) ? std::stoi(argv[2]) : 4;
 
     std::vector<std::string> files;
     for (const auto& entry : fs::directory_iterator(inputDir)) {
@@ -73,10 +60,9 @@ int main(int argc, char** argv) {
     int i = 0;
     while (i < files.size()) {
         while (workers.size() < numThreads && i < files.size()) {
-            workers.emplace_back(processFile, files[i], muonFilterHits);
+            workers.emplace_back(processFile, files[i]);
             ++i;
         }
-
         for (auto& t : workers) {
             if (t.joinable()) t.join();
         }
@@ -86,5 +72,3 @@ int main(int argc, char** argv) {
     return 0;
 }
 #endif
-
-

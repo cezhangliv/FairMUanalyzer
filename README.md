@@ -52,15 +52,14 @@ This produces:
 
 ### Analyze a single file:
 ```bash
-./run_FairMUanalyzer [input.root]
+./run_FairMUanalyzer input.root
 ```
 
 ### Analyze all `.root` files in a directory with 4 threads:
 ```bash
-./batch_run root/ 3 4
+./batch_run root/  4
 ```
 - `root/` is the input directory
-- `3` is the MuonFilterHits parameter
 - `4` is the number of threads
 
 Each output is saved in:
@@ -174,9 +173,6 @@ make         # 编译 run_FairMUanalyzer 和 batch_run
 
 如你升级到 GCC ≥ 10，则 std::filesystem 无需 -lstdc++fs，但 CERN 环境多为 8.x/9.x，建议始终保留以确保兼容性。
 
-运行示例
-
-./batch_run root/ 3 4   # 目录 + muon filter hits + 线程数
-./run_FairMUanalyzer root/single.root result/output 3
+运行示例见单独文件
 
 
