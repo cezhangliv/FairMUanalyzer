@@ -120,7 +120,7 @@ void FairMUanalyzer::SaveResults() {
 
     if(!savepdf_)return;
 
-    TCanvas* c3 = new TCanvas("c3", "Residuals by station", 1800, 400);
+    TCanvas* c3 = new TCanvas(Form("c3_%s", outputPrefix_.Data()), "Residuals by station", 1800, 400);
     c3->Divide(3, 1);
     for (int i = 0; i < 3; ++i) {
         c3->cd(i + 1);
@@ -136,7 +136,7 @@ void FairMUanalyzer::SaveResults() {
     }
     c3->SaveAs(Form("%s_residuals_station.pdf", outputPrefix_.Data()));
 
-    TCanvas* c4 = new TCanvas("c4", "Residuals by station/module", 2400, 1200);
+    TCanvas* c4 = new TCanvas(Form("c4_%s", outputPrefix_.Data()), "Residuals by station/module", 2400, 1200);
     c4->Divide(4, 3);
     for (int i = 0; i < 12; ++i) {
         int ii = i % 4; // module
