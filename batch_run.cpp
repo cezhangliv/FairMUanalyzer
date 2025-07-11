@@ -25,7 +25,7 @@ void processFile(const std::string& infile) {
     analyzer.Run();
 
     std::cout << "Finished processing: " << infile << std::endl;
-    std::cout << std::endl;
+    std::cout << "-----" << std::endl;
 }
 
 int main(int argc, char** argv) {
