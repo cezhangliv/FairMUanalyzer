@@ -15,7 +15,7 @@ void processFile(const std::string& infile) {
     std::error_code ec;
     fs::create_directories(outdir, ec);
     if (ec) {
-        std::cerr << "[!] Failed to create directory: " << outdir << " (" << ec.message() << ")" << std::endl;
+        std::cerr << "! Failed to create directory: " << outdir << " (" << ec.message() << ")" << std::endl;
         return;
     }
 
@@ -24,7 +24,7 @@ void processFile(const std::string& infile) {
     analyzer.SetOutputPrefix(outdir + "/FairMUanalyzer_" + std::string(base.Data()));
     analyzer.Run();
 
-    std::cout << "[✓] Finished processing: " << infile << std::endl;
+    std::cout << "Finished processing: " << infile << std::endl;
 }
 
 int main(int argc, char** argv) {
