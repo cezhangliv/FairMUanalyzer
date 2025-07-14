@@ -17,7 +17,7 @@ int main(int argc, char** argv) {
         //inputFile = "root/single_muon_interaction_1_CDbugfix11July25_muedaq04-1750228896-1750228937_MF1.root";
         //inputFile = "root/single_muon_interaction_1_CDbugfix11July25_muedaq04-1750228779-1750228937_MF1.root";
         //inputFile = "root/single_muon_interaction_1_CDbugfix11July25_muedaq04-1750227094-1750228621_MF1.root";
-        inputFile = "root/single_muon_interaction_1_CDbugfix11July25_muedaq04-1750227094-1750228937_MF1.root";
+        inputFile = "root/single_muon_interaction_1_CDbugfix11July25_run8_muedaq04-1750227094-1750228937_MF1.root";
         
         //std::cerr << "Usage: " << argv[0] << " input.root [output_prefix]" << std::endl;
         //return 1;
