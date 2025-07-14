@@ -6,30 +6,7 @@
 #include <set>
 #include <algorithm>
 #include <cmath>
-/*
-double me=0.51099906e-3;
-double mu=105.65836900e-3;
-double Ebeam=160;
 
-double Eevsth(double *x, double *par){
-    double th = *x;
-    double Emu = par[0];
-    double r = sqrt(Emu*Emu-mu*mu)/(Emu+me);
-    return  me*(1.+r*r*cos(th)*cos(th))/(1-r*r*cos(th)*cos(th));
-}
-
-
-double thmu_vs_the(double *x, double *par){
-    //double th = *x/1000.;
-    double th = *x/1.;
-    double Emu = par[0];
-    double pmu = sqrt(Emu*Emu-mu*mu);
-    double Ee = Eevsth(&th, par);
-    double pe = sqrt(Ee*Ee-me*me);
-    //return 1000.*acos((pmu-pe*cos(th))/sqrt(pe*pe+pmu*pmu-2*pmu*pe*cos(th)));
-    return 1.*acos((pmu-pe*cos(th))/sqrt(pe*pe+pmu*pmu-2*pmu*pe*cos(th)));
-}
-*/
 
 FairMUanalyzer::FairMUanalyzer() : inputFile_(nullptr), cbmsim_(nullptr), reco_(nullptr), MuonFilterHits_(3), outputPrefix_("result/FairMUanalyzer"), savepdf_(true) {
     
@@ -174,8 +151,8 @@ double FairMUanalyzer::computeSigned2DResidualMF(const TVector3& p3D, const TVec
 }
 
 void FairMUanalyzer::Analyze() {
-    //AnalyzeMF();
-    AnalyzeTRK();
+    //AnalyzeMF(); // run muon filter analysis (passing muon efficiency check)
+    AnalyzeTRK(); // run tracker analysis (elastic scattering plot)
 }
 
 void FairMUanalyzer::SaveResults() {

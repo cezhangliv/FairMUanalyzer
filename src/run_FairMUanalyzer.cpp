@@ -2,16 +2,10 @@
 #include <iostream>
 #include <TSystem.h>
 
-//./run_FairMUanalyzer <input.root> [output_prefix]
-// ./run_FairMUanalyzer root/event123.root
-// output: result/FairMUanalyzer_event123.root
+//./run_FairMUanalyzer [input.root] [output_prefix]
 //./run_FairMUanalyzer root/event123.root custom/output/path/myresult
 // output to custom/output/path/myresult.root
 
-//for f in root/example*.root; do
-//  ./run_FairMUanalyzer "$f" &
-//done
-//wait
 
 
 int main(int argc, char** argv) {

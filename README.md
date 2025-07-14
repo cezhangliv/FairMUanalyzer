@@ -1,6 +1,6 @@
 # FairMUanalyzer
 
-A modular C++ analysis framework for MUonE ROOT files using FairRoot/MUonEReco infrastructure.
+A modular C++ analysis framework for MUonE ROOT files using FairRoot infrastructure. Developed by C Zhang.
 
 ---
 
@@ -53,6 +53,11 @@ This produces:
 ### Analyze a single file:
 ```bash
 ./run_FairMUanalyzer input.root
+```
+
+or you can set the file path inside run_FairMUanalyzer (hard coded), then just run
+```bash
+./run_FairMUanalyzer 
 ```
 
 ### Analyze all `.root` files in a directory with 4 threads:
