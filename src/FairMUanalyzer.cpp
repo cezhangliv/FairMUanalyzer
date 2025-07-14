@@ -214,6 +214,7 @@ void FairMUanalyzer::SaveResults() {
     f_elastic->Draw("same");
 
     c10->SaveAs(Form("%s_theta_e_theta_mu.pdf", outputPrefix_.Data()));
+    c10->SaveAs(Form("%s_theta_e_theta_mu.root", outputPrefix_.Data()));
 
     TCanvas* c0 = new TCanvas(Form("c0_%s", outputPrefix_.Data()), "Tracks multiplicity", 600, 400);
     h_Ntracks->GetYaxis()->SetRangeUser(0, h_Ntracks->GetMaximum() * 1.2);
