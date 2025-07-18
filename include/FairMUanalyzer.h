@@ -8,10 +8,9 @@
 #include "TCanvas.h"
 #include "TVector3.h"
 #include "MUonERecoOutputAnalysis.h"
-
-
 #include <vector>
 #include <string>
+
 
 class FairMUanalyzer {
 public:
@@ -20,7 +19,14 @@ public:
 
     void SetInputFile(const std::string& path);
     void SetOutputPrefix(const std::string& prefix);
-    void SetMuonFilterHits(int val);
+    
+    void SetSavepdf(bool val);
+    void SetMf(bool val);
+    void SetRunN(Long64_t val);
+    void SetTgt(int val);
+
+    void SetMuonFilterHits(int val);//not very useful
+    
     void Run();
 
     static double Eevsth(double* x, double* par);
@@ -30,9 +36,14 @@ public:
 private:
     std::string inputFilePath_;
     TString outputPrefix_;
-    int MuonFilterHits_;
-    int goldenevents_;
+    
+    bool mf_;
     bool savepdf_;
+    Long64_t runN_;
+    int tgt_;
+    int MuonFilterHits_;
+
+    int goldenevents_;
 
     TFile* inputFile_;
     TTree* cbmsim_;

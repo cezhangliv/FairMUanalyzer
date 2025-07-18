@@ -5,6 +5,8 @@
 #include <iostream>
 #include <TSystem.h>
 
+//./batch_run root/prefix
+
 namespace fs = std::filesystem;
 
 void processFile(const std::string& infile) {
@@ -22,6 +24,14 @@ void processFile(const std::string& infile) {
     FairMUanalyzer analyzer;
     analyzer.SetInputFile(infile);
     analyzer.SetOutputPrefix(outdir + "/FairMUanalyzer_" + std::string(base.Data()));
+    
+    analyzer.SetSavepdf(true);
+    
+    analyzer.SetRunN(10000);
+    analyzer.SetTgt(1);
+    analyzer.SetMf(true);
+    
+    //analyzer.SetMuonFilterHits(3);
     analyzer.Run();
 
     std::cout << "Finished processing: " << infile << std::endl;

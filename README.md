@@ -4,6 +4,19 @@ A modular C++ analysis framework for MUonE ROOT files using FairRoot infrastruct
 
 ---
 
+## Tops
+run_FairMUanalyzer 是可以设定成改参数的，因为可以分别在run_FairMUanalyzer.sh上面跑
+batch_run 就没有必要了，反正都是大规模跑，也没法改参数，不如设定好以后 make 然后 run
+```
+./run_FairMUanalyzer [input.root] [output_prefix]
+```
+```
+./batch_run root/prefix
+```
+
+详情见 analyzer.Run();之前的各种 set
+
+
 ## Requirements
 
 - ROOT (via `root-config`)

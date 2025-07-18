@@ -5,8 +5,9 @@
 
 void FairMUanalyzer::AnalyzeMF() {
 
-    Long64_t N = cbmsim_->GetEntries();
-    std::cout << "Processing " << N << " events..." << std::endl;
+
+    Long64_t N = runN_>0?runN_:cbmsim_->GetEntries();
+    std::cout << "Processing " << N << " ** passing muon ** events..." << std::endl;
     for (Long64_t i = 0; i < N; ++i) {
         cbmsim_->GetEntry(i);
         const auto& tracks = reco_->reconstructedTracks();

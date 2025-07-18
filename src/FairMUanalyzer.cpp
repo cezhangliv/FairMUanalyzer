@@ -8,7 +8,9 @@
 #include <cmath>
 
 
-FairMUanalyzer::FairMUanalyzer() : inputFile_(nullptr), cbmsim_(nullptr), reco_(nullptr), MuonFilterHits_(3), outputPrefix_("result/FairMUanalyzer"), savepdf_(true) {
+FairMUanalyzer::FairMUanalyzer() : inputFile_(nullptr), cbmsim_(nullptr), reco_(nullptr), 
+    MuonFilterHits_(3), outputPrefix_("result/FairMUanalyzer"), 
+    savepdf_(true), tgt_(1), runN_(-1), mf_(true) {
     
     goldenevents_ = 0;
 
@@ -54,9 +56,52 @@ FairMUanalyzer::FairMUanalyzer() : inputFile_(nullptr), cbmsim_(nullptr), reco_(
     h_2d_ref = new TH2D("h_2d_ref","Electron VS Muon angle; Electron [rad]; Muon [rad]" ,500,0.,0.032,500,0.,0.005);
 }
 
+void FairMUanalyzer::SetRunN(Long64_t val) {
+    runN_ = val;
+}
+
+void FairMUanalyzer::SetTgt(int val) {
+    tgt_ = val;
+}
+
+void FairMUanalyzer::SetMuonFilterHits(int val) {
+    MuonFilterHits_ = val;
+}
+
+void FairMUanalyzer::SetSavepdf(bool val) {
+    savepdf_ = val;
+}
+
+void FairMUanalyzer::SetMf(bool val) {
+    mf_ = val;
+}
+
+
+void FairMUanalyzer::Run() {
+    Init();
+    Analyze();
+    SaveResults();
+}
+
 void FairMUanalyzer::Analyze() {
-    AnalyzeMF(); // run muon filter analysis (passing muon efficiency check)
-    //AnalyzeTRK(); // run tracker analysis (elastic scattering plot)
+    if(tgt_<0 || tgt_>1)AnalyzeMF(); // run muon filter analysis (passing muon efficiency check)
+    else AnalyzeTRK(); // run tracker analysis (elastic scattering plot)
+}
+
+void FairMUanalyzer::Init() {
+    inputFile_ = new TFile(inputFilePath_.c_str());
+    if (!inputFile_ || inputFile_->IsZombie()) {
+        std::cerr << "Failed to open input file: " << inputFilePath_ << std::endl;
+        return;
+    }
+
+    cbmsim_ = (TTree*) inputFile_->Get("cbmsim");
+    if (!cbmsim_) {
+        std::cerr << "Cannot find cbmsim tree in file: " << inputFilePath_ << std::endl;
+        return;
+    }
+
+    cbmsim_->SetBranchAddress("ReconstructionOutput", &reco_);
 }
 
 double FairMUanalyzer::Eevsth(double* x, double* par) {
@@ -87,31 +132,6 @@ void FairMUanalyzer::SetOutputPrefix(const std::string& prefix) {
     outputPrefix_ = prefix.c_str();
 }
 
-void FairMUanalyzer::SetMuonFilterHits(int val) {
-    MuonFilterHits_ = val;
-}
-
-void FairMUanalyzer::Run() {
-    Init();
-    Analyze();
-    SaveResults();
-}
-
-void FairMUanalyzer::Init() {
-    inputFile_ = new TFile(inputFilePath_.c_str());
-    if (!inputFile_ || inputFile_->IsZombie()) {
-        std::cerr << "Failed to open input file: " << inputFilePath_ << std::endl;
-        return;
-    }
-
-    cbmsim_ = (TTree*) inputFile_->Get("cbmsim");
-    if (!cbmsim_) {
-        std::cerr << "Cannot find cbmsim tree in file: " << inputFilePath_ << std::endl;
-        return;
-    }
-
-    cbmsim_->SetBranchAddress("ReconstructionOutput", &reco_);
-}
 
 TVector3 FairMUanalyzer::getXYfromHitMF(const MUonERecoOutputHitAnalysis& hit) {
     double pos = hit.positionPerpendicular();
@@ -158,6 +178,7 @@ double FairMUanalyzer::computeSigned2DResidualMF(const TVector3& p3D, const TVec
 
 
 void FairMUanalyzer::SaveResults() {
+
     TFile* fout = new TFile(Form("%s_output.root", outputPrefix_.Data()), "RECREATE");
     for (int i = 0; i < 3; ++i) {
         h_residual_hitOnTrack[i]->Write();
@@ -168,6 +189,11 @@ void FairMUanalyzer::SaveResults() {
             h_residual_hitAllTrackModule[i][j]->Write();
         }
     }
+    h_2d->Write();
+    h_2d_ref->Write();
+    h_Ntracks->Write();
+    h_hits_zcut->Write();
+    h_isMuon->Write();
     fout->Close();
 
     if(!savepdf_)return;

@@ -3,18 +3,20 @@
 #include <algorithm>
 #include <iostream>
 
-int TGT1 = 0;
-int TGT2 = 1;
-bool MF=false;
-
 
 void FairMUanalyzer::AnalyzeTRK() {
 
     goldenevents_ = 0;
 
-    Long64_t N = cbmsim_->GetEntries();
-    //Long64_t N = 100;
-    std::cout << "Processing " << N << " events..." << std::endl;
+    Long64_t N = runN_>0?runN_:cbmsim_->GetEntries();
+
+    int TGT1 = tgt_==0?1:0;
+    int TGT2 = tgt_==1?1:0;
+    if(!TGT1 && !TGT2){std::cout<<"wrong set up on TGT! return."<<std::endl;return;}
+
+    bool MF= mf_?true:false;
+
+    std::cout << "Processing " << N << Form(" ** interaction tgt%d ** events...",tgt_) << std::endl;
     for (Long64_t i = 0; i < N; ++i) {
         cbmsim_->GetEntry(i);
         const auto& tracks = reco_->reconstructedTracks();
@@ -220,8 +222,6 @@ void FairMUanalyzer::AnalyzeTRK() {
                     else h_2d->Fill(angle1,angle0);
                     
                 }
-
-
 
 
 

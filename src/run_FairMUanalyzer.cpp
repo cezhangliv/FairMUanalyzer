@@ -1,24 +1,17 @@
 #include "FairMUanalyzer.h"
 #include <iostream>
+#include <string>
 #include <TSystem.h>
 
-//./run_FairMUanalyzer [input.root] [output_prefix]
-//./run_FairMUanalyzer root/event123.root custom/output/path/myresult
-// output to custom/output/path/myresult.root
-
-
+//./run_FairMUanalyzer [input.root] [output_prefix] [RunN] [Tgt] 
+// more see run_FairMUanalyzer.sh
 
 int main(int argc, char** argv) {
     
     std::string inputFile;
     if (argc < 2) {
         
-        //inputFile = "root/single_muon_interaction_1_CDbugfix11July25_run8_muedaq04-1750227094-1750228937_MF1.root";
-        //inputFile = "root/single_muon_interaction_1_CDbugfix11July25_run11_muedaq04-1750493893-1750494687_MF1.root";
-        //inputFile = "root/single_muon_interaction_1_CDbugfix11July25_run12_muedaq04-1752206496-1752209387_MF1.root";
-		inputFile = "root/single_muon_interaction_1_CDbugfix11July25_run8_muedaq04-1750227094-1750228937_MF1_maxNumberOfSharedHits2.root";
-        
-        
+        inputFile = "root/single_muon_interaction_1_CDbugfix11July25_run8_muedaq04-1750227094-1750228937_MF1.root";
         //std::cerr << "Usage: " << argv[0] << " input.root [output_prefix]" << std::endl;
         //return 1;
     }
@@ -32,9 +25,24 @@ int main(int argc, char** argv) {
     std::cout<<"inputFile: "<<inputFile<<std::endl;
     std::cout<<"outputPrefix: "<<outputPrefix<<std::endl;
 
+
     FairMUanalyzer analyzer;
     analyzer.SetInputFile(inputFile);
     analyzer.SetOutputPrefix(outputPrefix);
+    
+    analyzer.SetSavepdf(true);
+    analyzer.SetRunN((argc > 3) ? std::stoll(argv[3]) : -1);
+	analyzer.SetTgt((argc > 4) ? std::stoi(argv[4]) : 1);
+    
+    bool mf_flag = true;
+	if (argc > 5) {
+    	std::string arg = argv[5];
+    	std::transform(arg.begin(), arg.end(), arg.begin(), ::tolower);
+    	mf_flag = (arg == "true" || arg == "1");
+	}
+	analyzer.SetMf(mf_flag);
+
+    //analyzer.SetMuonFilterHits(3);
     analyzer.Run();
 
     return 0;
