@@ -3,6 +3,10 @@
 #include <algorithm>
 #include <iostream>
 
+int TGT1 = 0;
+int TGT2 = 1;
+bool MF=false;
+
 
 void FairMUanalyzer::AnalyzeTRK() {
 
@@ -59,11 +63,7 @@ void FairMUanalyzer::AnalyzeTRK() {
             }
         }
 
-        //std::cout<<__LINE__<<std::endl;
-
-
-
-        if (tracks.size() >= 4) {
+        if ( (TGT2 && tracks.size() >= 4) || (TGT1 && tracks.size() >= 3) ) {
 
             bool isGolden = true;
             std::set<int> sectors;
@@ -83,7 +83,8 @@ void FairMUanalyzer::AnalyzeTRK() {
 
             //std::cout<<__LINE__<<std::endl;
 
-            if(bestvtx.zPositionFit()<770)continue;
+            if(TGT2 && bestvtx.zPositionFit()<770)continue;
+            if(TGT1 && bestvtx.zPositionFit()<670)continue;
 
             if (isGolden) {
 
@@ -95,18 +96,24 @@ void FairMUanalyzer::AnalyzeTRK() {
                 }
 
                 std::vector<TVector3> in; in.reserve(12);
+                std::vector<TVector3> out; out.reserve(12);
                 std::vector<TVector3> out_e; out_e.reserve(12);
                 std::vector<TVector3> outmuon; outmuon.reserve(12);
 
                 int sec0=0; 
                 int sec1=0;
+                int sec2=0;
+                
+                int sec1e=0;
+                int sec1muon=0;
                 int sec2e=0;
                 int sec2muon=0;
 
-                //std::cout<<__LINE__<<std::endl;
 
                 for(int j=0; j<tracks.size();j++)
                 {
+                    if(TGT1)continue;
+
                     if(tracks.at(j).sector()==1) {
                         TVector3 v(tracks.at(j).xSlope(),tracks.at(j).ySlope(),1.0); v=v.Unit(); in.push_back(v);
                         
@@ -115,14 +122,46 @@ void FairMUanalyzer::AnalyzeTRK() {
 
                         sec1++;
                     }
-                    if(tracks.at(j).sector()==2) {
+                    if(tracks.at(j).sector()==2 && MF) {
                         if(tracks.at(j).isMuon()){sec2muon++; TVector3 v(tracks.at(j).xSlope(),tracks.at(j).ySlope(),1.0); v=v.Unit(); outmuon.push_back(v);}
                         else {sec2e++; TVector3 v(tracks.at(j).xSlope(),tracks.at(j).ySlope(),1.0); v=v.Unit(); out_e.push_back(v);}
                     }    
+                    else if(tracks.at(j).sector()==2){
+                        sec2++; TVector3 v(tracks.at(j).xSlope(),tracks.at(j).ySlope(),1.0); v=v.Unit(); out.push_back(v);
+                        
+
+                    }
 
                 }
 
-                if(sec1==1 && sec2e==1 && sec2muon==1){
+                for(int j=0; j<tracks.size();j++)
+                {
+                    if(TGT2)continue;
+                    
+                    if(tracks.at(j).sector()==0) {
+                        TVector3 v(tracks.at(j).xSlope(),tracks.at(j).ySlope(),1.0); v=v.Unit(); in.push_back(v);
+                        
+                        //Eugenia's cut https://indico.cern.ch/event/1476217/contributions/6217032/attachments/2962101/5210167/tesi_phd_weekly.pdf
+                        if(v.Theta()>4e-3 || tracks.at(j).chi2perDegreeOfFreedom()>=2 )continue;
+
+                        sec0++;
+                    }
+                    if(tracks.at(j).sector()==1 && MF) {
+                        if(tracks.at(j).isMuon()){sec1muon++; TVector3 v(tracks.at(j).xSlope(),tracks.at(j).ySlope(),1.0); v=v.Unit(); outmuon.push_back(v);}
+                        else {sec1e++; TVector3 v(tracks.at(j).xSlope(),tracks.at(j).ySlope(),1.0); v=v.Unit(); out_e.push_back(v);}
+                    }    
+                    else if(tracks.at(j).sector()==1){
+                        sec1++; TVector3 v(tracks.at(j).xSlope(),tracks.at(j).ySlope(),1.0); v=v.Unit(); out.push_back(v);
+                        
+
+                    }
+
+                }
+                //case1: with MF tgt1/2
+                if( MF && 
+                    ( (sec1==1 && sec2e==1 && sec2muon==1) || (sec0==1 && sec1e==1 && sec1muon==1) )
+                   ) 
+                {
 
                     //std::cout<<__LINE__<<std::endl;
                     //double angle0=in.at(0).Angle(out.at(0)); 
@@ -150,6 +189,42 @@ void FairMUanalyzer::AnalyzeTRK() {
                     //else h_2d->Fill(angle1,angle0);
                     h_2d->Fill(angle_e,angle_mu);
                 }
+
+                //case2: w/o MF, tgt1/2
+                if( !MF && 
+                    ( (sec1==1 && sec2==2) || (sec0==1 && sec1==2 ) )
+                   ) 
+                {
+
+                    //std::cout<<__LINE__<<std::endl;
+                    double angle0=in.at(0).Angle(out.at(0)); 
+                    double angle1=in.at(0).Angle(out.at(1)); 
+
+
+
+                    double dotProduct_v = out.at(0).Dot(out.at(1));
+                    TVector3 crossProduct_v = out.at(0).Cross(out.at(1));
+
+                    double T_v = in.at(0).Dot(crossProduct_v);
+                    TVector3 im_v= in.at(0).Cross(out.at(0));
+                    TVector3 ie_v= in.at(0).Cross(out.at(1));
+                    T_v = T_v>0? 1:-1;
+                    double acoplanarity_v= T_v*(TMath::Pi() - acos( ((im_v).Dot(ie_v))/(im_v.Mag()*ie_v.Mag()) ));
+
+                    if( abs(acoplanarity_v)>0.4)continue;//0.4 rad
+            
+                    //if(tracks.size()!=3 || (angle0>angle1 && angle0>0.032) || (angle0<angle1 && angle1>0.032) || (angle0>angle1 && angle1<0.0002) || (angle0<angle1 && angle0<0.0002) )continue;
+                    //flag_good_event = 1;
+
+                    if(angle0>angle1) h_2d->Fill(angle0,angle1);
+                    else h_2d->Fill(angle1,angle0);
+                    
+                }
+
+
+
+
+
                 /*
                 for (int t = 0; t < 3; ++t) {
                     const auto& muonTrack = tracks[t];

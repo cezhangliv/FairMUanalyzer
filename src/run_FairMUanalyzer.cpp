@@ -12,12 +12,12 @@ int main(int argc, char** argv) {
     
     std::string inputFile;
     if (argc < 2) {
-        //inputFile = "root/passing_muon_muedaq04-1750192160_CDbugfix8July25_MuonFilterHits3.root";
-        //inputFile = "root/exampleProductionJob_passingmuon_perfectalign_5000_minMuonFilterHits3.root";
-        //inputFile = "root/single_muon_interaction_1_CDbugfix11July25_muedaq04-1750228896-1750228937_MF1.root";
-        //inputFile = "root/single_muon_interaction_1_CDbugfix11July25_muedaq04-1750228779-1750228937_MF1.root";
-        //inputFile = "root/single_muon_interaction_1_CDbugfix11July25_muedaq04-1750227094-1750228621_MF1.root";
-        inputFile = "root/single_muon_interaction_1_CDbugfix11July25_run8_muedaq04-1750227094-1750228937_MF1.root";
+        
+        //inputFile = "root/single_muon_interaction_1_CDbugfix11July25_run8_muedaq04-1750227094-1750228937_MF1.root";
+        //inputFile = "root/single_muon_interaction_1_CDbugfix11July25_run11_muedaq04-1750493893-1750494687_MF1.root";
+        //inputFile = "root/single_muon_interaction_1_CDbugfix11July25_run12_muedaq04-1752206496-1752209387_MF1.root";
+		inputFile = "root/single_muon_interaction_1_CDbugfix11July25_run8_muedaq04-1750227094-1750228937_MF1_maxNumberOfSharedHits2.root";
+        
         
         //std::cerr << "Usage: " << argv[0] << " input.root [output_prefix]" << std::endl;
         //return 1;

@@ -54,6 +54,11 @@ FairMUanalyzer::FairMUanalyzer() : inputFile_(nullptr), cbmsim_(nullptr), reco_(
     h_2d_ref = new TH2D("h_2d_ref","Electron VS Muon angle; Electron [rad]; Muon [rad]" ,500,0.,0.032,500,0.,0.005);
 }
 
+void FairMUanalyzer::Analyze() {
+    AnalyzeMF(); // run muon filter analysis (passing muon efficiency check)
+    //AnalyzeTRK(); // run tracker analysis (elastic scattering plot)
+}
+
 double FairMUanalyzer::Eevsth(double* x, double* par) {
     double th = *x;
     double Emu = par[0];
@@ -150,10 +155,7 @@ double FairMUanalyzer::computeSigned2DResidualMF(const TVector3& p3D, const TVec
     return cross.Dot(normal) / p.Mag();
 }
 
-void FairMUanalyzer::Analyze() {
-    //AnalyzeMF(); // run muon filter analysis (passing muon efficiency check)
-    AnalyzeTRK(); // run tracker analysis (elastic scattering plot)
-}
+
 
 void FairMUanalyzer::SaveResults() {
     TFile* fout = new TFile(Form("%s_output.root", outputPrefix_.Data()), "RECREATE");

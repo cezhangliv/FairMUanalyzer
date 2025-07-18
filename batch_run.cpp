@@ -57,7 +57,7 @@ int main(int argc, char** argv) {
     std::cout << "Found " << files.size() << " ROOT files in " << inputArg << std::endl;
 
     for (const auto& file : files) {
-        processFile(file);  // 串行处理每个文件
+        processFile(file);  
     }
 
     return 0;
