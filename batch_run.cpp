@@ -27,10 +27,10 @@ void processFile(const std::string& infile) {
     
     analyzer.SetSavepdf(true);
     
-    analyzer.SetRunN(10000);
+    analyzer.SetRunN(-1);
     analyzer.SetTgt(1);
     analyzer.SetMf(true);
-    
+
     //analyzer.SetMuonFilterHits(3);
     analyzer.Run();
 

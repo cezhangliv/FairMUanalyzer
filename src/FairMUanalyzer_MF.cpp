@@ -8,7 +8,11 @@ void FairMUanalyzer::AnalyzeMF() {
 
     Long64_t N = runN_>0?runN_:cbmsim_->GetEntries();
     std::cout << "Processing " << N << " ** passing muon ** events..." << std::endl;
+
     for (Long64_t i = 0; i < N; ++i) {
+        
+        if (i % (N / 10) == 0 || i == N - 1) {double progress = 100.0 * i / N;printf("Processing: %.1f%% (%lld/%lld)\n", progress, i, N);}
+
         cbmsim_->GetEntry(i);
         const auto& tracks = reco_->reconstructedTracks();
         const auto& hits = reco_->reconstructedHits();
@@ -41,7 +45,6 @@ void FairMUanalyzer::AnalyzeMF() {
                 for (auto const& hit : hits) {
                     if (hit.z() > 1000) {
                         
-                        //cout<<"module ID: "<<hit.moduleID()<<endl;
                         h_hitsModuleID_zcut[n_muons]->Fill(hit.moduleID());
 
                         auto const& muIDs = hit.muonIds();  // vector<Int_t>

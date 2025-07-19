@@ -4,6 +4,7 @@
 #include "TFile.h"
 #include "TTree.h"
 #include "TString.h"
+#include "TGraph.h"
 #include "TH1F.h"
 #include "TCanvas.h"
 #include "TVector3.h"
@@ -59,12 +60,20 @@ private:
     TH1F* h_hits_zcut;
     TH1F* h_hitsModuleID_zcut[5];
     TH1F* h_hitsPerMuonTrack_zcut[5];
+
+    TH1F* h_goldenMuon_isMuon[3];
+
     TH1F* h_isMuon;
     TH1F* h_Ntracks;
-    TH1F* h_goldenMuon_isMuon[3];
+    
     TH2D *h_2d;
     TH2D *h_2d_ref;
     TF1 *f_elastic;
+    TGraph* g_elastic;
+
+    TH1I* hCaseDist;
+    std::map<std::string, int> case_counts;
+
 
     void Init();
     void Analyze();
@@ -76,7 +85,10 @@ private:
     static constexpr double mu_ = 105.65836900e-3; // Muon mass [GeV]
     static constexpr double Ebeam_ = 160;          // Beam energy [GeV]
 
+    static constexpr double z_tgt1_ = 664.6;          // origin: 667.3 ; targetRelativePosition: -2.7
+    static constexpr double z_tgt2_ = 780.7;        //cm,  origin: 784.6 ; targetRelativePosition: -3.9
 
+    static constexpr int maxNhitInStat_ = 30; // Giovanni A suggested to set a max hit cut in a station
 
 
     TVector3 getXYfromHitMF(const MUonERecoOutputHitAnalysis& hit);

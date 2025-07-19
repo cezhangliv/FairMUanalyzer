@@ -17,11 +17,14 @@ FairMUanalyzer::FairMUanalyzer() : inputFile_(nullptr), cbmsim_(nullptr), reco_(
     f_elastic = new TF1("f_elastic", thmu_vs_the,  0., 0.032,1);
     f_elastic->SetParameter(0, Ebeam_);
     f_elastic->SetNpx(1e5);
+    f_elastic->SetTitle("Theoratical muon scattering angle vs electron angle");
+    f_elastic->SetName("f_elastic");
+    g_elastic = new TGraph();
 
     TH1::AddDirectory(kFALSE);
     gStyle->SetOptStat(1111);
 
-    h_hits_zcut = new TH1F("h_hits_zcut", "Number of hits in MF; Hits;Entries", 20, 0, 20);
+    h_hits_zcut = new TH1F("h_hits_zcut (MF hits)", "Number of hits in MF; Hits;Entries", 20, 0, 20);
     h_isMuon = new TH1F("h_isMuon", "Number of 'Muon' tracks; isMuon tracks per event;Entries", 20, 0, 20);
     h_Ntracks = new TH1F("h_Ntracks", "Tracks multiplicity; tracks per event;Entries", 20, 0, 20);
     
@@ -39,7 +42,7 @@ FairMUanalyzer::FairMUanalyzer() : inputFile_(nullptr), cbmsim_(nullptr), reco_(
 
     h_goldenMuon_isMuon[3];
     for (int i = 0; i < 3; i++) {
-        h_goldenMuon_isMuon[i] = new TH1F( Form("h_goldenMuon_isMuon_atStat%i",i), Form("golden muon isMuon? at station %i;isMuon;Entries",i), 2, 0, 2);
+        h_goldenMuon_isMuon[i] = new TH1F( Form("h_goldenMuon_isMuon_atStat%i",i), Form("golden passing muon isMuon? at station %i;isMuon;Entries",i), 2, 0, 2);
     }
 
     for (int i = 0; i < 3; ++i) {
@@ -54,6 +57,29 @@ FairMUanalyzer::FairMUanalyzer() : inputFile_(nullptr), cbmsim_(nullptr), reco_(
 
     h_2d = new TH2D("h_2d","Electron VS Muon angle; Electron [rad]; Muon [rad]" ,500,0.,0.032,500,0.,0.005);
     h_2d_ref = new TH2D("h_2d_ref","Electron VS Muon angle; Electron [rad]; Muon [rad]" ,500,0.,0.032,500,0.,0.005);
+
+    //count the cases:
+    hCaseDist = new TH1I("hCaseDist", "Case Distribution", 10, 0, 10);
+    hCaseDist->GetXaxis()->SetBinLabel(1, "Total");
+    hCaseDist->GetXaxis()->SetBinLabel(2, "golden");
+    hCaseDist->GetXaxis()->SetBinLabel(3, "t0mem");
+    hCaseDist->GetXaxis()->SetBinLabel(4, "t0mee");
+    hCaseDist->GetXaxis()->SetBinLabel(5, "t0mmm");
+    hCaseDist->GetXaxis()->SetBinLabel(6, "t1mem");
+    hCaseDist->GetXaxis()->SetBinLabel(7, "t1mee");
+    hCaseDist->GetXaxis()->SetBinLabel(8, "t1mmm");
+
+}
+
+void FairMUanalyzer::Run() {
+    Init();
+    Analyze();
+    SaveResults();
+}
+
+void FairMUanalyzer::Analyze() {
+    if(tgt_<0 || tgt_>1)AnalyzeMF(); // run muon filter analysis (passing muon efficiency check)
+    else AnalyzeTRK(); // run tracker analysis (elastic scattering plot)
 }
 
 void FairMUanalyzer::SetRunN(Long64_t val) {
@@ -76,17 +102,6 @@ void FairMUanalyzer::SetMf(bool val) {
     mf_ = val;
 }
 
-
-void FairMUanalyzer::Run() {
-    Init();
-    Analyze();
-    SaveResults();
-}
-
-void FairMUanalyzer::Analyze() {
-    if(tgt_<0 || tgt_>1)AnalyzeMF(); // run muon filter analysis (passing muon efficiency check)
-    else AnalyzeTRK(); // run tracker analysis (elastic scattering plot)
-}
 
 void FairMUanalyzer::Init() {
     inputFile_ = new TFile(inputFilePath_.c_str());
@@ -179,6 +194,26 @@ double FairMUanalyzer::computeSigned2DResidualMF(const TVector3& p3D, const TVec
 
 void FairMUanalyzer::SaveResults() {
 
+    for (const auto& [key, value] : case_counts) {
+        int bin = 0;
+        if (key == "Total") bin = 1;
+        else if (key == "golden") bin = 2;
+        else if (key == "t0mem") bin = 3;
+        else if (key == "t0mee") bin = 4;
+        else if (key == "t0mmm") bin = 5;
+        else if (key == "t1mem") bin = 6;
+        else if (key == "t1mee") bin = 7;
+        else if (key == "t1mmm") bin = 8;
+
+        hCaseDist->SetBinContent(bin, value);
+    }
+    for (const auto& [key, value] : case_counts) {
+        if (key == "Total") continue;
+        std::cout << key << ": " << value << " ("
+                  << 100.0 * value / case_counts["Total"] << "%)" << std::endl;
+    }
+
+
     TFile* fout = new TFile(Form("%s_output.root", outputPrefix_.Data()), "RECREATE");
     for (int i = 0; i < 3; ++i) {
         h_residual_hitOnTrack[i]->Write();
@@ -189,21 +224,16 @@ void FairMUanalyzer::SaveResults() {
             h_residual_hitAllTrackModule[i][j]->Write();
         }
     }
-    h_2d->Write();
-    h_2d_ref->Write();
-    h_Ntracks->Write();
-    h_hits_zcut->Write();
-    h_isMuon->Write();
-    fout->Close();
+    for (int i = 0; i < 3; i++) {
+        h_goldenMuon_isMuon[i]->Write();
+    }
+    for (int i = 1; i <= 4; i++) {
+        h_hitsPerMuonTrack_zcut[i]->Write();
+        h_hitsModuleID_zcut[i]->Write();
+    }
 
-    if(!savepdf_)return;
-
-
-    TCanvas* c10 = new TCanvas(Form("c10_%s", outputPrefix_.Data()), "Theta_e_theta_mu", 600, 400);
-    h_2d->Draw("colz");
     double k = 1; 
     double b = 0.0; 
-
     for (int i = 1; i <= h_2d_ref->GetNbinsX(); ++i) {
         double x = h_2d_ref->GetXaxis()->GetBinCenter(i);
         double y = k * x + b;
@@ -213,31 +243,60 @@ void FairMUanalyzer::SaveResults() {
             h_2d_ref->SetBinContent(i, j, 1.0); 
         }
     }
-    h_2d_ref->Draw("same");
+
     f_elastic->SetLineWidth(1);
     f_elastic->SetLineColor(kRed);
+    h_2d_ref->SetLineColor(kBlack);
+    h_2d_ref->SetMarkerColor(kBlack);
+
+    for (int i = 0; i < 1000; ++i) {
+        double x = 0.000032 * i / 1000;
+        double y = f_elastic->Eval(x);
+        g_elastic->SetPoint(i, x, y);
+    }
+    g_elastic->SetName("g_elastic");
+    g_elastic->SetTitle("Theoratical elastic curve; Theta_e [rad];Theta_mu [rad]");
+    g_elastic->Write();
+    
+    h_2d->Write();
+    //f_elastic->Write("f_elastic");
+    g_elastic->Write("g_elastic");
+    h_2d_ref->Write();
+
+    hCaseDist->Write();
+
+    h_hits_zcut->Write();
+
+    h_Ntracks->GetYaxis()->SetRangeUser(0, h_Ntracks->GetMaximum() * 1.2);
+    h_Ntracks->Write();
+
+    h_isMuon->GetYaxis()->SetRangeUser(0, h_isMuon->GetMaximum() * 1.2);
+    h_isMuon->SetLineColor(kRed);
+    h_isMuon->Write();
+    fout->Close();
+
+    if(!savepdf_)return;
+
+    TCanvas* c10 = new TCanvas(Form("c10_%s", outputPrefix_.Data()), "Theta_e_theta_mu", 600, 400);
+    h_2d->Draw("colz");
+    h_2d_ref->Draw("same");
     f_elastic->Draw("same");
 
     c10->SaveAs(Form("%s_theta_e_theta_mu.pdf", outputPrefix_.Data()));
-    c10->SaveAs(Form("%s_theta_e_theta_mu.root", outputPrefix_.Data()));
 
     TCanvas* c0 = new TCanvas(Form("c0_%s", outputPrefix_.Data()), "Tracks multiplicity", 600, 400);
-    h_Ntracks->GetYaxis()->SetRangeUser(0, h_Ntracks->GetMaximum() * 1.2);
     h_Ntracks->Draw();
     auto legend = new TLegend(0.4, 0.7, 0.9, 0.9);
     legend->AddEntry(h_Ntracks, "(all) tracks multiplicity", "l");
     legend->Draw();
     c0->SaveAs(Form("%s_all_tracksMulti.pdf", outputPrefix_.Data()));
 
-    
 
     TCanvas* c11 = new TCanvas(Form("c11_%s", outputPrefix_.Data()), "Muon tracks multiplicity", 1200, 400);
     c11->Divide(2,1);
     c11->cd(1);
     h_hits_zcut->Draw();
     c11->cd(2);
-    h_isMuon->GetYaxis()->SetRangeUser(0, h_isMuon->GetMaximum() * 1.2);
-    h_isMuon->SetLineColor(kRed);
     h_isMuon->Draw("");
     auto legend11 = new TLegend(0.4, 0.7, 0.9, 0.9);
     legend11->AddEntry(h_isMuon, "muon tracks multiplicity by MF", "l");
