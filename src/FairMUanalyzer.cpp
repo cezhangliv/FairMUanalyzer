@@ -287,6 +287,14 @@ void FairMUanalyzer::SaveResults() {
 
     if(!savepdf_)return;
 
+
+    TCanvas* c0 = new TCanvas(Form("c0_%s", outputPrefix_.Data()), "Tracks multiplicity", 600, 400);
+    h_Ntracks->Draw();
+    auto legend = new TLegend(0.4, 0.7, 0.9, 0.9);
+    legend->AddEntry(h_Ntracks, "(all) tracks multiplicity", "l");
+    legend->Draw();
+    c0->SaveAs(Form("%s_c0_all_tracksMulti.pdf", outputPrefix_.Data()));
+
     TCanvas* c10 = new TCanvas(Form("c10_%s", outputPrefix_.Data()), "Theta_e_theta_mu", 600, 400);
     gStyle->SetOptStat(1110); // entries, mean, RMS, name
     h_2d->Draw("colz");
@@ -294,15 +302,7 @@ void FairMUanalyzer::SaveResults() {
     //h_2d_ref->Draw("MARKER");
     std::cout << "f_elastic->Eval(0.01) = " << f_elastic->Eval(0.01) << std::endl;
     f_elastic->Draw("same");
-
-    c10->SaveAs(Form("%s_theta_e_theta_mu.pdf", outputPrefix_.Data()));
-
-    TCanvas* c0 = new TCanvas(Form("c0_%s", outputPrefix_.Data()), "Tracks multiplicity", 600, 400);
-    h_Ntracks->Draw();
-    auto legend = new TLegend(0.4, 0.7, 0.9, 0.9);
-    legend->AddEntry(h_Ntracks, "(all) tracks multiplicity", "l");
-    legend->Draw();
-    c0->SaveAs(Form("%s_all_tracksMulti.pdf", outputPrefix_.Data()));
+    c10->SaveAs(Form("%s_c10_theta_e_theta_mu.pdf", outputPrefix_.Data()));
 
 
     TCanvas* c11 = new TCanvas(Form("c11_%s", outputPrefix_.Data()), "Muon tracks multiplicity", 1200, 400);
@@ -315,7 +315,11 @@ void FairMUanalyzer::SaveResults() {
     legend11->AddEntry(h_isMuon, "muon tracks multiplicity by MF", "l");
     legend11->Draw();
     std::cout<<outputPrefix_.Data()<<", isMuon==0: "<<h_isMuon->GetBinContent(1)<<std::endl;
-    c11->SaveAs(Form("%s_all_tracksMulti.pdf", outputPrefix_.Data()));
+    c11->SaveAs(Form("%s_c11_all_tracksMulti.pdf", outputPrefix_.Data()));
+
+    TCanvas* c12 = new TCanvas(Form("c12_%s", outputPrefix_.Data()), "Efficiency", 600, 400);
+    hCaseDist->Draw();
+    c12->SaveAs(Form("%s_c12_efficiency.pdf", outputPrefix_.Data()));
 
     
     TCanvas* c1 = new TCanvas(Form("c1_%s", outputPrefix_.Data()), "Hit distributions", 2400, 800);
@@ -330,7 +334,7 @@ void FairMUanalyzer::SaveResults() {
         h_hitsModuleID_zcut[i-4]->SetLineColor(kRed);
         h_hitsModuleID_zcut[i-4]->Draw();
     }
-    c1->SaveAs(Form("%s_hit_module.pdf", outputPrefix_.Data()));
+    c1->SaveAs(Form("%s_c1_hit_module.pdf", outputPrefix_.Data()));
 
     
     TCanvas* c2 = new TCanvas(Form("c2_%s", outputPrefix_.Data()), "Golden muon identified", 1800, 400);
@@ -341,7 +345,7 @@ void FairMUanalyzer::SaveResults() {
         h_goldenMuon_isMuon[i-1]->Draw();
         std::cout<<outputPrefix_.Data()<<", "<<i<<" station golden muon failed: "<<h_goldenMuon_isMuon[i-1]->GetBinContent(1)<<std::endl;
     }
-    c2->SaveAs(Form("%s_golden_muon.pdf", outputPrefix_.Data()));
+    c2->SaveAs(Form("%s_c2_golden_muon.pdf", outputPrefix_.Data()));
 
     TCanvas* c3 = new TCanvas(Form("c3_%s", outputPrefix_.Data()), "Residuals by station", 1800, 400);
     c3->Divide(3, 1);
@@ -373,7 +377,7 @@ void FairMUanalyzer::SaveResults() {
         legend2->AddEntry(h_residual_hitOffTrack[i], "Off Track", "l");
         legend2->Draw();
     }
-    c3->SaveAs(Form("%s_residuals_station.pdf", outputPrefix_.Data()));
+    c3->SaveAs(Form("%s_c3_residuals_station.pdf", outputPrefix_.Data()));
 
     TCanvas* c4 = new TCanvas(Form("c4_%s", outputPrefix_.Data()), "Residuals by station/module", 2400, 1200);
     c4->Divide(4, 3);
@@ -407,7 +411,7 @@ void FairMUanalyzer::SaveResults() {
         legend3->AddEntry(h_residual_hitOffTrackModule[jj][ii], "Off Track", "l");
         legend3->Draw();
     }
-    c4->SaveAs(Form("%s_residuals_station_module.pdf", outputPrefix_.Data()));
+    c4->SaveAs(Form("%s_c4_residuals_station_module.pdf", outputPrefix_.Data()));
 
     TCanvas* c5 = new TCanvas(Form("c5_%s", outputPrefix_.Data()), "Residuals by station", 2400, 1200);
     c5->Divide(4,3);
@@ -433,5 +437,5 @@ void FairMUanalyzer::SaveResults() {
         legend4->AddEntry(h_residual_hitAllTrackModule[jj][ii], "All Track", "l");
         legend4->Draw();
     }
-    c5->SaveAs(Form("%s_alltracks_residuals_station_module.pdf", outputPrefix_.Data()));
+    c5->SaveAs(Form("%s_c5_alltracks_residuals_station_module.pdf", outputPrefix_.Data()));
 }
