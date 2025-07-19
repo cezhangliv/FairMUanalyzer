@@ -20,6 +20,15 @@ FairMUanalyzer::FairMUanalyzer() : inputFile_(nullptr), cbmsim_(nullptr), reco_(
     f_elastic->SetTitle("Theoratical muon scattering angle vs electron angle");
     f_elastic->SetName("f_elastic");
     g_elastic = new TGraph();
+    for (int i = 1; i < 1000; ++i) {
+        double x = 0.032 * i / 1000;
+        double y = f_elastic->Eval(x);
+        if (std::isnan(y) || std::isinf(y)) {
+            std::cerr << "Warning: y = NaN or Inf at x = " << x << std::endl;
+            continue;
+        }
+        g_elastic->SetPoint(i, x, y);
+    }
 
     TH1::AddDirectory(kFALSE);
     gStyle->SetOptStat(1111);
@@ -194,6 +203,9 @@ double FairMUanalyzer::computeSigned2DResidualMF(const TVector3& p3D, const TVec
 
 void FairMUanalyzer::SaveResults() {
 
+    //gStyle->SetCanvasPreferGL(kFALSE);// to draw h2d_ref marker without 3D openGL
+
+
     for (const auto& [key, value] : case_counts) {
         int bin = 0;
         if (key == "Total") bin = 1;
@@ -246,21 +258,19 @@ void FairMUanalyzer::SaveResults() {
 
     f_elastic->SetLineWidth(1);
     f_elastic->SetLineColor(kRed);
-    h_2d_ref->SetLineColor(kBlack);
-    h_2d_ref->SetMarkerColor(kBlack);
-
-    for (int i = 0; i < 1000; ++i) {
-        double x = 0.000032 * i / 1000;
-        double y = f_elastic->Eval(x);
-        g_elastic->SetPoint(i, x, y);
-    }
     g_elastic->SetName("g_elastic");
     g_elastic->SetTitle("Theoratical elastic curve; Theta_e [rad];Theta_mu [rad]");
-    g_elastic->Write();
-    
-    h_2d->Write();
-    //f_elastic->Write("f_elastic");
+    g_elastic->SetLineColor(kRed);
+    g_elastic->SetMarkerColor(kRed);
+    h_2d_ref->SetMarkerStyle(1);     
+    h_2d_ref->SetMarkerSize(1);      
+    h_2d_ref->SetLineColor(kBlack);
+    h_2d_ref->SetMarkerColor(kBlack);
+    h_2d->GetYaxis()->SetTitleOffset(1.4);
+
+    f_elastic->Write("f_elastic");
     g_elastic->Write("g_elastic");
+    h_2d->Write();
     h_2d_ref->Write();
 
     hCaseDist->Write();
@@ -278,8 +288,11 @@ void FairMUanalyzer::SaveResults() {
     if(!savepdf_)return;
 
     TCanvas* c10 = new TCanvas(Form("c10_%s", outputPrefix_.Data()), "Theta_e_theta_mu", 600, 400);
+    gStyle->SetOptStat(1110); // entries, mean, RMS, name
     h_2d->Draw("colz");
     h_2d_ref->Draw("same");
+    //h_2d_ref->Draw("MARKER");
+    std::cout << "f_elastic->Eval(0.01) = " << f_elastic->Eval(0.01) << std::endl;
     f_elastic->Draw("same");
 
     c10->SaveAs(Form("%s_theta_e_theta_mu.pdf", outputPrefix_.Data()));
