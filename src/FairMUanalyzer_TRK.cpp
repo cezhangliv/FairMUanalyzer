@@ -83,7 +83,7 @@ void FairMUanalyzer::AnalyzeTRK() {
         
         //golden muon step #1: N tracks
 
-        if ( (TGT2 && tracks.size() == 4) || (TGT1 && tracks.size() >= 5) ) {
+        if ( (TGT2 && tracks.size() == 4) || (TGT1 && tracks.size() >= 3) ) {
 
             bool isGolden = true;
             std::set<int> sectors;
@@ -234,6 +234,9 @@ void FairMUanalyzer::AnalyzeTRK() {
                     //if(angle0>angle1) h_2d->Fill(angle0,angle1);
                     //else h_2d->Fill(angle1,angle0);
                     h_2d->Fill(angle_e,angle_mu);
+
+                    if((sec1==1 && sec2e==1 && sec2muon==1) && angle_e<=intersecX_)case_counts["t1me<m"]++;
+                    if((sec0==1 && sec1e==1 && sec1muon==1) && angle_e<=intersecX_)case_counts["t0me<m"]++;
                 }
 
                 //case2: w/o MF, tgt1/2

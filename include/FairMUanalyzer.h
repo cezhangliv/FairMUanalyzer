@@ -90,6 +90,8 @@ private:
 
     static constexpr int maxNhitInStat_ = 30; // Giovanni A suggested to set a max hit cut in a station
 
+    double intersecX_ = -1;
+
 
     TVector3 getXYfromHitMF(const MUonERecoOutputHitAnalysis& hit);
     double computeSigned2DResidualMF(const TVector3& p3D, const TVector3& x0, const TVector3& h, int moduleID);

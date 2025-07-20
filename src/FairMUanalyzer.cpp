@@ -30,6 +30,15 @@ FairMUanalyzer::FairMUanalyzer() : inputFile_(nullptr), cbmsim_(nullptr), reco_(
         g_elastic->SetPoint(i, x, y);
     }
 
+    
+    double xmin = 0, xmax = 0.032;
+    TF1 *f_diff = new TF1("f_diff", [=](double *xx, double *) {
+        return f_elastic->Eval(xx[0]) - xx[0];
+    }, xmin, xmax, 0);
+    intersecX_ = f_diff->GetX(0, xmin, xmax);
+    std::cout << "Intersection at x ≈ " << intersecX_ << " for Ebeam = "<<Ebeam_<<" GeV"<< std::endl;
+    
+
     TH1::AddDirectory(kFALSE);
     gStyle->SetOptStat(1111);
 
@@ -64,19 +73,21 @@ FairMUanalyzer::FairMUanalyzer() : inputFile_(nullptr), cbmsim_(nullptr), reco_(
         }
     }
 
-    h_2d = new TH2D("h_2d","Electron VS Muon angle; Electron [rad]; Muon [rad]" ,500,0.,0.032,500,0.,0.005);
+    h_2d = new TH2D("h_2d",mf_?"Electron VS Muon angle; Electron [rad]; Muon [rad]":"Large VS Small angle; Large angle [rad]; Small angle [rad]" ,500,0.,0.032,500,0.,0.005);
     h_2d_ref = new TH2D("h_2d_ref","Electron VS Muon angle; Electron [rad]; Muon [rad]" ,500,0.,0.032,500,0.,0.005);
 
     //count the cases:
-    hCaseDist = new TH1I("hCaseDist", "Case Distribution", 10, 0, 10);
+    hCaseDist = new TH1I("hCaseDist", "Case Distribution", 11, 0, 11);
     hCaseDist->GetXaxis()->SetBinLabel(1, "Total");
     hCaseDist->GetXaxis()->SetBinLabel(2, "golden");
     hCaseDist->GetXaxis()->SetBinLabel(3, "t0mem");
     hCaseDist->GetXaxis()->SetBinLabel(4, "t0mee");
     hCaseDist->GetXaxis()->SetBinLabel(5, "t0mmm");
-    hCaseDist->GetXaxis()->SetBinLabel(6, "t1mem");
-    hCaseDist->GetXaxis()->SetBinLabel(7, "t1mee");
-    hCaseDist->GetXaxis()->SetBinLabel(8, "t1mmm");
+    hCaseDist->GetXaxis()->SetBinLabel(6, "t0me<m");
+    hCaseDist->GetXaxis()->SetBinLabel(7, "t1mem");
+    hCaseDist->GetXaxis()->SetBinLabel(8, "t1mee");
+    hCaseDist->GetXaxis()->SetBinLabel(9, "t1mmm");
+    hCaseDist->GetXaxis()->SetBinLabel(10, "t1me<m");
 
 }
 
@@ -213,9 +224,11 @@ void FairMUanalyzer::SaveResults() {
         else if (key == "t0mem") bin = 3;
         else if (key == "t0mee") bin = 4;
         else if (key == "t0mmm") bin = 5;
-        else if (key == "t1mem") bin = 6;
-        else if (key == "t1mee") bin = 7;
-        else if (key == "t1mmm") bin = 8;
+        else if (key == "t0me<m") bin = 6;
+        else if (key == "t1mem") bin = 7;
+        else if (key == "t1mee") bin = 8;
+        else if (key == "t1mmm") bin = 9;
+        else if (key == "t1me<m") bin = 10;
 
         hCaseDist->SetBinContent(bin, value);
     }
@@ -267,6 +280,7 @@ void FairMUanalyzer::SaveResults() {
     h_2d_ref->SetLineColor(kBlack);
     h_2d_ref->SetMarkerColor(kBlack);
     h_2d->GetYaxis()->SetTitleOffset(1.4);
+
 
     f_elastic->Write("f_elastic");
     g_elastic->Write("g_elastic");
