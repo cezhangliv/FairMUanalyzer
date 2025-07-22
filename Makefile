@@ -1,3 +1,4 @@
+
 # === FairSoft and FairRoot paths ===
 FAIRSOFT_BASE  = /cvmfs/fairsoft.gsi.de/centos8/fairsoft/nov22p1
 FAIRROOT_BASE  = /afs/cern.ch/user/c/cez/eos/Soft/fair_install/FairRoot/install_11July25
@@ -15,22 +16,18 @@ LDFLAGS = $(shell root-config --libs) \
   -lMUonEReconstruction -lMUonEReconstructedEventsFilter -lMUonEReconstructionConfiguration \
   -lstdc++fs
 
-# === Sources and Objects ===
-SRCS = $(wildcard src/*.cpp)
-OBJS = $(SRCS:src/%.cpp=build/%.o)
-
-BATCH_OBJS = build/FairMUanalyzer.o build/FairMUanalyzer_MF.o build/FairMUanalyzer_TRK.o build/batch_run.o
-
-TARGET = run_FairMUanalyzer
-BATCH  = batch_run
-
 # === Targets ===
-all: $(TARGET) $(BATCH)
+TARGETS = run_FairMUanalyzer run_FairMUanalyzer_compare batch_run
 
-$(TARGET): $(OBJS)
+all: $(TARGETS)
+
+run_FairMUanalyzer: build/FairMUanalyzer.o build/FairMUanalyzer_MF.o build/FairMUanalyzer_TRK.o build/run_FairMUanalyzer.o
 	$(CXX) -o $@ $^ $(LDFLAGS)
 
-$(BATCH): $(BATCH_OBJS)
+run_FairMUanalyzer_compare: build/FairMUanalyzer.o build/FairMUanalyzer_MF.o build/FairMUanalyzer_TRK.o build/run_FairMUanalyzer_compare.o
+	$(CXX) -o $@ $^ $(LDFLAGS)
+
+batch_run: build/FairMUanalyzer.o build/FairMUanalyzer_MF.o build/FairMUanalyzer_TRK.o build/batch_run.o
 	$(CXX) -o $@ $^ $(LDFLAGS) -pthread
 
 # === Compilation Rules ===
@@ -46,4 +43,4 @@ build:
 
 # === Clean ===
 clean:
-	rm -rf build $(TARGET) $(BATCH)
+	rm -rf build $(TARGETS)

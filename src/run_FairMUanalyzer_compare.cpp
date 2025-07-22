@@ -1,0 +1,68 @@
+#include "FairMUanalyzer.h"
+#include <TChain.h>
+#include <iostream>
+#include <fstream>
+#include <string>
+
+
+TChain* LoadChain(const std::string& input) {
+    TChain* chain = new TChain("cbmsim");
+
+    if (input.size() > 4 && input.substr(input.size() - 4) == ".txt") {
+        std::ifstream infile(input);
+        std::string line;
+        while (std::getline(infile, line)) {
+            if (!line.empty()) {
+                chain->Add(line.c_str());
+            }
+        }
+    } else {
+        chain->Add(input.c_str());
+    }
+
+    return chain;
+}
+
+
+bool CompareEvents(FairMUanalyzer& ana1, FairMUanalyzer& ana2, Long64_t i) {
+    bool g1 = ana1.IsGoldenEvent();
+    bool g2 = ana2.IsGoldenEvent();
+
+    if (g1 != g2) {
+        std::cout << "Event " << i << " mismatch in golden status: "
+                  << g1 << " vs " << g2 << std::endl;
+        return false;
+    }
+    return true;
+}
+
+int main(int argc, char** argv) {
+    if (argc < 3) {
+        std::cerr << "Usage: ./run_FairMUanalyzer_compare input1.root|.txt input2.root|.txt" << std::endl;
+        return 1;
+    }
+
+    TChain* chain1 = LoadChain(argv[1]);
+    TChain* chain2 = LoadChain(argv[2]);
+
+    FairMUanalyzer analyzer1, analyzer2;
+    analyzer1.SetInput(chain1);
+    analyzer2.SetInput(chain2);
+
+    analyzer1.Init();
+    analyzer2.Init();
+
+    Long64_t nEntries = std::min(chain1->GetEntries(), chain2->GetEntries());
+
+    for (Long64_t i = 0; i < nEntries; ++i) {
+        chain1->GetEntry(i);
+        chain2->GetEntry(i);
+
+        analyzer1.ProcessEvent(i);
+        analyzer2.ProcessEvent(i);
+
+        CompareEvents(analyzer1, analyzer2, i);
+    }
+
+    return 0;
+}

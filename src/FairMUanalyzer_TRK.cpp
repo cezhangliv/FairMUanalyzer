@@ -31,8 +31,8 @@ void FairMUanalyzer::AnalyzeTRK() {
         const auto& bestvtx = reco_->bestVertex();
 
         int n_muons = 0;
+        
         std::vector<const MUonERecoOutputTrackAnalysis*> muon_tracks;
-
         for (auto const& track : tracks) {
             if (track.isMuon() ) {
                 n_muons++;

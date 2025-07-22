@@ -18,7 +18,10 @@ public:
     FairMUanalyzer();
     ~FairMUanalyzer();
 
+    void Init();
+
     void SetInputFile(const std::string& path);
+    void SetInput(TTree* tree);
     void SetOutputPrefix(const std::string& prefix);
     
     void SetSavepdf(bool val);
@@ -32,6 +35,10 @@ public:
 
     static double Eevsth(double* x, double* par);
     static double thmu_vs_the(double* x, double* par);
+
+    void ProcessEvent(Long64_t i);
+    bool IsGoldenEvent() const;
+
 
 
 private:
@@ -74,8 +81,10 @@ private:
     TH1I* hCaseDist;
     std::map<std::string, int> case_counts;
 
+    bool isGolden_;
 
-    void Init();
+
+    
     void Analyze();
     void AnalyzeTRK();
     void AnalyzeMF();

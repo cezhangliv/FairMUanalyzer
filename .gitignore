@@ -18,6 +18,7 @@ root/
 # 可执行文件
 run_FairMUanalyzer
 batch_run
+run_FairMUanalyzer_compare
 
 # 生成目录
 result/
