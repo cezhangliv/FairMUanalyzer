@@ -210,6 +210,18 @@ double FairMUanalyzer::computeSigned2DResidualMF(const TVector3& p3D, const TVec
     return cross.Dot(normal) / p.Mag();
 }
 
+double FairMUanalyzer::acoplanarity(const TVector3 in, const TVector3 out1, const TVector3 out2) {
+
+    double dotProduct_v = out1.Dot(out2);
+    TVector3 crossProduct_v = out1.Cross(out2);
+    double T_v = in.Dot(crossProduct_v);
+    TVector3 im_v= in.Cross(out1);
+    TVector3 ie_v= in.Cross(out2);
+    T_v = T_v>0? 1:-1;
+    double acoplanarity_v= T_v*(TMath::Pi() - acos( ((im_v).Dot(ie_v))/(im_v.Mag()*ie_v.Mag()) ));
+    return acoplanarity_v;//rad
+
+}
 
 
 void FairMUanalyzer::SaveResults() {

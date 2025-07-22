@@ -16,3 +16,6 @@
 
 ./run_FairMUanalyzer root/single_muon_interaction_0_CDbugfix11July25_run8_muedaq04-1750227094-1750228937_MF1.root \
 	result/FairMUanalyzer_18July25_single_muon_interaction_0_CDbugfix11July25_run8_muedaq04-1750227094-1750228937_MF0 -1 0 0
+
+./batch_run root/single_muon_interaction_0_CDbugfix11July25_run8_21July25
+#./batch_run root/single_muon_interaction_1_CDbugfix11July25_run8_21July25

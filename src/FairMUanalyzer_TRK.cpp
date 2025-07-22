@@ -198,56 +198,68 @@ void FairMUanalyzer::AnalyzeTRK() {
 
                 }
 
+                double angle_e, angle_mu;
+                double angle0, angle1;
+                double aco = 1000;
 
-                if (sec1 == 1 && sec2e == 1 && sec2muon == 1)case_counts["t1mem"]++;
-                if (sec1 == 1 && sec2e == 2 && sec2muon == 0)case_counts["t1mee"]++;
-                if (sec1 == 1 && sec2e == 0 && sec2muon == 2)case_counts["t1mmm"]++;
-                if (sec0 == 1 && sec1e == 1 && sec1muon == 1)case_counts["t0mem"]++;
-                if (sec0 == 1 && sec1e == 2 && sec1muon == 0)case_counts["t0mee"]++;
-                if (sec0 == 1 && sec1e == 0 && sec1muon == 2)case_counts["t0mmm"]++;
+                //case1: with MF
+                if (sec1 == 1 && sec2e == 1 && sec2muon == 1 && MF){ 
+                    angle_e=in.at(0).Angle(oute.at(0));    
+                    angle_mu=in.at(0).Angle(outmuon.at(0)); 
+                    aco=acoplanarity(in.at(0),oute.at(0),outmuon.at(0)); 
+                    if( abs(aco)>0.4)continue;//0.4 rad
+                    case_counts["t1mem"]++; 
+                    if(angle_e<=intersecX_)case_counts["t1me<m"]++;
+                }    
+                if (sec1 == 1 && sec2e == 2 && sec2muon == 0 && MF){ 
+                    angle_e=in.at(0).Angle(oute.at(0));    
+                    angle_mu=in.at(0).Angle(oute.at(1));    
+                    aco=acoplanarity(in.at(0),oute.at(0),oute.at(1)); 
+                    if( abs(aco)>0.4)continue;//0.4 rad
+                    case_counts["t1mee"]++; 
+                }    
+                if (sec1 == 1 && sec2e == 0 && sec2muon == 2 && MF){ 
+                    angle_e=in.at(0).Angle(outmuon.at(0)); 
+                    angle_mu=in.at(0).Angle(outmuon.at(1)); 
+                    aco=acoplanarity(in.at(0),outmuon.at(0),outmuon.at(1)); 
+                    if( abs(aco)>0.4)continue;//0.4 rad
+                    case_counts["t1mmm"]++; 
+                }    
+                if (sec0 == 1 && sec1e == 1 && sec1muon == 1 && MF){ 
+                    angle_e=in.at(0).Angle(oute.at(0));    
+                    angle_mu=in.at(0).Angle(outmuon.at(0)); 
+                    aco=acoplanarity(in.at(0),oute.at(0),outmuon.at(0)); 
+                    if( abs(aco)>0.4)continue;//0.4 rad
+                    case_counts["t0mem"]++; 
+                    if(angle_e<=intersecX_)case_counts["t0me<m"]++;
+                }    
+                if (sec0 == 1 && sec1e == 2 && sec1muon == 0 && MF){ 
+                    angle_e=in.at(0).Angle(oute.at(0));    
+                    angle_mu=in.at(0).Angle(oute.at(1));    
+                    aco=acoplanarity(in.at(0),oute.at(0),oute.at(1)); 
+                    if( abs(aco)>0.4)continue;//0.4 rad
+                    case_counts["t0mee"]++; 
+                }    
+                if (sec0 == 1 && sec1e == 0 && sec1muon == 2 && MF){ 
+                    angle_e=in.at(0).Angle(outmuon.at(0)); 
+                    angle_mu=in.at(0).Angle(outmuon.at(1)); 
+                    aco=acoplanarity(in.at(0),outmuon.at(0),outmuon.at(1)); 
+                    if( abs(aco)>0.4)continue;//0.4 rad
+                    case_counts["t0mmm"]++; 
+                }    
 
-                //case1: with MF tgt1/2
-                if( MF && 
-                    ( (sec1==1 && sec2e==1 && sec2muon==1) || (sec0==1 && sec1e==1 && sec1muon==1) )
-                   ) 
-                {
-
-                    //double angle0=in.at(0).Angle(out.at(0)); 
-                    //double angle1=in.at(0).Angle(out.at(1)); 
-                    
-                    double angle_e=in.at(0).Angle(oute.at(0)); 
-                    double angle_mu=in.at(0).Angle(outmuon.at(0)); 
-
-                    //event selection #2: acoplanarity
-                    double dotProduct_v = outmuon.at(0).Dot(oute.at(0));
-                    TVector3 crossProduct_v = outmuon.at(0).Cross(oute.at(0));
-                    double T_v = in.at(0).Dot(crossProduct_v);
-                    TVector3 im_v= in.at(0).Cross(outmuon.at(0));
-                    TVector3 ie_v= in.at(0).Cross(oute.at(0));
-                    T_v = T_v>0? 1:-1;
-                    double acoplanarity_v= T_v*(TMath::Pi() - acos( ((im_v).Dot(ie_v))/(im_v.Mag()*ie_v.Mag()) ));
-                    if( abs(acoplanarity_v)>0.4)continue;//0.4 rad
-            
-                    //if(tracks.size()!=3 || (angle0>angle1 && angle0>0.032) || (angle0<angle1 && angle1>0.032) || (angle0>angle1 && angle1<0.0002) || (angle0<angle1 && angle0<0.0002) )continue;
-                    //flag_good_event = 1;
-
-                    //if(angle0>angle1) h_2d->Fill(angle0,angle1);
-                    //else h_2d->Fill(angle1,angle0);
-                    h_2d->Fill(angle_e,angle_mu);
-
-                    if((sec1==1 && sec2e==1 && sec2muon==1) && angle_e<=intersecX_)case_counts["t1me<m"]++;
-                    if((sec0==1 && sec1e==1 && sec1muon==1) && angle_e<=intersecX_)case_counts["t0me<m"]++;
-                }
+                
 
                 //case2: w/o MF, tgt1/2
+
                 if( !MF && 
                     ( (sec1==1 && sec2==2) || (sec0==1 && sec1==2 ) )
                    ) 
                 {
 
+                    /*
                     double angle0=in.at(0).Angle(out.at(0)); 
                     double angle1=in.at(0).Angle(out.at(1)); 
-
                     //event selection #2: acoplanarity
                     double dotProduct_v = out.at(0).Dot(out.at(1));
                     TVector3 crossProduct_v = out.at(0).Cross(out.at(1));
@@ -256,7 +268,12 @@ void FairMUanalyzer::AnalyzeTRK() {
                     TVector3 ie_v= in.at(0).Cross(out.at(1));
                     T_v = T_v>0? 1:-1;
                     double acoplanarity_v= T_v*(TMath::Pi() - acos( ((im_v).Dot(ie_v))/(im_v.Mag()*ie_v.Mag()) ));
-                    if( abs(acoplanarity_v)>0.4)continue;//0.4 rad
+                    */
+                    
+                    angle0=in.at(0).Angle(out.at(0)); 
+                    angle1=in.at(0).Angle(out.at(1)); 
+                    aco=acoplanarity(in.at(0),out.at(0),out.at(1));
+                    if( abs(aco)>0.4)continue;//0.4 rad
             
                     //if(tracks.size()!=3 || (angle0>angle1 && angle0>0.032) || (angle0<angle1 && angle1>0.032) || (angle0>angle1 && angle1<0.0002) || (angle0<angle1 && angle0<0.0002) )continue;
                     //flag_good_event = 1;

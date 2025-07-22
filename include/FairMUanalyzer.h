@@ -95,6 +95,8 @@ private:
 
     TVector3 getXYfromHitMF(const MUonERecoOutputHitAnalysis& hit);
     double computeSigned2DResidualMF(const TVector3& p3D, const TVector3& x0, const TVector3& h, int moduleID);
+
+    double acoplanarity(const TVector3 in, const TVector3 out1, const TVector3 out2);
     
 };
 
