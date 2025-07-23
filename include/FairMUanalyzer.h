@@ -79,7 +79,9 @@ private:
     TGraph* g_elastic;
 
     TH1I* hCaseDist;
+    std::vector<std::string> case_keys = {"Total","golden","t0mem","t0mee","t0mmm","t0me<m","t1mem","t1mee","t1mmm","t1me<m"};
     std::map<std::string, int> case_counts;
+    std::map<std::string, TH2D *> case_h2d;
 
     bool isGolden_;
 

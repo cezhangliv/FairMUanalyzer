@@ -208,8 +208,11 @@ void FairMUanalyzer::AnalyzeTRK() {
                     angle_mu=in.at(0).Angle(outmuon.at(0)); 
                     aco=acoplanarity(in.at(0),oute.at(0),outmuon.at(0)); 
                     if( abs(aco)>0.4)continue;//0.4 rad
-                    case_counts["t1mem"]++; 
-                    if(angle_e<=intersecX_)case_counts["t1me<m"]++;
+                    case_counts["t1mem"]++;
+                    case_h2d["t1mem"]->Fill(angle_e,angle_mu);
+                    h_2d->Fill(angle_e,angle_mu); 
+                    if(angle_e<=intersecX_){case_counts["t1me<m"]++;case_h2d["t1me<m"]->Fill(angle_e,angle_mu);}
+                    case_h2d["golden"]->Fill(angle_e,angle_mu);
                 }    
                 if (sec1 == 1 && sec2e == 2 && sec2muon == 0 && MF){ 
                     angle_e=in.at(0).Angle(oute.at(0));    
@@ -217,6 +220,9 @@ void FairMUanalyzer::AnalyzeTRK() {
                     aco=acoplanarity(in.at(0),oute.at(0),oute.at(1)); 
                     if( abs(aco)>0.4)continue;//0.4 rad
                     case_counts["t1mee"]++; 
+                    if(angle_e>angle_mu)case_h2d["t1mee"]->Fill(angle_e,angle_mu);
+                    else case_h2d["t1mee"]->Fill(angle_mu,angle_e);
+                    case_h2d["golden"]->Fill(angle_e,angle_mu);
                 }    
                 if (sec1 == 1 && sec2e == 0 && sec2muon == 2 && MF){ 
                     angle_e=in.at(0).Angle(outmuon.at(0)); 
@@ -224,6 +230,9 @@ void FairMUanalyzer::AnalyzeTRK() {
                     aco=acoplanarity(in.at(0),outmuon.at(0),outmuon.at(1)); 
                     if( abs(aco)>0.4)continue;//0.4 rad
                     case_counts["t1mmm"]++; 
+                    if(angle_e>angle_mu)case_h2d["t1mmm"]->Fill(angle_e,angle_mu);
+                    else case_h2d["t1mmm"]->Fill(angle_mu,angle_e);
+                    case_h2d["golden"]->Fill(angle_e,angle_mu);
                 }    
                 if (sec0 == 1 && sec1e == 1 && sec1muon == 1 && MF){ 
                     angle_e=in.at(0).Angle(oute.at(0));    
@@ -231,7 +240,10 @@ void FairMUanalyzer::AnalyzeTRK() {
                     aco=acoplanarity(in.at(0),oute.at(0),outmuon.at(0)); 
                     if( abs(aco)>0.4)continue;//0.4 rad
                     case_counts["t0mem"]++; 
-                    if(angle_e<=intersecX_)case_counts["t0me<m"]++;
+                    case_h2d["t0mem"]->Fill(angle_e,angle_mu); 
+                    h_2d->Fill(angle_e,angle_mu); 
+                    if(angle_e<=intersecX_){case_counts["t0me<m"]++;case_h2d["t0me<m"]->Fill(angle_e,angle_mu); }
+                    case_h2d["golden"]->Fill(angle_e,angle_mu);
                 }    
                 if (sec0 == 1 && sec1e == 2 && sec1muon == 0 && MF){ 
                     angle_e=in.at(0).Angle(oute.at(0));    
@@ -239,6 +251,9 @@ void FairMUanalyzer::AnalyzeTRK() {
                     aco=acoplanarity(in.at(0),oute.at(0),oute.at(1)); 
                     if( abs(aco)>0.4)continue;//0.4 rad
                     case_counts["t0mee"]++; 
+                    if(angle_e>angle_mu)case_h2d["t0mee"]->Fill(angle_e,angle_mu);
+                    else case_h2d["t0mee"]->Fill(angle_mu,angle_e);
+                    case_h2d["golden"]->Fill(angle_e,angle_mu);
                 }    
                 if (sec0 == 1 && sec1e == 0 && sec1muon == 2 && MF){ 
                     angle_e=in.at(0).Angle(outmuon.at(0)); 
@@ -246,6 +261,9 @@ void FairMUanalyzer::AnalyzeTRK() {
                     aco=acoplanarity(in.at(0),outmuon.at(0),outmuon.at(1)); 
                     if( abs(aco)>0.4)continue;//0.4 rad
                     case_counts["t0mmm"]++; 
+                    if(angle_e>angle_mu)case_h2d["t0mmm"]->Fill(angle_e,angle_mu);
+                    else case_h2d["t0mmm"]->Fill(angle_mu,angle_e);
+                    case_h2d["golden"]->Fill(angle_e,angle_mu);
                 }    
 
                 

@@ -78,16 +78,12 @@ FairMUanalyzer::FairMUanalyzer() : inputFile_(nullptr), cbmsim_(nullptr), reco_(
 
     //count the cases:
     hCaseDist = new TH1I("hCaseDist", "Case Distribution", 11, 0, 11);
-    hCaseDist->GetXaxis()->SetBinLabel(1, "Total");
-    hCaseDist->GetXaxis()->SetBinLabel(2, "golden");
-    hCaseDist->GetXaxis()->SetBinLabel(3, "t0mem");
-    hCaseDist->GetXaxis()->SetBinLabel(4, "t0mee");
-    hCaseDist->GetXaxis()->SetBinLabel(5, "t0mmm");
-    hCaseDist->GetXaxis()->SetBinLabel(6, "t0me<m");
-    hCaseDist->GetXaxis()->SetBinLabel(7, "t1mem");
-    hCaseDist->GetXaxis()->SetBinLabel(8, "t1mee");
-    hCaseDist->GetXaxis()->SetBinLabel(9, "t1mmm");
-    hCaseDist->GetXaxis()->SetBinLabel(10, "t1me<m");
+    int ikey=1;
+    for (const auto& key : case_keys) {
+        hCaseDist->GetXaxis()->SetBinLabel(ikey, key.c_str());ikey++;
+        case_h2d[key] = new TH2D(("h2d_"+key).c_str(), ("Electron VS Muon angle "+key+"; Electron [rad]; Muon [rad]").c_str(), 500,0.,0.032,500,0.,0.005);
+    }
+
 
 }
 
@@ -235,20 +231,13 @@ void FairMUanalyzer::SaveResults() {
 
 
     for (const auto& [key, value] : case_counts) {
-        int bin = 0;
-        if (key == "Total") bin = 1;
-        else if (key == "golden") bin = 2;
-        else if (key == "t0mem") bin = 3;
-        else if (key == "t0mee") bin = 4;
-        else if (key == "t0mmm") bin = 5;
-        else if (key == "t0me<m") bin = 6;
-        else if (key == "t1mem") bin = 7;
-        else if (key == "t1mee") bin = 8;
-        else if (key == "t1mmm") bin = 9;
-        else if (key == "t1me<m") bin = 10;
-
-        hCaseDist->SetBinContent(bin, value);
+        auto it = std::find(case_keys.begin(), case_keys.end(), key);
+        if (it != case_keys.end()) {
+            int bin = std::distance(case_keys.begin(), it) + 1; // bin 从 1 开始
+            hCaseDist->SetBinContent(bin, value);
+        }
     }
+
     for (const auto& [key, value] : case_counts) {
         if (key == "Total") continue;
         std::cout << key << ": " << value << " ("
@@ -303,6 +292,10 @@ void FairMUanalyzer::SaveResults() {
     g_elastic->Write("g_elastic");
     h_2d->Write();
     h_2d_ref->Write();
+    for (auto& [key, hist] : case_h2d) {
+        hist->Write();
+    }
+
 
     hCaseDist->Write();
 

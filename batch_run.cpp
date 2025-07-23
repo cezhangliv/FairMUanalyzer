@@ -28,7 +28,7 @@ void processFile(const std::string& infile) {
     analyzer.SetSavepdf(true);
     
     analyzer.SetRunN(-1);
-    analyzer.SetTgt(1);
+    analyzer.SetTgt(0);
     analyzer.SetMf(true);
 
     //analyzer.SetMuonFilterHits(3);
