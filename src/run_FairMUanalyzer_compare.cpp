@@ -44,16 +44,22 @@ int main(int argc, char** argv) {
 
     TChain* chain1 = LoadChain(argv[1]);
     TChain* chain2 = LoadChain(argv[2]);
+    std::cout<<chain1->GetEntries()<<" "<<chain2->GetEntries()<<std::endl;
 
     FairMUanalyzer analyzer1, analyzer2;
-    analyzer1.SetInput(chain1);
-    analyzer2.SetInput(chain2);
 
-    analyzer1.Init();
-    analyzer2.Init();
+    
+    analyzer1.SetInputTree(chain1);
+    analyzer2.SetInputTree(chain2);
+
+    //analyzer.SetTgt(1);
+    //analyzer.SetMf();
+
 
     Long64_t nEntries = std::min(chain1->GetEntries(), chain2->GetEntries());
 
+
+    
     int mismatch = 0;
     for (Long64_t i = 0; i < nEntries; ++i) {
         chain1->GetEntry(i);
@@ -62,9 +68,17 @@ int main(int argc, char** argv) {
         analyzer1.ProcessEvent(i);
         analyzer2.ProcessEvent(i);
 
-        if(!CompareEvents(analyzer1, analyzer2, i))mismatch++;
-        if(mismatch>100)break;
+        if(!CompareEvents(analyzer1, analyzer2, i)){
+            mismatch++;
+            if(!analyzer1.IsGoldenEvent())continue;
+            std::cout<<"HS0"<<std::endl;
+            analyzer1.ProcessEvent(i,1);
+            std::cout<<"HS2"<<std::endl;
+            analyzer2.ProcessEvent(i,1);
+        }
+        if(mismatch>1)break;
     }
+    
 
     return 0;
 }

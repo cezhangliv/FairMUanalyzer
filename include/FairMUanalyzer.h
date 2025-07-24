@@ -21,7 +21,7 @@ public:
     void Init();
 
     void SetInputFile(const std::string& path);
-    void SetInput(TTree* tree);
+    void SetInputTree(TTree* tree);
     void SetOutputPrefix(const std::string& prefix);
     
     void SetSavepdf(bool val);
@@ -36,7 +36,7 @@ public:
     static double Eevsth(double* x, double* par);
     static double thmu_vs_the(double* x, double* par);
 
-    void ProcessEvent(Long64_t i);
+    void ProcessEvent(Long64_t i, int debug=0);
     bool IsGoldenEvent() const;
 
 

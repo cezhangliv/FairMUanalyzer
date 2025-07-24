@@ -22,4 +22,5 @@ run_FairMUanalyzer_compare
 
 # 生成目录
 result/
+txt/
 
