@@ -54,6 +54,7 @@ int main(int argc, char** argv) {
 
     Long64_t nEntries = std::min(chain1->GetEntries(), chain2->GetEntries());
 
+    int mismatch = 0;
     for (Long64_t i = 0; i < nEntries; ++i) {
         chain1->GetEntry(i);
         chain2->GetEntry(i);
@@ -61,7 +62,8 @@ int main(int argc, char** argv) {
         analyzer1.ProcessEvent(i);
         analyzer2.ProcessEvent(i);
 
-        CompareEvents(analyzer1, analyzer2, i);
+        if(!CompareEvents(analyzer1, analyzer2, i))mismatch++;
+        if(mismatch>100)break;
     }
 
     return 0;
