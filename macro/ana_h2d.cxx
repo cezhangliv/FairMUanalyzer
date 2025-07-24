@@ -40,6 +40,7 @@ TString filename[N] = {
 	"../result/FairMUanalyzer_single_muon_interaction_1_CDbugfix11July25_run8_21July25_muedaq04-1750227094-1750228937_MF1_maxNumberOfSharedHits2_output.root"
 	
 };
+TString savebasename[N];
 
 TString label[Nbin] = {"total","golden","t0mem","t0mee","t0mmm","t0me<m","t1mem","t1mee","t1mmm","t1me<m",""};
 
@@ -83,7 +84,13 @@ void ana_h2d(){
 		h2d_ref[i]->Draw("samecolscat");
 		g_elastic[i]->Draw("sameL");
 		
+		//save the plots
 
+		savebasename[i] = filename[i];
+		savebasename[i].ReplaceAll("../result/","");
+		savebasename[i].ReplaceAll(".root","");
+
+		c1[i]->SaveAs(Form("h2d_%s.pdf",savebasename[i].Data()));
 		
 
 		/*
