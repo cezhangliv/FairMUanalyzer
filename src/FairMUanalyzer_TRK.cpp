@@ -83,7 +83,10 @@ void FairMUanalyzer::AnalyzeTRK() {
         
         //golden muon step #1: N tracks
 
-        if ( (TGT2 && tracks.size() == 4) || (TGT1 && tracks.size() >= 3) ) {
+        if ( (TGT2 && (useTightTrackCutTgt2_ ? tracks.size() == 4 : tracks.size() >= 4)) 
+            || 
+            (TGT1 && (useTightTrackCutTgt1_?tracks.size() == 5: tracks.size() >= 3))
+            ) {
 
             bool isGolden = true;
             std::set<int> sectors;
@@ -98,11 +101,22 @@ void FairMUanalyzer::AnalyzeTRK() {
                 for (auto const& h : track.hits()) {
                     modules.insert(h.moduleID());
                 }
-                if (modules.size() != 6) {
+                if (modules.size() != 6   && (TGT1)  ) {
                     //golden muon step #2: 1 hit/module
                     isGolden = false;
                     break;
                 }
+                else if (modules.size() != 6   && (TGT2 && useTightTrackCutTgt2_)  ) {
+                    //golden muon step #2: 1 hit/module
+                    isGolden = false;
+                    break;
+                }
+                else if (modules.size() < 5   && (TGT2 && !useTightTrackCutTgt2_)  ) {
+                    //golden muon step #2: 1 hit/module
+                    isGolden = false;
+                    break;
+                }
+
                 //golden muon step #3: reduced chi2
                 if(track.chi2perDegreeOfFreedom()>=2)isGolden = false;
 
@@ -126,8 +140,14 @@ void FairMUanalyzer::AnalyzeTRK() {
                 
 
             if(TGT2 
+                && useTightTrackCutTgt2_
                 && 
                 ( sectors.size() != 3 || !(ntrk_sec0==1 && ntrk_sec1==1 && ntrk_sec2==2) || (nhits_sec2 > maxNhitInStat_ ) ) // suggested by Giovanni A, can be tested by turning HitCutsOn ON/OFF
+                )isGolden = false;
+            else if(TGT2 
+                && !useTightTrackCutTgt2_
+                && 
+                ( sectors.size() != 3 || !(ntrk_sec0==1 && ntrk_sec1==1 && ntrk_sec2>=2) || (nhits_sec2 > maxNhitInStat_ ) ) // suggested by Giovanni A, can be tested by turning HitCutsOn ON/OFF
                 )isGolden = false;
 
             if (isGolden) {
@@ -155,6 +175,18 @@ void FairMUanalyzer::AnalyzeTRK() {
                 std::vector<TVector3> oute; oute.reserve(12);
                 std::vector<TVector3> outmuon; outmuon.reserve(12);
 
+
+                if(TGT2 && !useTightTrackCutTgt2_){
+
+                    if( abs(bestvtx.modifiedAcoplanarity())>0.4e-3 || bestvtx.chi2perDegreeOfFreedom()>3 )continue;//0.4 rad
+                    case_counts["t1mem"]++;
+                    case_h2d["t1mem"]->Fill(bestvtx.electronTheta(),bestvtx.muonTheta());
+                    h_2d->Fill(bestvtx.electronTheta(),bestvtx.muonTheta()); 
+                    if(bestvtx.electronTheta()<=intersecX_){case_counts["t1me<m"]++;case_h2d["t1me<m"]->Fill(bestvtx.electronTheta(),bestvtx.muonTheta());}
+                    case_h2d["golden"]->Fill(bestvtx.electronTheta(),bestvtx.muonTheta());
+
+                    continue; // so skip the rest part using useTightTrackCutTgt2_ Ntrack==2
+                }
                 
                 for(int j=0; j<tracks.size();j++)
                 {

@@ -30,9 +30,11 @@ int main(int argc, char** argv) {
     analyzer.SetInputFile(inputFile);
     analyzer.SetOutputPrefix(outputPrefix);
     
+    //// configurations
+
     analyzer.SetSavepdf(true);
-    analyzer.SetRunN((argc > 3) ? std::stoll(argv[3]) : -1);std::cout << "RunN set to: " << ((argc > 3) ? std::stoll(argv[3]) : -1) << std::endl;
-	analyzer.SetTgt((argc > 4) ? std::stoi(argv[4]) : 1);std::cout << "Tgt set to: " << ((argc > 4) ? std::stoi(argv[4]) : 1) << std::endl;
+    analyzer.SetRunN((argc > 3) ? std::stoll(argv[3]) : -1);
+	analyzer.SetTgt((argc > 4) ? std::stoi(argv[4]) : 1);
     
     bool mf_flag = true;
 	if (argc > 5) {
@@ -40,9 +42,12 @@ int main(int argc, char** argv) {
     	std::transform(arg.begin(), arg.end(), arg.begin(), ::tolower);
     	mf_flag = (arg == "true" || arg == "1");
 	}
-	analyzer.SetMf(mf_flag);std::cout << "Mf set to: " << std::boolalpha << mf_flag << std::endl;
-
+	analyzer.SetMf(mf_flag);
+    analyzer.SetUseTightTrackCut(false,1);//default is true: only for tgt1 Ntrack==4, otherwise Ntrack>=4 for golden muon first step selection
     //analyzer.SetMuonFilterHits(3);
+
+    ////////////////////
+
     analyzer.Run();
 
     return 0;

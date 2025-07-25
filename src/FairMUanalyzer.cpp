@@ -100,22 +100,27 @@ void FairMUanalyzer::Analyze() {
 
 void FairMUanalyzer::SetRunN(Long64_t val) {
     runN_ = val;
+    std::cout << "RunN set to: " << runN_ << std::endl;
 }
 
 void FairMUanalyzer::SetTgt(int val) {
     tgt_ = val;
+    std::cout << "Tgt set to: " << tgt_ << std::endl;
 }
 
 void FairMUanalyzer::SetMuonFilterHits(int val) {
     MuonFilterHits_ = val;
+    std::cout << "MuonFilterHits set to: " << MuonFilterHits_ << std::endl;
 }
 
 void FairMUanalyzer::SetSavepdf(bool val) {
     savepdf_ = val;
+    std::cout << "savepdf set to: " << (savepdf_?"true":"false") << std::endl;
 }
 
 void FairMUanalyzer::SetMf(bool val) {
     mf_ = val;
+    std::cout << "Muon Filter set to: " << (mf_?"true":"false") << std::endl;
 }
 
 
@@ -157,6 +162,7 @@ FairMUanalyzer::~FairMUanalyzer() {
 
 void FairMUanalyzer::SetInputFile(const std::string& path) {
     inputFilePath_ = path;
+    std::cout << "inputFilePath set to: " << inputFilePath_.c_str() << std::endl;
 }
 void FairMUanalyzer::SetInputTree(TTree* tree) {
     cbmsim_ = tree;
@@ -166,6 +172,7 @@ void FairMUanalyzer::SetInputTree(TTree* tree) {
 
 void FairMUanalyzer::SetOutputPrefix(const std::string& prefix) {
     outputPrefix_ = prefix.c_str();
+    std::cout << "outputPrefix set to: " << outputPrefix_.Data() << std::endl;
 }
 
 

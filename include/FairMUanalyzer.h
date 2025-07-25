@@ -39,22 +39,34 @@ public:
     void ProcessEvent(Long64_t i, int debug=0);
     bool IsGoldenEvent() const;
 
+    void SetUseTightTrackCut(bool flag, int tgt=1) { 
+        if(tgt==0)useTightTrackCutTgt1_ = flag;
+        if(tgt==1)useTightTrackCutTgt2_ = flag;  
+        std::cout<<"useTightTrackCutTgt1: "<<useTightTrackCutTgt1_<<", "<<"useTightTrackCutTgt2: "<<useTightTrackCutTgt2_<<std::endl;
+    }
+    bool GetUseTightTrackCut(int tgt=1) const { return tgt==1?useTightTrackCutTgt2_:useTightTrackCutTgt1_; }
+
 
 
 private:
     std::string inputFilePath_;
     TString outputPrefix_;
     
+    Long64_t runN_;
+
     bool mf_;
     bool savepdf_;
-    Long64_t runN_;
+    bool useTightTrackCutTgt2_ = true;
+    bool useTightTrackCutTgt1_ = false;
+
     int tgt_;
     int MuonFilterHits_;
-
     int goldenevents_;
+    bool isGolden_;
 
     TFile* inputFile_;
     TTree* cbmsim_;
+
     MUonERecoOutputAnalysis* reco_;
 
     // Histograms
@@ -75,22 +87,13 @@ private:
     
     TH2D *h_2d;
     TH2D *h_2d_ref;
+    
     TF1 *f_elastic;
     TGraph* g_elastic;
-
     TH1I* hCaseDist;
     std::vector<std::string> case_keys = {"Total","golden","t0mem","t0mee","t0mmm","t0me<m","t1mem","t1mee","t1mmm","t1me<m"};
     std::map<std::string, int> case_counts;
     std::map<std::string, TH2D *> case_h2d;
-
-    bool isGolden_;
-
-
-    
-    void Analyze();
-    void AnalyzeTRK();
-    void AnalyzeMF();
-    void SaveResults();
 
     static constexpr double me_ = 0.51099906e-3;   // Electron mass [GeV]
     static constexpr double mu_ = 105.65836900e-3; // Muon mass [GeV]
@@ -102,11 +105,14 @@ private:
     static constexpr int maxNhitInStat_ = 30; // Giovanni A suggested to set a max hit cut in a station
 
     double intersecX_ = -1;
-
+    
+    void Analyze();
+    void AnalyzeTRK();
+    void AnalyzeMF();
+    void SaveResults();
 
     TVector3 getXYfromHitMF(const MUonERecoOutputHitAnalysis& hit);
     double computeSigned2DResidualMF(const TVector3& p3D, const TVector3& x0, const TVector3& h, int moduleID);
-
     double acoplanarity(const TVector3 in, const TVector3 out1, const TVector3 out2);
     
 };
