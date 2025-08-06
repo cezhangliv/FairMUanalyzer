@@ -30,6 +30,7 @@ void processFile(const std::string& infile) {
     analyzer.SetRunN(-1);
     analyzer.SetTgt(1);//0/1
     analyzer.SetMf(true);
+    analyzer.SetUseTightTrackCut(false,1);
 
     //analyzer.SetMuonFilterHits(3);
     analyzer.Run();
