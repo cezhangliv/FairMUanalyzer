@@ -20,9 +20,20 @@
 
 ./run_FairMUanalyzer root/single_muon_interaction_0_CDbugfix11July25_run8_muedaq04-1750227094-1750228937_MF1.root \
 	result/FairMUanalyzer_18July25_single_muon_interaction_0_CDbugfix11July25_run8_muedaq04-1750227094-1750228937_MF0 -1 0 0
-'
 
 ./run_FairMUanalyzer root/single_muon_interaction_1_CDbugfix11July25_run8_muedaq04-1750227094-1750228937_MF1.root \
 	result/FairMUanalyzer_18July25_single_muon_interaction_1_CDbugfix11July25_run8_muedaq04-1750227094-1750228937_MF1_NoTightTrackCutTgt2 -1 1
+'
 
+./run_FairMUanalyzer /afs/cern.ch/work/m/mzdybal/public/run8_reconstruction.root \
+	result/FairMUanalyzer_06Aug25_Milosz_run8_reconstruction_1_CDbugfix11July25_MF1 -1 1
+
+./run_FairMUanalyzer /afs/cern.ch/work/m/mzdybal/public/run8_reconstruction.root \
+	result/FairMUanalyzer_06Aug25_Milosz_run8_reconstruction_0_CDbugfix11July25_MF1 -1 0
+
+./run_FairMUanalyzer /afs/cern.ch/work/m/mzdybal/public/run17_interaction1_reconstruction.root \
+	result/FairMUanalyzer_06Aug25_Milosz_run17_reconstruction_1_CDbugfix11July25_MF1 -1 1
+
+./run_FairMUanalyzer /afs/cern.ch/work/m/mzdybal/public/run17_interaction0_reconstruction.root \
+	result/FairMUanalyzer_06Aug25_Milosz_run17_reconstruction_0_CDbugfix11July25_MF1 -1 0
 

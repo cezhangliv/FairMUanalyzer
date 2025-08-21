@@ -147,7 +147,8 @@ void FairMUanalyzer::AnalyzeTRK() {
             else if(TGT2 
                 && !useTightTrackCutTgt2_
                 && 
-                ( sectors.size() != 3 || !(ntrk_sec0==1 && ntrk_sec1==1 && ntrk_sec2>=2) || (nhits_sec2 > maxNhitInStat_ ) ) // suggested by Giovanni A, can be tested by turning HitCutsOn ON/OFF
+                //( sectors.size() != 3 || !(ntrk_sec0==1 && ntrk_sec1==1 && ntrk_sec2>=2) || (nhits_sec2 > maxNhitInStat_ ) ) // suggested by Giovanni A, can be tested by turning HitCutsOn ON/OFF
+                ( sectors.size() != 3 || !(ntrk_sec0==1 && ntrk_sec1>=1 && ntrk_sec2>=2) || (nhits_sec2 > maxNhitInStat_ ) ) // suggested by Giovanni A, can be tested by turning HitCutsOn ON/OFF
                 )isGolden = false;
 
             if (isGolden) {
@@ -178,7 +179,8 @@ void FairMUanalyzer::AnalyzeTRK() {
 
                 if(TGT2 && !useTightTrackCutTgt2_){
 
-                    if( abs(bestvtx.modifiedAcoplanarity())>0.4e-3 || bestvtx.chi2perDegreeOfFreedom()>3 )continue;//0.4 rad
+                    //if( abs(bestvtx.modifiedAcoplanarity())>0.4e-3 || bestvtx.chi2perDegreeOfFreedom()>3 )continue;//0.4 rad
+                    if( abs(bestvtx.modifiedAcoplanarity())>0.4 )continue;//not very much difference between 0.4 and 0.4e-3. see my slides 250722
                     case_counts["t1mem"]++;
                     case_h2d["t1mem"]->Fill(bestvtx.electronTheta(),bestvtx.muonTheta());
                     h_2d->Fill(bestvtx.electronTheta(),bestvtx.muonTheta()); 
