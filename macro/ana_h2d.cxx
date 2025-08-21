@@ -59,17 +59,34 @@ void TruncateGraphAtX(TGraph* g, double x_max = 0.0315) {
 
 
 
-const int N = 6;
+const int N = 2;
 const int Nbin = 11;
 TFile * f[N];
 
 TString filename[N] = {
+	/*
+	// 26July25 archive
 	"../result/FairMUanalyzer_18July25_single_muon_interaction_0_CDbugfix11July25_run8_muedaq04-1750227094-1750228937_MF0_output.root",
 	"../result/FairMUanalyzer_18July25_single_muon_interaction_0_CDbugfix11July25_run8_muedaq04-1750227094-1750228937_MF1_output.root",
 	"../result/FairMUanalyzer_single_muon_interaction_0_CDbugfix11July25_run8_21July25_muedaq04-1750227094-1750228937_MF1_maxNumberOfSharedHits2_output.root",
 	"../result/FairMUanalyzer_18July25_single_muon_interaction_1_CDbugfix11July25_run8_muedaq04-1750227094-1750228937_MF0_output.root",
 	"../result/FairMUanalyzer_18July25_single_muon_interaction_1_CDbugfix11July25_run8_muedaq04-1750227094-1750228937_MF1_output.root",
 	"../result/FairMUanalyzer_single_muon_interaction_1_CDbugfix11July25_run8_21July25_muedaq04-1750227094-1750228937_MF1_maxNumberOfSharedHits2_output.root"
+	*/
+
+	//9Aug25 backup, before Milosz. All my own generation
+	/*
+	"../result-26July25/FairMUanalyzer_18July25_single_muon_interaction_0_CDbugfix11July25_run8_muedaq04-1750227094-1750228937_MF0_output.root",
+	"../result-26July25/FairMUanalyzer_18July25_single_muon_interaction_0_CDbugfix11July25_run8_muedaq04-1750227094-1750228937_MF1_output.root",
+	"../result-26July25/FairMUanalyzer_single_muon_interaction_0_CDbugfix11July25_run8_21July25_muedaq04-1750227094-1750228937_MF1_maxNumberOfSharedHits2_output.root",
+	"../result-26July25/FairMUanalyzer_18July25_single_muon_interaction_1_CDbugfix11July25_run8_muedaq04-1750227094-1750228937_MF0_output.root",
+	"../result-06Aug25/FairMUanalyzer_18July25_single_muon_interaction_1_CDbugfix11July25_run8_muedaq04-1750227094-1750228937_MF1_NoTightTrackCutTgt2_output.root",
+	"../result-06Aug25/FairMUanalyzer_single_muon_interaction_1_CDbugfix11July25_run8_21July25_muedaq04-1750227094-1750228937_MF1_maxNumberOfSharedHits2_NoTightTrackCutTgt2_output.root"
+	*/
+	//9Aug25 backup, run17 by Milosz.
+	"../result/FairMUanalyzer_06Aug25_Milosz_run17_reconstruction_0_CDbugfix11July25_MF1_output.root",
+	"../result/FairMUanalyzer_06Aug25_Milosz_run17_reconstruction_1_CDbugfix11July25_MF1_output.root"
+
 	
 };
 TString savebasename[N];
@@ -118,8 +135,8 @@ void ana_h2d(){
 		cout<<"t0_allscat: "<<t0_allscat<<endl;
 		cout<<"t1_allscat: "<<t1_allscat<<endl;
 
-		cout<<"allscat0/total: "<<t0_allscat*1.0/hCaseDist[i]->GetBinContent(1)<<endl;
-		cout<<"allscat1/total: "<<t1_allscat*1.0/hCaseDist[i]->GetBinContent(1)<<endl;
+		cout<<"t0_allscat/total: "<<t0_allscat*1.0/hCaseDist[i]->GetBinContent(1)<<endl;
+		cout<<"t1_allscat/total: "<<t1_allscat*1.0/hCaseDist[i]->GetBinContent(1)<<endl;
 
 		
 		h2d[i] = (TH2D*)f[i]->Get("h_2d");
@@ -144,7 +161,9 @@ void ana_h2d(){
 		//save the plots
 
 		savebasename[i] = filename[i];
-		savebasename[i].ReplaceAll("../result/","");
+		TRegexp re("^\\.\\./result[^/]*/");
+		savebasename[i](re) = ""; 
+		//savebasename[i].ReplaceAll("../result/","");
 		savebasename[i].ReplaceAll(".root","");
 
 		if(savepdf)c1[i]->SaveAs(Form("h2d_%s.pdf",savebasename[i].Data()));
