@@ -41,9 +41,10 @@
 
 ### 21 Aug 25 test new run24
 
-./run_FairMUanalyzer root/single_muon_interaction_0_CDbugfix11July25_run24_muedaq04-1753473533_MF1.root \
-	result/FairMUanalyzer_21Aug25_run24_reconstruction_0_CDbugfix11July25_MF1 -1 0
+#./run_FairMUanalyzer root/single_muon_interaction_0_CDbugfix11July25_run24_muedaq04-1753473533_MF1.root \
+#	result/FairMUanalyzer_21Aug25_run24_reconstruction_0_CDbugfix11July25_MF1 -1 0
+#
+#./run_FairMUanalyzer root/single_muon_interaction_1_CDbugfix11July25_run24_muedaq04-1753473533_MF1.root \
+#	result/FairMUanalyzer_21Aug25_run24_reconstruction_1_CDbugfix11July25_MF1 -1 1
 
-./run_FairMUanalyzer root/single_muon_interaction_1_CDbugfix11July25_run24_muedaq04-1753473533_MF1.root \
-	result/FairMUanalyzer_21Aug25_run24_reconstruction_1_CDbugfix11July25_MF1 -1 1
-
+./batch_run root/single_muon_interaction_0_CDbugfix11July25_run24_muedaq04
