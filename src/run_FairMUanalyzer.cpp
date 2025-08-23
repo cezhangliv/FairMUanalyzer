@@ -43,7 +43,8 @@ int main(int argc, char** argv) {
     	mf_flag = (arg == "true" || arg == "1");
 	}
 	analyzer.SetMf(mf_flag);
-    //analyzer.SetUseTightTrackCut(false,1);//default is true: only for tgt1 Ntrack==4, otherwise Ntrack>=4 for golden muon first step selection
+    //analyzer.SetUseTightTrackCut(true,0);
+    //analyzer.SetUseTightTrackCut(false,1);//default is true for tgt1(1 in braket) and flase for tgt0(0 in braket): only for tgt1 Ntrack==4, otherwise Ntrack>=4 for golden muon first step selection
     //analyzer.SetMuonFilterHits(3);
 
     ////////////////////

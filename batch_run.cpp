@@ -26,13 +26,13 @@ void processFile(const std::string& infile) {
     analyzer.SetOutputPrefix(outdir + "/FairMUanalyzer_" + std::string(base.Data()));
     
     analyzer.SetSavepdf(true);
-    
     analyzer.SetRunN(-1);
-    analyzer.SetTgt(1);//0/1
+    analyzer.SetTgt(0);//0/1
     analyzer.SetMf(true);
-    analyzer.SetUseTightTrackCut(false,1);
 
+    //analyzer.SetUseTightTrackCut(false,1);//default is true for tgt1(1 in braket) and flase for tgt0(0 in braket): only for tgt1 Ntrack==4, otherwise Ntrack>=4 for golden muon first step selection
     //analyzer.SetMuonFilterHits(3);
+
     analyzer.Run();
 
     std::cout << "Finished processing: " << infile << std::endl;

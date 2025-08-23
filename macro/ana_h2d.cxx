@@ -84,8 +84,12 @@ TString filename[N] = {
 	"../result-06Aug25/FairMUanalyzer_single_muon_interaction_1_CDbugfix11July25_run8_21July25_muedaq04-1750227094-1750228937_MF1_maxNumberOfSharedHits2_NoTightTrackCutTgt2_output.root"
 	*/
 	//9Aug25 backup, run17 by Milosz.
-	"../result/FairMUanalyzer_06Aug25_Milosz_run17_reconstruction_0_CDbugfix11July25_MF1_output.root",
-	"../result/FairMUanalyzer_06Aug25_Milosz_run17_reconstruction_1_CDbugfix11July25_MF1_output.root"
+	//"../result/FairMUanalyzer_06Aug25_Milosz_run17_reconstruction_0_CDbugfix11July25_MF1_output.root",
+	//"../result/FairMUanalyzer_06Aug25_Milosz_run17_reconstruction_1_CDbugfix11July25_MF1_output.root"
+
+	//21Aug first look at run24
+	"../result/FairMUanalyzer_21Aug25_run24_reconstruction_0_CDbugfix11July25_MF1_output.root",
+	"../result/FairMUanalyzer_21Aug25_run24_reconstruction_1_CDbugfix11July25_MF1_output.root"
 
 	
 };
