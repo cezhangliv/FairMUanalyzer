@@ -59,7 +59,7 @@ void TruncateGraphAtX(TGraph* g, double x_max = 0.0315) {
 
 
 
-const int N = 2;
+const int N = 4;
 const int Nbin = 11;
 TFile * f[N];
 
@@ -88,8 +88,14 @@ TString filename[N] = {
 	//"../result/FairMUanalyzer_06Aug25_Milosz_run17_reconstruction_1_CDbugfix11July25_MF1_output.root"
 
 	//21Aug first look at run24
-	"../result/FairMUanalyzer_21Aug25_run24_reconstruction_0_CDbugfix11July25_MF1_output.root",
-	"../result/FairMUanalyzer_21Aug25_run24_reconstruction_1_CDbugfix11July25_MF1_output.root"
+	//"../result/FairMUanalyzer_21Aug25_run24_reconstruction_0_CDbugfix11July25_MF1_output.root",
+	//"../result/FairMUanalyzer_21Aug25_run24_reconstruction_1_CDbugfix11July25_MF1_output.root"
+	//26Aug25 run24 MF=1 all
+
+	"../result/FairMUanalyzer_single_muon_interaction_0_CDbugfix11July25_run24_muedaq04-1753473450-1753473533_MF1_output.root",
+	"../result/FairMUanalyzer_single_muon_interaction_0_CDbugfix11July25_run24_muedaq04-1753473450-1753473533_MF1_SH2_output.root",
+	"../result/FairMUanalyzer_single_muon_interaction_1_CDbugfix11July25_run24_muedaq04-1753473450-1753473533_MF1_output.root",
+	"../result/FairMUanalyzer_single_muon_interaction_1_CDbugfix11July25_run24_muedaq04-1753473450-1753473533_MF1_SH2_output.root"
 
 	
 };
@@ -114,6 +120,8 @@ TLegend *ly[N];
 TCanvas * c1[N];
 TCanvas * c2[N];
 TCanvas * c3[N];
+
+
 
 void ana_h2d(){
 
