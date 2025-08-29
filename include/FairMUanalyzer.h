@@ -98,6 +98,7 @@ private:
     std::vector<std::string> case_keys = {"Total","golden","t0mem","t0mee","t0mmm","t0me<m","t1mem","t1mee","t1mmm","t1me<m"};
     std::map<std::string, int> case_counts;
     std::map<std::string, TH2D *> case_h2d;
+    std::map<std::string, TH2D *> case_h2d_bstvtx;
 
     static constexpr double me_ = 0.51099906e-3;   // Electron mass [GeV]
     static constexpr double mu_ = 105.65836900e-3; // Muon mass [GeV]

@@ -5,7 +5,7 @@
 
 void add_TH2D() {
     // 输入 ROOT 文件
-    TFile *f = TFile::Open("../result/FairMUanalyzer_29Aug25_GAtest204_single_muon_interaction_1_CDbugfix11July25_run8_muedaq04-1750227094-1750228937_MF1_output.root", "READ");
+    TFile *f = TFile::Open("../result/FairMUanalyzer_29Aug25_GAtest205_single_muon_interaction_1_CDbugfix11July25_run8_muedaq04-1750227094-1750228937_MF1_output.root", "READ");
     if (!f || f->IsZombie()) {
         printf("Error: cannot open file!\n");
         return;

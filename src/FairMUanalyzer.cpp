@@ -86,6 +86,7 @@ FairMUanalyzer::FairMUanalyzer() : inputFile_(nullptr), cbmsim_(nullptr), reco_(
     for (const auto& key : case_keys) {
         hCaseDist->GetXaxis()->SetBinLabel(ikey, key.c_str());ikey++;
         case_h2d[key] = new TH2D(("h2d_"+key).c_str(), mf_?("Electron VS Muon angle "+key+"; Electron [rad]; Muon [rad]").c_str():("Large VS Small angle "+key+"; Large angle [rad]; Small angle [rad]").c_str(), 500,0.,0.032,500,0.,0.005);
+        case_h2d_bstvtx[key] = new TH2D(("h2d_bstvtx_"+key).c_str(), mf_?("Electron VS Muon angle "+key+"; Electron [rad]; Muon [rad]").c_str():("Large VS Small angle "+key+"; Large angle [rad]; Small angle [rad]").c_str(), 500,0.,0.032,500,0.,0.005);
     }
 
 
@@ -304,6 +305,9 @@ void FairMUanalyzer::SaveResults() {
     h_2d->Write();
     h_2d_ref->Write();
     for (auto& [key, hist] : case_h2d) {
+        hist->Write();
+    }
+    for (auto& [key, hist] : case_h2d_bstvtx) {
         hist->Write();
     }
 
