@@ -25,6 +25,8 @@
 	result/FairMUanalyzer_18July25_single_muon_interaction_1_CDbugfix11July25_run8_muedaq04-1750227094-1750228937_MF1_NoTightTrackCutTgt2 -1 1
 '
 
+##### Milosz
+
 : '
 ./run_FairMUanalyzer /afs/cern.ch/work/m/mzdybal/public/run8_reconstruction.root \
 	result/FairMUanalyzer_06Aug25_Milosz_run8_reconstruction_1_CDbugfix11July25_MF1 -1 1
@@ -54,3 +56,6 @@
 
 ./run_FairMUanalyzer100 root/single_muon_interaction_1_CDbugfix11July25_run8_muedaq04-1750227094-1750228937_MF1.root \
 	result/FairMUanalyzer_29Aug25_GAtest100_single_muon_interaction_1_CDbugfix11July25_run8_muedaq04-1750227094-1750228937_MF1 -1 1
+
+
+#./run_FairMUanalyzer101 root/single_muon_interaction_1_CDbugfix11July25_run8_muedaq04-1750227094-1750228937_MF1.root result/FairMUanalyzer_29Aug25_GAtest101_single_muon_interaction_1_CDbugfix11July25_run8_muedaq04-1750227094-1750228937_MF1 -1 1
