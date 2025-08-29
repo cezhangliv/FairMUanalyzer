@@ -191,7 +191,8 @@ void FairMUanalyzer::AnalyzeTRK() {
                 }
 
                 if(TGT2 && useTightTrackCutTgt2_){
-                    h_2d_bstvtx->Fill(bestvtx.electronTheta(),bestvtx.muonTheta()); 
+
+                    if(abs(bestvtx.acoplanarity()<0.4) )h_2d_bstvtx->Fill(bestvtx.electronTheta(),bestvtx.muonTheta()); 
                 }
                 
                 for(int j=0; j<tracks.size();j++)
