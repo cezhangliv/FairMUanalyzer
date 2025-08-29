@@ -162,6 +162,7 @@ void FairMUanalyzer::AnalyzeTRK() {
                 if(TGT1 && bestvtx.zPositionFit()<=z_tgt1_+2 && bestvtx.zPositionFit()>=z_tgt1_-2)intgt=1;
                 //if(!intgt)continue;
 
+                h_vtxchi2->Fill(bestvtx.chi2perDegreeOfFreedom());
                 if(bestvtx.chi2perDegreeOfFreedom()>10)continue;
 
                 int sec0=0; 

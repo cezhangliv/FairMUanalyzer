@@ -46,6 +46,8 @@ FairMUanalyzer::FairMUanalyzer() : inputFile_(nullptr), cbmsim_(nullptr), reco_(
     h_isMuon = new TH1F("h_isMuon", "Number of 'Muon' tracks; isMuon tracks per event;Entries", 20, 0, 20);
     h_Ntracks = new TH1F("h_Ntracks", "Tracks multiplicity; tracks per event;Entries", 20, 0, 20);
     
+    h_vtxchi2 = new TH1F("h_vtxchi2", "BestVtx chi2perDOF; BestVtx chi2perDOF;Entries", 100, 0, 100);
+
     h_hitsModuleID_zcut[5];
     h_hitsPerMuonTrack_zcut[5];
 
@@ -310,6 +312,8 @@ void FairMUanalyzer::SaveResults() {
     hCaseDist->Write();
 
     h_hits_zcut->Write();
+
+    h_vtxchi2->Write();
 
     h_Ntracks->GetYaxis()->SetRangeUser(0, h_Ntracks->GetMaximum() * 1.2);
     h_Ntracks->Write();

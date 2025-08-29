@@ -82,6 +82,8 @@ private:
 
     TH1F* h_goldenMuon_isMuon[3];
 
+    TH1F* h_vtxchi2;
+
     TH1F* h_isMuon;
     TH1F* h_Ntracks;
     
