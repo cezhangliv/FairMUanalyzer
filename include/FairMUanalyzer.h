@@ -88,13 +88,7 @@ private:
     TH2D *h_2d;
     TH2D *h_2d_ref;
     
-    TH2D *h_2d_test101; // 29Aug25, Giovanni A, TVector calculation, removing reduced track chi2<2
-    TH2D *h_2d_test201; // 29Aug25, Giovanni A, TVector calculation, removing best vtx z position
-    TH2D *h_2d_test202; // 29Aug25, Giovanni A, TVector calculation, removing aco<0.4
-    TH2D *h_2d_test203; // 29Aug25, Giovanni A, TVector calculation, requesting aco<0.3
-
-    std::vector<std::string> case_keys_h2d_bstvtx = {"100","101","201","202","203"}; //100 is counterpart for h_2d
-    std::map<std::string, TH2D *> case_h2d_bstvtx;
+    TH2D *h_2d_bstvtx;
     
     TF1 *f_elastic;
     TGraph* g_elastic;
@@ -110,7 +104,7 @@ private:
     static constexpr double z_tgt1_ = 664.6;          // origin: 667.3 ; targetRelativePosition: -2.7
     static constexpr double z_tgt2_ = 780.7;        //cm,  origin: 784.6 ; targetRelativePosition: -3.9
 
-    static constexpr int maxNhitInStat_ = 30; // Giovanni A suggested to set a max hit cut in a station
+    static constexpr int maxNhitInStat_ = 100;//30; // Giovanni A suggested to set a max hit cut in a station, either 30 or 15
 
     double intersecX_ = -1;
     

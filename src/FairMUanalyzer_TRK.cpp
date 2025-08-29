@@ -101,7 +101,7 @@ void FairMUanalyzer::AnalyzeTRK() {
                 for (auto const& h : track.hits()) {
                     modules.insert(h.moduleID());
                 }
-                if (modules.size() != 6   && (TGT1)  ) {
+                if (modules.size() != 6   && (TGT1) && track.sector()<2 ) {
                     //golden muon step #2: 1 hit/module
                     isGolden = false;
                     break;
@@ -188,6 +188,10 @@ void FairMUanalyzer::AnalyzeTRK() {
                     case_h2d["golden"]->Fill(bestvtx.electronTheta(),bestvtx.muonTheta());
 
                     continue; // so skip the rest part using useTightTrackCutTgt2_ Ntrack==2
+                }
+
+                if(TGT2 && useTightTrackCutTgt2_){
+                    h_2d_bstvtx->Fill(bestvtx.electronTheta(),bestvtx.muonTheta()); 
                 }
                 
                 for(int j=0; j<tracks.size();j++)

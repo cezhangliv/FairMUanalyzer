@@ -27,6 +27,7 @@ void processFile(const std::string& infile) {
     
     analyzer.SetSavepdf(true);
     analyzer.SetRunN(-1);
+    //analyzer.SetRunN(10000);
     analyzer.SetTgt(1);//0/1
     analyzer.SetMf(true);
     //analyzer.SetUseTightTrackCut(true,0);
