@@ -74,14 +74,23 @@ FairMUanalyzer::FairMUanalyzer() : inputFile_(nullptr), cbmsim_(nullptr), reco_(
     }
 
     h_2d = new TH2D("h_2d",mf_?"Electron VS Muon angle; Electron [rad]; Muon [rad]":"Large VS Small angle; Large angle [rad]; Small angle [rad]" ,500,0.,0.032,500,0.,0.005);
-    h_2d_ref = new TH2D("h_2d_ref","Electron VS Muon angle; Electron [rad]; Muon [rad]" ,500,0.,0.032,500,0.,0.005);
+    h_2d_ref = new TH2D("h_2d_ref",mf_?"Electron VS Muon angle; Electron [rad]; Muon [rad]":"Large VS Small angle; Large angle [rad]; Small angle [rad]" ,500,0.,0.032,500,0.,0.005);
+
+    h_2d_test101 = new TH2D("h_2d_test101",mf_?"Electron VS Muon angle; Electron [rad]; Muon [rad]":"Large VS Small angle; Large angle [rad]; Small angle [rad]" ,500,0.,0.032,500,0.,0.005);
+    h_2d_test201 = new TH2D("h_2d_test201",mf_?"Electron VS Muon angle; Electron [rad]; Muon [rad]":"Large VS Small angle; Large angle [rad]; Small angle [rad]" ,500,0.,0.032,500,0.,0.005);
+    h_2d_test202 = new TH2D("h_2d_test202",mf_?"Electron VS Muon angle; Electron [rad]; Muon [rad]":"Large VS Small angle; Large angle [rad]; Small angle [rad]" ,500,0.,0.032,500,0.,0.005);
+    h_2d_test203 = new TH2D("h_2d_test203",mf_?"Electron VS Muon angle; Electron [rad]; Muon [rad]":"Large VS Small angle; Large angle [rad]; Small angle [rad]" ,500,0.,0.032,500,0.,0.005);
 
     //count the cases:
     hCaseDist = new TH1I("hCaseDist", "Case Distribution", 11, 0, 11);
     int ikey=1;
     for (const auto& key : case_keys) {
         hCaseDist->GetXaxis()->SetBinLabel(ikey, key.c_str());ikey++;
-        case_h2d[key] = new TH2D(("h2d_"+key).c_str(), ("Electron VS Muon angle "+key+"; Electron [rad]; Muon [rad]").c_str(), 500,0.,0.032,500,0.,0.005);
+        case_h2d[key] = new TH2D(("h2d_"+key).c_str(), mf_?("Electron VS Muon angle "+key+"; Electron [rad]; Muon [rad]").c_str():("Large VS Small angle "+key+"; Large angle [rad]; Small angle [rad]").c_str(), 500,0.,0.032,500,0.,0.005);
+    }
+
+    for (const auto& key : case_keys_h2d_bstvtx) {
+        case_h2d_bstvtx[key] = new TH2D(("h2d_bstvtx_"+key).c_str(), mf_?("Electron VS Muon angle "+key+"; Electron [rad]; Muon [rad]").c_str():("Large VS Small angle "+key+"; Large angle [rad]; Small angle [rad]").c_str(), 500,0.,0.032,500,0.,0.005);
     }
 
 
@@ -300,6 +309,15 @@ void FairMUanalyzer::SaveResults() {
     h_2d->Write();
     h_2d_ref->Write();
     for (auto& [key, hist] : case_h2d) {
+        hist->Write();
+    }
+
+    h_2d_test101->Write();
+    h_2d_test201->Write();
+    h_2d_test202->Write();
+    h_2d_test203->Write();
+
+    for (auto& [key, hist] : case_h2d_bstvtx) {
         hist->Write();
     }
 
