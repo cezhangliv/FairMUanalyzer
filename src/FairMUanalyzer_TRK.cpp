@@ -119,7 +119,7 @@ void FairMUanalyzer::AnalyzeTRK() {
                 }
 
                 //golden muon step #3: reduced chi2
-                //if(track.chi2perDegreeOfFreedom()>=2)isGolden = false;
+                if(track.chi2perDegreeOfFreedom()>=2)isGolden = false;
 
                 sectors.insert(track.sector());
                 if(track.sector()<2)sectors01.insert(track.sector());
@@ -162,7 +162,7 @@ void FairMUanalyzer::AnalyzeTRK() {
                 if(TGT2 && bestvtx.zPositionFit()<=z_tgt2_+2 && bestvtx.zPositionFit()>=z_tgt2_-2)intgt=1;
                 if(TGT1 && bestvtx.zPositionFit()<=z_tgt1_+2 && bestvtx.zPositionFit()>=z_tgt1_-2)intgt=1;
                 //Elastic step #1: tgt position
-                //if(!intgt)continue;
+                if(!intgt)continue;
 
                 h_vtxchi2->Fill(bestvtx.chi2perDegreeOfFreedom());
                 //Elastic step #2 (optional): bestvtx chi2perDOF
@@ -183,13 +183,13 @@ void FairMUanalyzer::AnalyzeTRK() {
                 std::vector<TVector3> outmuon; outmuon.reserve(12);
 
                 //Elastic step #3: aco (following)
-                
+                int acocut = 1;
 
 
                 if(TGT2 && !useTightTrackCutTgt2_){
 
                     //if( abs(bestvtx.modifiedAcoplanarity())>0.4e-3 || bestvtx.chi2perDegreeOfFreedom()>3 )continue;//0.4 rad
-                    //if( abs(bestvtx.modifiedAcoplanarity())>0.4)continue;//not very much difference between 0.4 and 0.4e-3. see my slides 250722
+                    if( abs(bestvtx.modifiedAcoplanarity())>0.4 && acocut)continue;//not very much difference between 0.4 and 0.4e-3. see my slides 250722
                     
                     case_counts["t1mem"]++;
                     case_counts["t1all"]++;
@@ -217,10 +217,10 @@ void FairMUanalyzer::AnalyzeTRK() {
 
                     
                     //if(abs(bestvtx.modifiedAcoplanarity()<0.3) ){
-                    //if(abs(bestvtx.modifiedAcoplanarity()<0.4) ){
+                    if( (abs(bestvtx.modifiedAcoplanarity()<0.4) && acocut) || (!acocut)  ){
                         h_2d_bstvtx->Fill(bestvtx.electronTheta(),bestvtx.muonTheta()); 
-                        g_2d_bstvtx->SetPoint(g_2d_bstvtx->GetN(), bestvtx.electronTheta(),bestvtx.muonTheta()); 
-                    //}
+                        //g_2d_bstvtx->SetPoint(g_2d_bstvtx->GetN(), bestvtx.electronTheta(),bestvtx.muonTheta()); 
+                    }
                 }
                 
                 for(int j=0; j<tracks.size();j++)
@@ -276,7 +276,7 @@ void FairMUanalyzer::AnalyzeTRK() {
                     angle_mu=in.at(0).Angle(outmuon.at(0)); 
                     aco=acoplanarity(in.at(0),oute.at(0),outmuon.at(0)); 
                     
-                    //if( abs(aco)>0.4)continue;//0.4 rad
+                    if( abs(aco)>0.4 && acocut)continue;//0.4 rad
                     //if( abs(aco)>0.3)continue;//0.3 rad
                     
                     case_counts["t1all"]++;
@@ -312,7 +312,7 @@ void FairMUanalyzer::AnalyzeTRK() {
                     angle_mu=in.at(0).Angle(oute.at(1));    
                     aco=acoplanarity(in.at(0),oute.at(0),oute.at(1)); 
                     
-                    //if( abs(aco)>0.4)continue;//0.4 rad
+                    if( abs(aco)>0.4 && acocut)continue;//0.4 rad
                     //if( abs(aco)>0.3)continue;//0.3 rad
                     
                     case_counts["t1mee"]++; 
@@ -342,7 +342,7 @@ void FairMUanalyzer::AnalyzeTRK() {
                     angle_mu=in.at(0).Angle(outmuon.at(1)); 
                     aco=acoplanarity(in.at(0),outmuon.at(0),outmuon.at(1)); 
                     
-                    //if( abs(aco)>0.4)continue;//0.4 rad
+                    if( abs(aco)>0.4 && acocut)continue;//0.4 rad
                     //if( abs(aco)>0.3)continue;//0.3 rad
                     
                     case_counts["t1mmm"]++; 
@@ -373,7 +373,7 @@ void FairMUanalyzer::AnalyzeTRK() {
                     angle_mu=in.at(0).Angle(outmuon.at(0)); 
                     aco=acoplanarity(in.at(0),oute.at(0),outmuon.at(0)); 
                     
-                    //if( abs(aco)>0.4)continue;//0.4 rad
+                    if( abs(aco)>0.4 && acocut)continue;//0.4 rad
                     
                     case_counts["t0mem"]++; 
                     case_counts["t0all"]++; 
@@ -397,7 +397,7 @@ void FairMUanalyzer::AnalyzeTRK() {
                     angle_mu=in.at(0).Angle(oute.at(1));    
                     aco=acoplanarity(in.at(0),oute.at(0),oute.at(1)); 
                     
-                    //if( abs(aco)>0.4)continue;//0.4 rad
+                    if( abs(aco)>0.4 && acocut)continue;//0.4 rad
                     
                     case_counts["t0mee"]++; 
                     case_counts["t0all"]++; 
@@ -418,7 +418,7 @@ void FairMUanalyzer::AnalyzeTRK() {
                     angle_mu=in.at(0).Angle(outmuon.at(1)); 
                     aco=acoplanarity(in.at(0),outmuon.at(0),outmuon.at(1)); 
                     
-                    //if( abs(aco)>0.4)continue;//0.4 rad
+                    if( abs(aco)>0.4 && acocut)continue;//0.4 rad
                     
                     case_counts["t0mmm"]++; 
                     case_counts["t0all"]++; 
@@ -463,13 +463,19 @@ void FairMUanalyzer::AnalyzeTRK() {
                     angle1=in.at(0).Angle(out.at(1)); 
                     aco=acoplanarity(in.at(0),out.at(0),out.at(1));
                     
-                    //if( abs(aco)>0.4)continue;//0.4 rad
+                    if( abs(aco)>0.4 && acocut)continue;//0.4 rad
             
                     //if(tracks.size()!=3 || (angle0>angle1 && angle0>0.032) || (angle0<angle1 && angle1>0.032) || (angle0>angle1 && angle1<0.0002) || (angle0<angle1 && angle0<0.0002) )continue;
                     //flag_good_event = 1;
 
-                    if(angle0>angle1) {h_2d->Fill(angle0,angle1);g_2d->SetPoint(g_2d->GetN(),angle0,angle1);}
-                    else {h_2d->Fill(angle1,angle0);g_2d->SetPoint(g_2d->GetN(),angle1,angle0);}
+                    if(angle0>angle1) {
+                        h_2d->Fill(angle0,angle1);
+                        //g_2d->SetPoint(g_2d->GetN(),angle0,angle1);
+                    }
+                    else {
+                        h_2d->Fill(angle1,angle0);
+                        //g_2d->SetPoint(g_2d->GetN(),angle1,angle0);
+                    }
                     
                 }
 
