@@ -99,9 +99,6 @@ FairMUanalyzer::FairMUanalyzer() : inputFile_(nullptr), cbmsim_(nullptr), reco_(
     g_2d_bstvtx->SetName("g_2d_bstvtx");
     g_2d_bstvtx->SetTitle(mf_ ? "Electron VS Muon angle; Electron [rad]; Muon [rad]": "Large VS Small angle; Large angle [rad]; Small angle [rad]");
     
-    //std::map<std::string, TGraph *> case_g2d;
-    //std::map<std::string, TGraph *> case_g2d_bstvtx;
-    
     for (const auto& key : case_keys) {
 
         case_g2d[key] = new TGraph();
