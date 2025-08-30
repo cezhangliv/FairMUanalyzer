@@ -290,10 +290,15 @@ void FairMUanalyzer::AnalyzeTRK() {
                     case_g2d_bstvtx["t1mem"]->SetPoint(case_g2d_bstvtx["t1mem"]->GetN(),bestvtx.electronTheta(),bestvtx.muonTheta());
 
                     h_2d->Fill(angle_e,angle_mu); 
+                    g_2d->SetPoint(g_2d->GetN(),angle_e,angle_mu); 
+
                     if(angle_e<=intersecX_){
+
                         case_counts["t1me<m"]++;
+                        
                         case_h2d["t1me<m"]->Fill(angle_e,angle_mu);
                         case_h2d_bstvtx["t1me<m"]->Fill(bestvtx.electronTheta(),bestvtx.muonTheta());
+                        
                         case_g2d["t1me<m"]->SetPoint(case_g2d["t1me<m"]->GetN(),angle_e,angle_mu);
                         case_g2d_bstvtx["t1me<m"]->SetPoint(case_g2d_bstvtx["t1me<m"]->GetN(), bestvtx.electronTheta(),bestvtx.muonTheta());
                     }
