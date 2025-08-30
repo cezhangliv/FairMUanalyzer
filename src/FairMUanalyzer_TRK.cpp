@@ -20,6 +20,7 @@ void FairMUanalyzer::AnalyzeTRK() {
 
     std::cout << "Processing " << N << Form(" ** interaction tgt%d ** events with MF tag %s...",tgt_, mf_?"ON":"OFF") << std::endl;
     
+    int igraph = 0;
     for (Long64_t i = 0; i < N; ++i) {
 
         if (i % (N / 10) == 0 || i == N - 1) {double progress = 100.0 * i / N;printf("Processing: %.1f%% (%lld/%lld)\n", progress, i, N);}
@@ -160,9 +161,11 @@ void FairMUanalyzer::AnalyzeTRK() {
                 int intgt=0;
                 if(TGT2 && bestvtx.zPositionFit()<=z_tgt2_+2 && bestvtx.zPositionFit()>=z_tgt2_-2)intgt=1;
                 if(TGT1 && bestvtx.zPositionFit()<=z_tgt1_+2 && bestvtx.zPositionFit()>=z_tgt1_-2)intgt=1;
-                //if(!intgt)continue;
+                //Elastic step #1: tgt position
+                if(!intgt)continue;
 
                 h_vtxchi2->Fill(bestvtx.chi2perDegreeOfFreedom());
+                //Elastic step #2 (optional): bestvtx chi2perDOF
                 //if(bestvtx.chi2perDegreeOfFreedom()>10)continue;
 
                 int sec0=0; 
@@ -179,25 +182,43 @@ void FairMUanalyzer::AnalyzeTRK() {
                 std::vector<TVector3> oute; oute.reserve(12);
                 std::vector<TVector3> outmuon; outmuon.reserve(12);
 
+                //Elastic step #3: aco (following)
+
 
                 if(TGT2 && !useTightTrackCutTgt2_){
 
                     //if( abs(bestvtx.modifiedAcoplanarity())>0.4e-3 || bestvtx.chi2perDegreeOfFreedom()>3 )continue;//0.4 rad
                     if( abs(bestvtx.modifiedAcoplanarity())>0.4 )continue;//not very much difference between 0.4 and 0.4e-3. see my slides 250722
+                    
                     case_counts["t1mem"]++;
+                    case_counts["t1all"]++;
+                    
+                    //case_h2d["golden"]->Fill(bestvtx.electronTheta(),bestvtx.muonTheta());
+                    case_h2d["t1all"]->Fill(bestvtx.electronTheta(),bestvtx.muonTheta());
                     case_h2d["t1mem"]->Fill(bestvtx.electronTheta(),bestvtx.muonTheta());
-                    h_2d->Fill(bestvtx.electronTheta(),bestvtx.muonTheta()); 
-                    if(bestvtx.electronTheta()<=intersecX_){case_counts["t1me<m"]++;case_h2d["t1me<m"]->Fill(bestvtx.electronTheta(),bestvtx.muonTheta());}
-                    case_h2d["golden"]->Fill(bestvtx.electronTheta(),bestvtx.muonTheta());
 
+                    //case_g2d["golden"]->Fill(bestvtx.electronTheta(),bestvtx.muonTheta());
+                    case_g2d["t1all"]->SetPoint(case_g2d["t1all"]->GetN(),bestvtx.electronTheta(),bestvtx.muonTheta());
+                    case_g2d["t1mem"]->SetPoint(case_g2d["t1mem"]->GetN(),bestvtx.electronTheta(),bestvtx.muonTheta());
+
+                    h_2d->Fill(bestvtx.electronTheta(),bestvtx.muonTheta()); 
+                    g_2d->SetPoint(g_2d->GetN(), bestvtx.electronTheta(),bestvtx.muonTheta()); 
+                    
+                    if(bestvtx.electronTheta()<=intersecX_){
+                        case_counts["t1me<m"]++;
+                        case_h2d["t1me<m"]->Fill(bestvtx.electronTheta(),bestvtx.muonTheta());
+                        case_g2d["t1me<m"]->SetPoint(case_g2d["t1me<m"]->GetN(),bestvtx.electronTheta(),bestvtx.muonTheta());
+                    }
                     continue; // so skip the rest part using useTightTrackCutTgt2_ Ntrack==2
                 }
 
                 if(TGT2 && useTightTrackCutTgt2_){
 
-                    //if(abs(bestvtx.modifiedAcoplanarity()<0.4) )h_2d_bstvtx->Fill(bestvtx.electronTheta(),bestvtx.muonTheta()); 
+                    if(abs(bestvtx.modifiedAcoplanarity()<0.4) )h_2d_bstvtx->Fill(bestvtx.electronTheta(),bestvtx.muonTheta()); 
                     //if(abs(bestvtx.modifiedAcoplanarity()<0.3) )h_2d_bstvtx->Fill(bestvtx.electronTheta(),bestvtx.muonTheta()); 
+                    
                     h_2d_bstvtx->Fill(bestvtx.electronTheta(),bestvtx.muonTheta()); 
+                    g_2d_bstvtx->SetPoint(g_2d_bstvtx->GetN(), bestvtx.electronTheta(),bestvtx.muonTheta()); 
                 }
                 
                 for(int j=0; j<tracks.size();j++)
@@ -206,6 +227,7 @@ void FairMUanalyzer::AnalyzeTRK() {
 
                     if(tracks.at(j).sector()==1) {
                         TVector3 v(tracks.at(j).xSlope(),tracks.at(j).ySlope(),1.0); v=v.Unit(); in.push_back(v);
+
                         //Eugenia's cut https://indico.cern.ch/event/1476217/contributions/6217032/attachments/2962101/5210167/tesi_phd_weekly.pdf
                         //if(v.Theta()>4e-3)continue;
                         sec1++;
@@ -251,74 +273,161 @@ void FairMUanalyzer::AnalyzeTRK() {
                     angle_e=in.at(0).Angle(oute.at(0));    
                     angle_mu=in.at(0).Angle(outmuon.at(0)); 
                     aco=acoplanarity(in.at(0),oute.at(0),outmuon.at(0)); 
-                    //if( abs(aco)>0.4)continue;//0.4 rad
+                    
+                    if( abs(aco)>0.4)continue;//0.4 rad
                     //if( abs(aco)>0.3)continue;//0.3 rad
+                    
+                    case_counts["t1all"]++;
                     case_counts["t1mem"]++;
+                    case_h2d["t1all"]->Fill(angle_e,angle_mu);
                     case_h2d["t1mem"]->Fill(angle_e,angle_mu);
+                    case_h2d_bstvtx["t1all"]->Fill(bestvtx.electronTheta(),bestvtx.muonTheta());
                     case_h2d_bstvtx["t1mem"]->Fill(bestvtx.electronTheta(),bestvtx.muonTheta());
+
+                    case_g2d["t1all"]->SetPoint(case_g2d["t1all"]->GetN(),angle_e,angle_mu);
+                    case_g2d["t1mem"]->SetPoint(case_g2d["t1mem"]->GetN(),angle_e,angle_mu);
+                    case_g2d_bstvtx["t1all"]->SetPoint(case_g2d_bstvtx["t1all"]->GetN(),bestvtx.electronTheta(),bestvtx.muonTheta());
+                    case_g2d_bstvtx["t1mem"]->SetPoint(case_g2d_bstvtx["t1mem"]->GetN(),bestvtx.electronTheta(),bestvtx.muonTheta());
+
                     h_2d->Fill(angle_e,angle_mu); 
-                    if(angle_e<=intersecX_){case_counts["t1me<m"]++;case_h2d["t1me<m"]->Fill(angle_e,angle_mu);case_h2d_bstvtx["t1me<m"]->Fill(bestvtx.electronTheta(),bestvtx.muonTheta());}
-                    case_h2d["golden"]->Fill(angle_e,angle_mu);
-                    case_h2d_bstvtx["golden"]->Fill(bestvtx.electronTheta(),bestvtx.muonTheta());
+                    if(angle_e<=intersecX_){
+                        case_counts["t1me<m"]++;
+                        case_h2d["t1me<m"]->Fill(angle_e,angle_mu);
+                        case_h2d_bstvtx["t1me<m"]->Fill(bestvtx.electronTheta(),bestvtx.muonTheta());
+                        case_g2d["t1me<m"]->SetPoint(case_g2d["t1me<m"]->GetN(),angle_e,angle_mu);
+                        case_g2d_bstvtx["t1me<m"]->SetPoint(case_g2d_bstvtx["t1me<m"]->GetN(), bestvtx.electronTheta(),bestvtx.muonTheta());
+                    }
+                    //case_h2d["golden"]->Fill(angle_e,angle_mu);
+                    //case_h2d_bstvtx["golden"]->Fill(bestvtx.electronTheta(),bestvtx.muonTheta());
                 }    
                 if (sec1 == 1 && sec2e == 2 && sec2muon == 0 && MF){ 
                     angle_e=in.at(0).Angle(oute.at(0));    
                     angle_mu=in.at(0).Angle(oute.at(1));    
                     aco=acoplanarity(in.at(0),oute.at(0),oute.at(1)); 
-                    //if( abs(aco)>0.4)continue;//0.4 rad
+                    
+                    if( abs(aco)>0.4)continue;//0.4 rad
                     //if( abs(aco)>0.3)continue;//0.3 rad
+                    
                     case_counts["t1mee"]++; 
-                    if(angle_e>angle_mu)case_h2d["t1mee"]->Fill(angle_e,angle_mu);
-                    else case_h2d["t1mee"]->Fill(angle_mu,angle_e);
+                    case_counts["t1all"]++; 
+                    if(angle_e>angle_mu){
+                        case_h2d["t1mee"]->Fill(angle_e,angle_mu);case_h2d["t1all"]->Fill(angle_e,angle_mu);
+                        case_g2d["t1mee"]->SetPoint(case_g2d["t1mee"]->GetN(),angle_e,angle_mu);
+                        case_g2d["t1all"]->SetPoint(case_g2d["t1all"]->GetN(),angle_e,angle_mu);
+                    }
+                    else {
+                        case_h2d["t1mee"]->Fill(angle_mu,angle_e);case_h2d["t1all"]->Fill(angle_mu,angle_e);
+                        case_g2d["t1mee"]->SetPoint(case_g2d["t1mee"]->GetN(), angle_mu,angle_e);
+                        case_g2d["t1all"]->SetPoint(case_g2d["t1all"]->GetN(), angle_mu,angle_e);
+                    }
+                    
+                    case_h2d_bstvtx["t1all"]->Fill(bestvtx.electronTheta(),bestvtx.muonTheta());
                     case_h2d_bstvtx["t1mee"]->Fill(bestvtx.electronTheta(),bestvtx.muonTheta());
 
-                    case_h2d["golden"]->Fill(angle_e,angle_mu);
-                    case_h2d_bstvtx["golden"]->Fill(bestvtx.electronTheta(),bestvtx.muonTheta());
+                    case_g2d_bstvtx["t1all"]->SetPoint(case_g2d_bstvtx["t1all"]->GetN(), bestvtx.electronTheta(),bestvtx.muonTheta());
+                    case_g2d_bstvtx["t1mee"]->SetPoint(case_g2d_bstvtx["t1mee"]->GetN(), bestvtx.electronTheta(),bestvtx.muonTheta());
+
+                    //case_h2d["golden"]->Fill(angle_e,angle_mu);
+                    //case_h2d_bstvtx["golden"]->Fill(bestvtx.electronTheta(),bestvtx.muonTheta());
                 }    
                 if (sec1 == 1 && sec2e == 0 && sec2muon == 2 && MF){ 
                     angle_e=in.at(0).Angle(outmuon.at(0)); 
                     angle_mu=in.at(0).Angle(outmuon.at(1)); 
                     aco=acoplanarity(in.at(0),outmuon.at(0),outmuon.at(1)); 
-                    //if( abs(aco)>0.4)continue;//0.4 rad
+                    
+                    if( abs(aco)>0.4)continue;//0.4 rad
                     //if( abs(aco)>0.3)continue;//0.3 rad
+                    
                     case_counts["t1mmm"]++; 
-                    if(angle_e>angle_mu)case_h2d["t1mmm"]->Fill(angle_e,angle_mu);
-                    else case_h2d["t1mmm"]->Fill(angle_mu,angle_e);
+                    case_counts["t1all"]++; 
+                    
+                    if(angle_e>angle_mu){
+                        case_h2d["t1mmm"]->Fill(angle_e,angle_mu);case_h2d["t1all"]->Fill(angle_e,angle_mu);
+                        case_g2d["t1mmm"]->SetPoint(case_g2d["t1mmm"]->GetN(),angle_e,angle_mu);
+                        case_g2d["t1all"]->SetPoint(case_g2d["t1all"]->GetN(),angle_e,angle_mu);
+                    }
+                    else {
+                        case_h2d["t1mmm"]->Fill(angle_mu,angle_e);case_h2d["t1all"]->Fill(angle_mu,angle_e);
+                        case_g2d["t1mmm"]->SetPoint(case_g2d["t1mmm"]->GetN(),angle_mu,angle_e);
+                        case_g2d["t1all"]->SetPoint(case_g2d["t1all"]->GetN(),angle_mu,angle_e);
+                    }
+                    
+                    case_h2d_bstvtx["t1all"]->Fill(bestvtx.electronTheta(),bestvtx.muonTheta());
                     case_h2d_bstvtx["t1mmm"]->Fill(bestvtx.electronTheta(),bestvtx.muonTheta());
 
-                    case_h2d["golden"]->Fill(angle_e,angle_mu);
-                    case_h2d_bstvtx["golden"]->Fill(bestvtx.electronTheta(),bestvtx.muonTheta());
+                    case_g2d_bstvtx["t1all"]->SetPoint(case_g2d_bstvtx["t1all"]->GetN(), bestvtx.electronTheta(),bestvtx.muonTheta());
+                    case_g2d_bstvtx["t1mmm"]->SetPoint(case_g2d_bstvtx["t1mmm"]->GetN(), bestvtx.electronTheta(),bestvtx.muonTheta());
+
+                    //case_h2d["golden"]->Fill(angle_e,angle_mu);
+                    //case_h2d_bstvtx["golden"]->Fill(bestvtx.electronTheta(),bestvtx.muonTheta());
                 }    
                 if (sec0 == 1 && sec1e == 1 && sec1muon == 1 && MF){ 
                     angle_e=in.at(0).Angle(oute.at(0));    
                     angle_mu=in.at(0).Angle(outmuon.at(0)); 
                     aco=acoplanarity(in.at(0),oute.at(0),outmuon.at(0)); 
+                    
                     if( abs(aco)>0.4)continue;//0.4 rad
+                    
                     case_counts["t0mem"]++; 
+                    case_counts["t0all"]++; 
                     case_h2d["t0mem"]->Fill(angle_e,angle_mu); 
+                    case_h2d["t0all"]->Fill(angle_e,angle_mu); 
+                    case_g2d["t0mem"]->SetPoint(case_g2d["t0mem"]->GetN(), angle_e,angle_mu); 
+                    case_g2d["t0all"]->SetPoint(case_g2d["t0all"]->GetN(), angle_e,angle_mu); 
+                    
                     h_2d->Fill(angle_e,angle_mu); 
-                    if(angle_e<=intersecX_){case_counts["t0me<m"]++;case_h2d["t0me<m"]->Fill(angle_e,angle_mu); }
-                    case_h2d["golden"]->Fill(angle_e,angle_mu);
+                    g_2d->Fill(g_2d->GetN(), angle_e,angle_mu); 
+                    
+                    if(angle_e<=intersecX_){
+                        case_counts["t0me<m"]++;
+                        case_h2d["t0me<m"]->Fill(angle_e,angle_mu); 
+                        case_g2d["t0me<m"]->SetPoint(case_g2d["t0me<m"]->GetN(),angle_e,angle_mu); 
+                    }
+                    //case_h2d["golden"]->Fill(angle_e,angle_mu);
                 }    
                 if (sec0 == 1 && sec1e == 2 && sec1muon == 0 && MF){ 
                     angle_e=in.at(0).Angle(oute.at(0));    
                     angle_mu=in.at(0).Angle(oute.at(1));    
                     aco=acoplanarity(in.at(0),oute.at(0),oute.at(1)); 
+                    
                     if( abs(aco)>0.4)continue;//0.4 rad
+                    
                     case_counts["t0mee"]++; 
-                    if(angle_e>angle_mu)case_h2d["t0mee"]->Fill(angle_e,angle_mu);
-                    else case_h2d["t0mee"]->Fill(angle_mu,angle_e);
-                    case_h2d["golden"]->Fill(angle_e,angle_mu);
+                    case_counts["t0all"]++; 
+                    if(angle_e>angle_mu){
+                        case_h2d["t0mee"]->Fill(angle_e,angle_mu);case_h2d["t0all"]->Fill(angle_e,angle_mu);
+                        case_g2d["t0mee"]->SetPoint(case_g2d["t0mee"]->GetN(), angle_e,angle_mu);
+                        case_g2d["t0all"]->SetPoint(case_g2d["t0all"]->GetN(), angle_e,angle_mu);
+                    }
+                    else {
+                        case_h2d["t0mee"]->Fill(angle_mu,angle_e);case_h2d["t0all"]->Fill(angle_mu,angle_e);
+                        case_g2d["t0mee"]->SetPoint(case_g2d["t0mee"]->GetN(), angle_mu,angle_e);
+                        case_g2d["t0all"]->SetPoint(case_g2d["t0all"]->GetN(), angle_mu,angle_e);
+                    }
+                    //case_h2d["golden"]->Fill(angle_e,angle_mu);
                 }    
                 if (sec0 == 1 && sec1e == 0 && sec1muon == 2 && MF){ 
                     angle_e=in.at(0).Angle(outmuon.at(0)); 
                     angle_mu=in.at(0).Angle(outmuon.at(1)); 
                     aco=acoplanarity(in.at(0),outmuon.at(0),outmuon.at(1)); 
+                    
                     if( abs(aco)>0.4)continue;//0.4 rad
+                    
                     case_counts["t0mmm"]++; 
-                    if(angle_e>angle_mu)case_h2d["t0mmm"]->Fill(angle_e,angle_mu);
-                    else case_h2d["t0mmm"]->Fill(angle_mu,angle_e);
-                    case_h2d["golden"]->Fill(angle_e,angle_mu);
+                    case_counts["t0all"]++; 
+                    
+                    if(angle_e>angle_mu){
+                        case_h2d["t0mmm"]->Fill(angle_e,angle_mu);case_h2d["t0all"]->Fill(angle_e,angle_mu);
+                        case_g2d["t0mmm"]->SetPoint(case_g2d["t0mmm"]->GetN(), angle_e,angle_mu);
+                        case_g2d["t0all"]->SetPoint(case_g2d["t0all"]->GetN(), angle_e,angle_mu);
+                    }
+                    else {
+                        case_h2d["t0mmm"]->Fill(angle_mu,angle_e);case_h2d["t0all"]->Fill(angle_mu,angle_e);
+                        case_g2d["t0mmm"]->SetPoint(case_g2d["t0mmm"]->GetN(), angle_mu,angle_e);
+                        case_g2d["t0all"]->SetPoint(case_g2d["t0all"]->GetN(), angle_mu,angle_e);
+                    }
+                    
+                    //case_h2d["golden"]->Fill(angle_e,angle_mu);
                 }    
 
                 
@@ -346,17 +455,15 @@ void FairMUanalyzer::AnalyzeTRK() {
                     angle0=in.at(0).Angle(out.at(0)); 
                     angle1=in.at(0).Angle(out.at(1)); 
                     aco=acoplanarity(in.at(0),out.at(0),out.at(1));
-                    //if( abs(aco)>0.4)continue;//0.4 rad
+                    if( abs(aco)>0.4)continue;//0.4 rad
             
                     //if(tracks.size()!=3 || (angle0>angle1 && angle0>0.032) || (angle0<angle1 && angle1>0.032) || (angle0>angle1 && angle1<0.0002) || (angle0<angle1 && angle0<0.0002) )continue;
                     //flag_good_event = 1;
 
-                    if(angle0>angle1) h_2d->Fill(angle0,angle1);
-                    else h_2d->Fill(angle1,angle0);
+                    if(angle0>angle1) {h_2d->Fill(angle0,angle1);g_2d->SetPoint(g_2d->GetN(),angle0,angle1);}
+                    else {h_2d->Fill(angle1,angle0);g_2d->SetPoint(g_2d->GetN(),angle1,angle0);}
                     
                 }
-
-
 
             }//isGolden
 

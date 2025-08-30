@@ -79,26 +79,29 @@ private:
     TH1F* h_hits_zcut;
     TH1F* h_hitsModuleID_zcut[5];
     TH1F* h_hitsPerMuonTrack_zcut[5];
-
     TH1F* h_goldenMuon_isMuon[3];
 
     TH1F* h_vtxchi2;
-
     TH1F* h_isMuon;
     TH1F* h_Ntracks;
     
     TH2D *h_2d;
     TH2D *h_2d_ref;
-    
     TH2D *h_2d_bstvtx;
+
+    TGraph *g_2d;
+    TGraph *g_2d_ref;
+    TGraph *g_2d_bstvtx;
     
     TF1 *f_elastic;
     TGraph* g_elastic;
     TH1I* hCaseDist;
-    std::vector<std::string> case_keys = {"Total","golden","t0mem","t0mee","t0mmm","t0me<m","t1mem","t1mee","t1mmm","t1me<m"};
+    std::vector<std::string> case_keys = {"Total","golden","t0all","t0mem","t0mee","t0mmm","t0me<m","t1all","t1mem","t1mee","t1mmm","t1me<m"};
     std::map<std::string, int> case_counts;
     std::map<std::string, TH2D *> case_h2d;
     std::map<std::string, TH2D *> case_h2d_bstvtx;
+    std::map<std::string, TGraph *> case_g2d;
+    std::map<std::string, TGraph *> case_g2d_bstvtx;
 
     static constexpr double me_ = 0.51099906e-3;   // Electron mass [GeV]
     static constexpr double mu_ = 105.65836900e-3; // Muon mass [GeV]

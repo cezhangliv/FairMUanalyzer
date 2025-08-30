@@ -89,6 +89,30 @@ FairMUanalyzer::FairMUanalyzer() : inputFile_(nullptr), cbmsim_(nullptr), reco_(
         case_h2d_bstvtx[key] = new TH2D(("h2d_bstvtx_"+key).c_str(), mf_?("Electron VS Muon angle "+key+"; Electron [rad]; Muon [rad]").c_str():("Large VS Small angle "+key+"; Large angle [rad]; Small angle [rad]").c_str(), 500,0.,0.032,500,0.,0.005);
     }
 
+    g_2d = new TGraph();
+    g_2d->SetName("g_2d");
+    g_2d->SetTitle(mf_ ? "Electron VS Muon angle; Electron [rad]; Muon [rad]": "Large VS Small angle; Large angle [rad]; Small angle [rad]");
+    g_2d_ref = new TGraph();
+    g_2d_ref->SetName("g_2d_ref");
+    g_2d_ref->SetTitle(mf_ ? "Electron VS Muon angle; Electron [rad]; Muon [rad]": "Large VS Small angle; Large angle [rad]; Small angle [rad]");
+    g_2d_bstvtx = new TGraph();
+    g_2d_bstvtx->SetName("g_2d_bstvtx");
+    g_2d_bstvtx->SetTitle(mf_ ? "Electron VS Muon angle; Electron [rad]; Muon [rad]": "Large VS Small angle; Large angle [rad]; Small angle [rad]");
+    
+    std::map<std::string, TGraph *> case_g2d;
+    std::map<std::string, TGraph *> case_g2d_bstvtx;
+    
+    for (const auto& key : case_keys) {
+
+        case_g2d[key] = new TGraph();
+        case_g2d[key]->SetName(("g2d_"+key).c_str());
+        case_g2d[key]->SetTitle(mf_?("Electron VS Muon angle "+key+"; Electron [rad]; Muon [rad]").c_str():("Large VS Small angle "+key+"; Large angle [rad]; Small angle [rad]").c_str());
+
+        case_g2d_bstvtx[key] = new TGraph();
+        case_g2d_bstvtx[key]->SetName(("g2d_bstvtx_"+key).c_str());
+        case_g2d_bstvtx[key]->SetTitle(mf_?("Electron VS Muon angle "+key+"; Electron [rad]; Muon [rad]").c_str():("Large VS Small angle "+key+"; Large angle [rad]; Small angle [rad]").c_str());
+
+    }
 
 }
 
@@ -304,19 +328,29 @@ void FairMUanalyzer::SaveResults() {
     g_elastic->Write("g_elastic");
     h_2d->Write();
     h_2d_ref->Write();
+    h_2d_bstvtx->Write();
+
+    g_2d->Write();
+    g_2d_ref->Write();
+    g_2d_bstvtx->Write();
+
     for (auto& [key, hist] : case_h2d) {
         hist->Write();
     }
     for (auto& [key, hist] : case_h2d_bstvtx) {
         hist->Write();
     }
+    for (auto& [key, graph] : case_g2d) {
+        graph->Write();
+    }
+    for (auto& [key, graph] : case_g2d_bstvtx) {
+        graph->Write();
+    }
 
-    h_2d_bstvtx->Write();
+    
 
     hCaseDist->Write();
-
     h_hits_zcut->Write();
-
     h_vtxchi2->Write();
 
     h_Ntracks->GetYaxis()->SetRangeUser(0, h_Ntracks->GetMaximum() * 1.2);
