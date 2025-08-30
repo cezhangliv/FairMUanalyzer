@@ -119,7 +119,7 @@ void FairMUanalyzer::AnalyzeTRK() {
                 }
 
                 //golden muon step #3: reduced chi2
-                //if(track.chi2perDegreeOfFreedom()>=2)isGolden = false;
+                if(track.chi2perDegreeOfFreedom()>=2)isGolden = false;
 
                 sectors.insert(track.sector());
                 if(track.sector()<2)sectors01.insert(track.sector());
