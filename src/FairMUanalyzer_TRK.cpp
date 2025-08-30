@@ -199,16 +199,16 @@ void FairMUanalyzer::AnalyzeTRK() {
                     case_h2d["t1mem"]->Fill(bestvtx.electronTheta(),bestvtx.muonTheta());
 
                     //case_g2d["golden"]->Fill(bestvtx.electronTheta(),bestvtx.muonTheta());
-                    case_g2d["t1all"]->SetPoint(case_g2d["t1all"]->GetN(),bestvtx.electronTheta(),bestvtx.muonTheta());
-                    case_g2d["t1mem"]->SetPoint(case_g2d["t1mem"]->GetN(),bestvtx.electronTheta(),bestvtx.muonTheta());
+                    //case_g2d["t1all"]->SetPoint(case_g2d["t1all"]->GetN(),bestvtx.electronTheta(),bestvtx.muonTheta());
+                    //case_g2d["t1mem"]->SetPoint(case_g2d["t1mem"]->GetN(),bestvtx.electronTheta(),bestvtx.muonTheta());
 
                     h_2d->Fill(bestvtx.electronTheta(),bestvtx.muonTheta()); 
-                    g_2d->SetPoint(g_2d->GetN(), bestvtx.electronTheta(),bestvtx.muonTheta()); 
+                    //g_2d->SetPoint(g_2d->GetN(), bestvtx.electronTheta(),bestvtx.muonTheta()); 
                     
                     if(bestvtx.electronTheta()<=intersecX_){
                         case_counts["t1me<m"]++;
                         case_h2d["t1me<m"]->Fill(bestvtx.electronTheta(),bestvtx.muonTheta());
-                        case_g2d["t1me<m"]->SetPoint(case_g2d["t1me<m"]->GetN(),bestvtx.electronTheta(),bestvtx.muonTheta());
+                        //case_g2d["t1me<m"]->SetPoint(case_g2d["t1me<m"]->GetN(),bestvtx.electronTheta(),bestvtx.muonTheta());
                     }
                     continue; // so skip the rest part using useTightTrackCutTgt2_ Ntrack==2
                 }
@@ -286,13 +286,13 @@ void FairMUanalyzer::AnalyzeTRK() {
                     case_h2d_bstvtx["t1all"]->Fill(bestvtx.electronTheta(),bestvtx.muonTheta());
                     case_h2d_bstvtx["t1mem"]->Fill(bestvtx.electronTheta(),bestvtx.muonTheta());
 
-                    case_g2d["t1all"]->SetPoint(case_g2d["t1all"]->GetN(),angle_e,angle_mu);
-                    case_g2d["t1mem"]->SetPoint(case_g2d["t1mem"]->GetN(),angle_e,angle_mu);
-                    case_g2d_bstvtx["t1all"]->SetPoint(case_g2d_bstvtx["t1all"]->GetN(),bestvtx.electronTheta(),bestvtx.muonTheta());
-                    case_g2d_bstvtx["t1mem"]->SetPoint(case_g2d_bstvtx["t1mem"]->GetN(),bestvtx.electronTheta(),bestvtx.muonTheta());
+                    //case_g2d["t1all"]->SetPoint(case_g2d["t1all"]->GetN(),angle_e,angle_mu);
+                    //case_g2d["t1mem"]->SetPoint(case_g2d["t1mem"]->GetN(),angle_e,angle_mu);
+                    //case_g2d_bstvtx["t1all"]->SetPoint(case_g2d_bstvtx["t1all"]->GetN(),bestvtx.electronTheta(),bestvtx.muonTheta());
+                    //case_g2d_bstvtx["t1mem"]->SetPoint(case_g2d_bstvtx["t1mem"]->GetN(),bestvtx.electronTheta(),bestvtx.muonTheta());
 
                     h_2d->Fill(angle_e,angle_mu); 
-                    g_2d->SetPoint(g_2d->GetN(),angle_e,angle_mu); 
+                    //g_2d->SetPoint(g_2d->GetN(),angle_e,angle_mu); 
 
                     if(angle_e<=intersecX_){
 
@@ -301,8 +301,8 @@ void FairMUanalyzer::AnalyzeTRK() {
                         case_h2d["t1me<m"]->Fill(angle_e,angle_mu);
                         case_h2d_bstvtx["t1me<m"]->Fill(bestvtx.electronTheta(),bestvtx.muonTheta());
                         
-                        case_g2d["t1me<m"]->SetPoint(case_g2d["t1me<m"]->GetN(),angle_e,angle_mu);
-                        case_g2d_bstvtx["t1me<m"]->SetPoint(case_g2d_bstvtx["t1me<m"]->GetN(), bestvtx.electronTheta(),bestvtx.muonTheta());
+                        //case_g2d["t1me<m"]->SetPoint(case_g2d["t1me<m"]->GetN(),angle_e,angle_mu);
+                        //case_g2d_bstvtx["t1me<m"]->SetPoint(case_g2d_bstvtx["t1me<m"]->GetN(), bestvtx.electronTheta(),bestvtx.muonTheta());
                     }
                     //case_h2d["golden"]->Fill(angle_e,angle_mu);
                     //case_h2d_bstvtx["golden"]->Fill(bestvtx.electronTheta(),bestvtx.muonTheta());
@@ -319,20 +319,20 @@ void FairMUanalyzer::AnalyzeTRK() {
                     case_counts["t1all"]++; 
                     if(angle_e>angle_mu){
                         case_h2d["t1mee"]->Fill(angle_e,angle_mu);case_h2d["t1all"]->Fill(angle_e,angle_mu);
-                        case_g2d["t1mee"]->SetPoint(case_g2d["t1mee"]->GetN(),angle_e,angle_mu);
-                        case_g2d["t1all"]->SetPoint(case_g2d["t1all"]->GetN(),angle_e,angle_mu);
+                        //case_g2d["t1mee"]->SetPoint(case_g2d["t1mee"]->GetN(),angle_e,angle_mu);
+                        //case_g2d["t1all"]->SetPoint(case_g2d["t1all"]->GetN(),angle_e,angle_mu);
                     }
                     else {
                         case_h2d["t1mee"]->Fill(angle_mu,angle_e);case_h2d["t1all"]->Fill(angle_mu,angle_e);
-                        case_g2d["t1mee"]->SetPoint(case_g2d["t1mee"]->GetN(), angle_mu,angle_e);
-                        case_g2d["t1all"]->SetPoint(case_g2d["t1all"]->GetN(), angle_mu,angle_e);
+                        //case_g2d["t1mee"]->SetPoint(case_g2d["t1mee"]->GetN(), angle_mu,angle_e);
+                        //case_g2d["t1all"]->SetPoint(case_g2d["t1all"]->GetN(), angle_mu,angle_e);
                     }
                     
                     case_h2d_bstvtx["t1all"]->Fill(bestvtx.electronTheta(),bestvtx.muonTheta());
                     case_h2d_bstvtx["t1mee"]->Fill(bestvtx.electronTheta(),bestvtx.muonTheta());
 
-                    case_g2d_bstvtx["t1all"]->SetPoint(case_g2d_bstvtx["t1all"]->GetN(), bestvtx.electronTheta(),bestvtx.muonTheta());
-                    case_g2d_bstvtx["t1mee"]->SetPoint(case_g2d_bstvtx["t1mee"]->GetN(), bestvtx.electronTheta(),bestvtx.muonTheta());
+                    //case_g2d_bstvtx["t1all"]->SetPoint(case_g2d_bstvtx["t1all"]->GetN(), bestvtx.electronTheta(),bestvtx.muonTheta());
+                    //case_g2d_bstvtx["t1mee"]->SetPoint(case_g2d_bstvtx["t1mee"]->GetN(), bestvtx.electronTheta(),bestvtx.muonTheta());
 
                     //case_h2d["golden"]->Fill(angle_e,angle_mu);
                     //case_h2d_bstvtx["golden"]->Fill(bestvtx.electronTheta(),bestvtx.muonTheta());
@@ -350,20 +350,20 @@ void FairMUanalyzer::AnalyzeTRK() {
                     
                     if(angle_e>angle_mu){
                         case_h2d["t1mmm"]->Fill(angle_e,angle_mu);case_h2d["t1all"]->Fill(angle_e,angle_mu);
-                        case_g2d["t1mmm"]->SetPoint(case_g2d["t1mmm"]->GetN(),angle_e,angle_mu);
-                        case_g2d["t1all"]->SetPoint(case_g2d["t1all"]->GetN(),angle_e,angle_mu);
+                        //case_g2d["t1mmm"]->SetPoint(case_g2d["t1mmm"]->GetN(),angle_e,angle_mu);
+                        //case_g2d["t1all"]->SetPoint(case_g2d["t1all"]->GetN(),angle_e,angle_mu);
                     }
                     else {
                         case_h2d["t1mmm"]->Fill(angle_mu,angle_e);case_h2d["t1all"]->Fill(angle_mu,angle_e);
-                        case_g2d["t1mmm"]->SetPoint(case_g2d["t1mmm"]->GetN(),angle_mu,angle_e);
-                        case_g2d["t1all"]->SetPoint(case_g2d["t1all"]->GetN(),angle_mu,angle_e);
+                        //case_g2d["t1mmm"]->SetPoint(case_g2d["t1mmm"]->GetN(),angle_mu,angle_e);
+                        //case_g2d["t1all"]->SetPoint(case_g2d["t1all"]->GetN(),angle_mu,angle_e);
                     }
                     
                     case_h2d_bstvtx["t1all"]->Fill(bestvtx.electronTheta(),bestvtx.muonTheta());
                     case_h2d_bstvtx["t1mmm"]->Fill(bestvtx.electronTheta(),bestvtx.muonTheta());
 
-                    case_g2d_bstvtx["t1all"]->SetPoint(case_g2d_bstvtx["t1all"]->GetN(), bestvtx.electronTheta(),bestvtx.muonTheta());
-                    case_g2d_bstvtx["t1mmm"]->SetPoint(case_g2d_bstvtx["t1mmm"]->GetN(), bestvtx.electronTheta(),bestvtx.muonTheta());
+                    //case_g2d_bstvtx["t1all"]->SetPoint(case_g2d_bstvtx["t1all"]->GetN(), bestvtx.electronTheta(),bestvtx.muonTheta());
+                    //case_g2d_bstvtx["t1mmm"]->SetPoint(case_g2d_bstvtx["t1mmm"]->GetN(), bestvtx.electronTheta(),bestvtx.muonTheta());
 
                     //case_h2d["golden"]->Fill(angle_e,angle_mu);
                     //case_h2d_bstvtx["golden"]->Fill(bestvtx.electronTheta(),bestvtx.muonTheta());
@@ -379,16 +379,16 @@ void FairMUanalyzer::AnalyzeTRK() {
                     case_counts["t0all"]++; 
                     case_h2d["t0mem"]->Fill(angle_e,angle_mu); 
                     case_h2d["t0all"]->Fill(angle_e,angle_mu); 
-                    case_g2d["t0mem"]->SetPoint(case_g2d["t0mem"]->GetN(), angle_e,angle_mu); 
-                    case_g2d["t0all"]->SetPoint(case_g2d["t0all"]->GetN(), angle_e,angle_mu); 
+                    //case_g2d["t0mem"]->SetPoint(case_g2d["t0mem"]->GetN(), angle_e,angle_mu); 
+                    //case_g2d["t0all"]->SetPoint(case_g2d["t0all"]->GetN(), angle_e,angle_mu); 
                     
                     h_2d->Fill(angle_e,angle_mu); 
-                    g_2d->SetPoint(g_2d->GetN(), angle_e,angle_mu); 
+                    //g_2d->SetPoint(g_2d->GetN(), angle_e,angle_mu); 
                     
                     if(angle_e<=intersecX_){
                         case_counts["t0me<m"]++;
                         case_h2d["t0me<m"]->Fill(angle_e,angle_mu); 
-                        case_g2d["t0me<m"]->SetPoint(case_g2d["t0me<m"]->GetN(),angle_e,angle_mu); 
+                        //case_g2d["t0me<m"]->SetPoint(case_g2d["t0me<m"]->GetN(),angle_e,angle_mu); 
                     }
                     //case_h2d["golden"]->Fill(angle_e,angle_mu);
                 }    
@@ -403,13 +403,13 @@ void FairMUanalyzer::AnalyzeTRK() {
                     case_counts["t0all"]++; 
                     if(angle_e>angle_mu){
                         case_h2d["t0mee"]->Fill(angle_e,angle_mu);case_h2d["t0all"]->Fill(angle_e,angle_mu);
-                        case_g2d["t0mee"]->SetPoint(case_g2d["t0mee"]->GetN(), angle_e,angle_mu);
-                        case_g2d["t0all"]->SetPoint(case_g2d["t0all"]->GetN(), angle_e,angle_mu);
+                        //case_g2d["t0mee"]->SetPoint(case_g2d["t0mee"]->GetN(), angle_e,angle_mu);
+                        //case_g2d["t0all"]->SetPoint(case_g2d["t0all"]->GetN(), angle_e,angle_mu);
                     }
                     else {
                         case_h2d["t0mee"]->Fill(angle_mu,angle_e);case_h2d["t0all"]->Fill(angle_mu,angle_e);
-                        case_g2d["t0mee"]->SetPoint(case_g2d["t0mee"]->GetN(), angle_mu,angle_e);
-                        case_g2d["t0all"]->SetPoint(case_g2d["t0all"]->GetN(), angle_mu,angle_e);
+                        //case_g2d["t0mee"]->SetPoint(case_g2d["t0mee"]->GetN(), angle_mu,angle_e);
+                        //case_g2d["t0all"]->SetPoint(case_g2d["t0all"]->GetN(), angle_mu,angle_e);
                     }
                     //case_h2d["golden"]->Fill(angle_e,angle_mu);
                 }    
@@ -425,13 +425,13 @@ void FairMUanalyzer::AnalyzeTRK() {
                     
                     if(angle_e>angle_mu){
                         case_h2d["t0mmm"]->Fill(angle_e,angle_mu);case_h2d["t0all"]->Fill(angle_e,angle_mu);
-                        case_g2d["t0mmm"]->SetPoint(case_g2d["t0mmm"]->GetN(), angle_e,angle_mu);
-                        case_g2d["t0all"]->SetPoint(case_g2d["t0all"]->GetN(), angle_e,angle_mu);
+                        //case_g2d["t0mmm"]->SetPoint(case_g2d["t0mmm"]->GetN(), angle_e,angle_mu);
+                        //case_g2d["t0all"]->SetPoint(case_g2d["t0all"]->GetN(), angle_e,angle_mu);
                     }
                     else {
                         case_h2d["t0mmm"]->Fill(angle_mu,angle_e);case_h2d["t0all"]->Fill(angle_mu,angle_e);
-                        case_g2d["t0mmm"]->SetPoint(case_g2d["t0mmm"]->GetN(), angle_mu,angle_e);
-                        case_g2d["t0all"]->SetPoint(case_g2d["t0all"]->GetN(), angle_mu,angle_e);
+                        //case_g2d["t0mmm"]->SetPoint(case_g2d["t0mmm"]->GetN(), angle_mu,angle_e);
+                        //case_g2d["t0all"]->SetPoint(case_g2d["t0all"]->GetN(), angle_mu,angle_e);
                     }
                     
                     //case_h2d["golden"]->Fill(angle_e,angle_mu);

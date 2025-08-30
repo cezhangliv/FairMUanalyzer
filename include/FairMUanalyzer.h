@@ -88,10 +88,11 @@ private:
     TH2D *h_2d;
     TH2D *h_2d_ref;
     TH2D *h_2d_bstvtx;
-
+    /*
     TGraph *g_2d;
     TGraph *g_2d_ref;
     TGraph *g_2d_bstvtx;
+    */
     
     TF1 *f_elastic;
     TGraph* g_elastic;
@@ -100,8 +101,8 @@ private:
     std::map<std::string, int> case_counts;
     std::map<std::string, TH2D *> case_h2d;
     std::map<std::string, TH2D *> case_h2d_bstvtx;
-    std::map<std::string, TGraph *> case_g2d;
-    std::map<std::string, TGraph *> case_g2d_bstvtx;
+    //std::map<std::string, TGraph *> case_g2d;
+    //std::map<std::string, TGraph *> case_g2d_bstvtx;
 
     static constexpr double me_ = 0.51099906e-3;   // Electron mass [GeV]
     static constexpr double mu_ = 105.65836900e-3; // Muon mass [GeV]

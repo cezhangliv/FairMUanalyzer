@@ -89,6 +89,7 @@ FairMUanalyzer::FairMUanalyzer() : inputFile_(nullptr), cbmsim_(nullptr), reco_(
         case_h2d_bstvtx[key] = new TH2D(("h2d_bstvtx_"+key).c_str(), mf_?("Electron VS Muon angle "+key+"; Electron [rad]; Muon [rad]").c_str():("Large VS Small angle "+key+"; Large angle [rad]; Small angle [rad]").c_str(), 500,0.,0.032,500,0.,0.005);
     }
 
+    /*
     g_2d = new TGraph();
     g_2d->SetName("g_2d");
     g_2d->SetTitle(mf_ ? "Electron VS Muon angle; Electron [rad]; Muon [rad]": "Large VS Small angle; Large angle [rad]; Small angle [rad]");
@@ -110,6 +111,7 @@ FairMUanalyzer::FairMUanalyzer() : inputFile_(nullptr), cbmsim_(nullptr), reco_(
         case_g2d_bstvtx[key]->SetTitle(mf_?("Electron VS Muon angle "+key+"; Electron [rad]; Muon [rad]").c_str():("Large VS Small angle "+key+"; Large angle [rad]; Small angle [rad]").c_str());
 
     }
+    */
 
 }
 
@@ -327,9 +329,9 @@ void FairMUanalyzer::SaveResults() {
     h_2d_ref->Write();
     h_2d_bstvtx->Write();
 
-    g_2d->Write();
-    g_2d_ref->Write();
-    g_2d_bstvtx->Write();
+    //g_2d->Write();
+    //g_2d_ref->Write();
+    //g_2d_bstvtx->Write();
 
     for (auto& [key, hist] : case_h2d) {
         hist->Write();
@@ -337,12 +339,14 @@ void FairMUanalyzer::SaveResults() {
     for (auto& [key, hist] : case_h2d_bstvtx) {
         hist->Write();
     }
+    /*
     for (auto& [key, graph] : case_g2d) {
         graph->Write();
     }
     for (auto& [key, graph] : case_g2d_bstvtx) {
         graph->Write();
     }
+    */
 
     
 
