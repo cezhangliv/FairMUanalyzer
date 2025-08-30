@@ -376,7 +376,7 @@ void FairMUanalyzer::AnalyzeTRK() {
                     case_g2d["t0all"]->SetPoint(case_g2d["t0all"]->GetN(), angle_e,angle_mu); 
                     
                     h_2d->Fill(angle_e,angle_mu); 
-                    g_2d->Fill(g_2d->GetN(), angle_e,angle_mu); 
+                    g_2d->SetPoint(g_2d->GetN(), angle_e,angle_mu); 
                     
                     if(angle_e<=intersecX_){
                         case_counts["t0me<m"]++;
