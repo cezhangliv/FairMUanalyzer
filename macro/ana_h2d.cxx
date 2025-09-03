@@ -5,7 +5,7 @@
 #include <algorithm>
 #include "TH1.h"
 
-bool savepdf = 0;
+bool savepdf = 1;
 
 std::pair<double, double> GetYRange(const std::vector<TH1*>& hists) {
     double minY = std::numeric_limits<double>::max();
@@ -59,8 +59,8 @@ void TruncateGraphAtX(TGraph* g, double x_max = 0.0315) {
 
 
 
-const int N = 4;
-const int Nbin = 11;
+const int N = 6;
+const int Nbin = 13;
 TFile * f[N];
 
 TString filename[N] = {
@@ -91,22 +91,69 @@ TString filename[N] = {
 	//"../result/FairMUanalyzer_21Aug25_run24_reconstruction_0_CDbugfix11July25_MF1_output.root",
 	//"../result/FairMUanalyzer_21Aug25_run24_reconstruction_1_CDbugfix11July25_MF1_output.root"
 	//26Aug25 run24 MF=1 all
-
+	/*
 	"../result/FairMUanalyzer_single_muon_interaction_0_CDbugfix11July25_run24_muedaq04-1753473450-1753473533_MF1_output.root",
 	"../result/FairMUanalyzer_single_muon_interaction_0_CDbugfix11July25_run24_muedaq04-1753473450-1753473533_MF1_SH2_output.root",
 	"../result/FairMUanalyzer_single_muon_interaction_1_CDbugfix11July25_run24_muedaq04-1753473450-1753473533_MF1_output.root",
 	"../result/FairMUanalyzer_single_muon_interaction_1_CDbugfix11July25_run24_muedaq04-1753473450-1753473533_MF1_SH2_output.root"
+	*/
+
+	/// 30 Aug, GA discussion towards plots approval
+	/*
+	"../result/FairMUanalyzer_29Aug25_GAtest400_single_muon_interaction_0_CDbugfix11July25_run8_muedaq04-1750227094-1750228937_MF0_output.root",
+	"../result/FairMUanalyzer_29Aug25_GAtest401_single_muon_interaction_0_CDbugfix11July25_run8_muedaq04-1750227094-1750228937_MF0_output.root",
+	"../result/FairMUanalyzer_29Aug25_GAtest402_single_muon_interaction_0_CDbugfix11July25_run8_muedaq04-1750227094-1750228937_MF0_output.root"
+	*/
+	/*
+	"../result/FairMUanalyzer_29Aug25_GAtest400_single_muon_interaction_1_CDbugfix11July25_run8_muedaq04-1750227094-1750228937_MF0_output.root",
+	"../result/FairMUanalyzer_29Aug25_GAtest401_single_muon_interaction_1_CDbugfix11July25_run8_muedaq04-1750227094-1750228937_MF0_output.root",
+	"../result/FairMUanalyzer_29Aug25_GAtest402_single_muon_interaction_1_CDbugfix11July25_run8_muedaq04-1750227094-1750228937_MF0_output.root"
+	*/
+	/*
+	"../result/FairMUanalyzer_29Aug25_GAtest400_single_muon_interaction_0_CDbugfix11July25_run8_muedaq04-1750227094-1750228937_MF1_output.root",
+	"../result/FairMUanalyzer_29Aug25_GAtest401_single_muon_interaction_0_CDbugfix11July25_run8_muedaq04-1750227094-1750228937_MF1_output.root",
+	"../result/FairMUanalyzer_29Aug25_GAtest402_single_muon_interaction_0_CDbugfix11July25_run8_muedaq04-1750227094-1750228937_MF1_output.root"
+	*/
+	
+	/*
+	"../result/FairMUanalyzer_29Aug25_GAtest400_single_muon_interaction_1_CDbugfix11July25_run8_muedaq04-1750227094-1750228937_MF1_output.root",
+	"../result/FairMUanalyzer_29Aug25_GAtest401_single_muon_interaction_1_CDbugfix11July25_run8_muedaq04-1750227094-1750228937_MF1_output.root",
+	"../result/FairMUanalyzer_29Aug25_GAtest402_single_muon_interaction_1_CDbugfix11July25_run8_muedaq04-1750227094-1750228937_MF1_output.root"
+	*/
+
+	/*
+	"../result/FairMUanalyzer_29Aug25_GAtest400_single_muon_interaction_0_CDbugfix11July25_run8_muedaq04-1750227094-1750228937_MF1_output.root",
+	"../result/FairMUanalyzer_29Aug25_GAtest401_single_muon_interaction_0_CDbugfix11July25_run8_muedaq04-1750227094-1750228937_MF1_output.root",
+	"../result/FairMUanalyzer_29Aug25_GAtest402_single_muon_interaction_0_CDbugfix11July25_run8_muedaq04-1750227094-1750228937_MF1_output.root",
+	"../result/FairMUanalyzer_29Aug25_GAtest400_single_muon_interaction_1_CDbugfix11July25_run8_muedaq04-1750227094-1750228937_MF1_output.root",
+	"../result/FairMUanalyzer_29Aug25_GAtest401_single_muon_interaction_1_CDbugfix11July25_run8_muedaq04-1750227094-1750228937_MF1_output.root",
+	"../result/FairMUanalyzer_29Aug25_GAtest402_single_muon_interaction_1_CDbugfix11July25_run8_muedaq04-1750227094-1750228937_MF1_output.root"
+	*/
+
+	"../result/FairMUanalyzer_29Aug25_GAtest400_single_muon_interaction_0_CDbugfix11July25_run8_muedaq04-1750227094-1750228937_MF0_output.root",
+	"../result/FairMUanalyzer_29Aug25_GAtest401_single_muon_interaction_0_CDbugfix11July25_run8_muedaq04-1750227094-1750228937_MF0_output.root",
+	"../result/FairMUanalyzer_29Aug25_GAtest402_single_muon_interaction_0_CDbugfix11July25_run8_muedaq04-1750227094-1750228937_MF0_output.root",
+	"../result/FairMUanalyzer_29Aug25_GAtest400_single_muon_interaction_1_CDbugfix11July25_run8_muedaq04-1750227094-1750228937_MF0_output.root",
+	"../result/FairMUanalyzer_29Aug25_GAtest401_single_muon_interaction_1_CDbugfix11July25_run8_muedaq04-1750227094-1750228937_MF0_output.root",
+	"../result/FairMUanalyzer_29Aug25_GAtest402_single_muon_interaction_1_CDbugfix11July25_run8_muedaq04-1750227094-1750228937_MF0_output.root"
+	
+	
 
 	
 };
 TString savebasename[N];
 
-TString label[Nbin] = {"total","golden","t0mem","t0mee","t0mmm","t0me<m","t1mem","t1mee","t1mmm","t1me<m",""};
+TString label[Nbin] = {"total","golden","t0all","t0mem","t0mee","t0mmm","t0me<m","t1all","t1mem","t1mee","t1mmm","t1me<m",""};
 
 TH1F * hCaseDist[N];
 TH2D * h2d[N];
 TH2D * h2d_ref[N];
 TGraph * g_elastic[N];
+
+TH2D * h_2d_bstvtx[N];
+
+TH2D * h2d_all[N];
+TH2D * h_2d_bstvtx_all[N];
 
 TH1D* h1_x[N];
 TH1D* h1_y[N];
@@ -125,8 +172,8 @@ TCanvas * c3[N];
 
 void ana_h2d(){
 
-	//gStyle->SetOptStat(0); 
-	gStyle->SetOptStat(1110); // entries, mean, RMS, name
+	gStyle->SetOptStat(0); 
+	//gStyle->SetOptStat(1110); // entries, mean, RMS, name
 
 	for(int i = 0; i<N; i++){
 
@@ -153,6 +200,18 @@ void ana_h2d(){
 		
 		h2d[i] = (TH2D*)f[i]->Get("h_2d");
 		h2d[i]->SetName(Form("h_2d_%i",i));
+
+		h_2d_bstvtx[i] = (TH2D*)f[i]->Get("h_2d_bstvtx");
+		h_2d_bstvtx[i]->SetName(Form("h_2d_bstvtx_%i",i));
+
+		int add = 1;
+		if(i>2 && add){
+			h2d_all[i] = (TH2D*)h2d[i]->Clone(Form("h2d_all_%i",i));
+			h2d_all[i] -> Add(h2d[i-3]);
+			h_2d_bstvtx_all [i] = (TH2D*)h_2d_bstvtx[i]->Clone(Form("h_2d_bstvtx_all_%i",i));
+			h_2d_bstvtx_all[i] -> Add(h_2d_bstvtx[i-3]);
+
+		}
 		
 		h2d_ref[i] = (TH2D*)f[i]->Get("h_2d_ref");
 		h2d_ref[i]->SetName(Form("h_2d_ref_%i",i));
@@ -160,7 +219,14 @@ void ana_h2d(){
 		g_elastic[i]->SetName(Form("g_elastic_%i",i));
 		TruncateGraphAtX(g_elastic[i]);
 		c1[i] = new TCanvas(Form("c1_%i",i),Form("c1_%i",i));
-		h2d[i]->Draw("colz");
+		//h2d[i]->SetTitle("Large VS Small angle; Large angle [rad]; Small angle [rad]");
+		//h2d[i]->GetYaxis()->SetTitleOffset(1.5);
+		//h2d[i]->Draw("colz");
+		//h_2d_bstvtx[i]->Draw("colz");
+		//h_2d_bstvtx[i]->GetYaxis()->SetTitleOffset(1.5);
+		if(i>2)h2d_all[i]->SetTitle("Large VS Small angle; Large angle [rad]; Small angle [rad]");
+		if(i>2)h2d_all[i]->GetYaxis()->SetTitleOffset(1.5);
+		if(i>2)h2d_all[i]->Draw("colz");
 		h2d_ref[i]->Draw("samecolscat");
 		g_elastic[i]->Draw("sameL");
 		
@@ -178,8 +244,19 @@ void ana_h2d(){
 		//savebasename[i].ReplaceAll("../result/","");
 		savebasename[i].ReplaceAll(".root","");
 
-		if(savepdf)c1[i]->SaveAs(Form("h2d_%s.pdf",savebasename[i].Data()));
-		
+		//if(savepdf)c1[i]->SaveAs(Form("30Aug_AllPlots/h2d_%s.pdf",savebasename[i].Data()));
+		//if(savepdf)c1[i]->SaveAs(Form("30Aug_AllPlots/TrackAngles_tgt0_MF1_preVtxTrks_%d.pdf",i+1));
+		//if(savepdf)c1[i]->SaveAs(Form("30Aug_AllPlots/TrackAngles_tgt0_MF1_preVtxTrks_%d.cxx",i+1));
+		//if(savepdf)c1[i]->SaveAs(Form("30Aug_AllPlots/TrackAngles_tgt0_MF1_bestVtxTrks_%d.pdf",i+1));
+		//if(savepdf)c1[i]->SaveAs(Form("30Aug_AllPlots/TrackAngles_tgt0_MF1_bestVtxTrks_%d.cxx",i+1));
+		//if(savepdf)c1[i]->SaveAs(Form("30Aug_AllPlots/TrackAngles_tgt1_MF1_preVtxTrks_%d.pdf",i+1));
+		//if(savepdf)c1[i]->SaveAs(Form("30Aug_AllPlots/TrackAngles_tgt1_MF1_preVtxTrks_%d.cxx",i+1));
+		//if(savepdf)c1[i]->SaveAs(Form("30Aug_AllPlots/TrackAngles_tgt1_MF1_bestVtxTrks_%d.pdf",i+1));
+		//if(savepdf)c1[i]->SaveAs(Form("30Aug_AllPlots/TrackAngles_tgt1_MF1_bestVtxTrks_%d.cxx",i+1));
+		//if(savepdf && i>2)c1[i]->SaveAs(Form("30Aug_AllPlots/TrackAngles_tgt0+1_MF1_preVtxTrks_%d.pdf",i-3));
+		//if(savepdf && i>2)c1[i]->SaveAs(Form("30Aug_AllPlots/TrackAngles_tgt0+1_MF1_preVtxTrks_%d.cxx",i-3));
+		if(savepdf && i>2)c1[i]->SaveAs(Form("30Aug_AllPlots/TrackAngles_tgt0+1_MF0_preVtxTrks_%d.pdf",i-3));
+		if(savepdf && i>2)c1[i]->SaveAs(Form("30Aug_AllPlots/TrackAngles_tgt0+1_MF0_preVtxTrks_%d.cxx",i-3));
 
 		h1_x[i] = h2d[i]->ProjectionX(Form("h1_x_%i",i));
 		h1_x[i]->Rebin(5);
@@ -194,14 +271,18 @@ void ana_h2d(){
 		c2[i]->cd(2);h1_y[i]->Draw();
 
 		
-		if(i%3==2){
+
+
+
+		int compare = 0;
+		if(i%3==2 && compare){
 
 			std::vector<TH1*> hvec = {h1_x[i-2], h1_x[i-1], h1_x[i]};
 			auto [ymin, ymax] = GetYRange(hvec);
 			std::vector<TH1*> hvec2 = {h1_y[i-2], h1_y[i-1], h1_y[i]};
 			auto [ymin2, ymax2] = GetYRange(hvec2);
 
-			//gStyle->SetOptStat(1);
+			//gStyle->SetOptStat(0000);
 
 
 			c3[i] = new TCanvas(Form("c3_%i",i),Form("c3_%i",i),1400*0.7,1000*0.7);
