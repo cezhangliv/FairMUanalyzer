@@ -14,7 +14,7 @@ root/
 *.root
 *.pdf
 *.log
-
+*.zip
 # 可执行文件
 run_FairMUanalyzer
 batch_run
@@ -23,4 +23,5 @@ run_FairMUanalyzer_compare
 # 生成目录
 result/
 txt/
+archive/
 
