@@ -289,7 +289,7 @@ double FairMUanalyzer::CalculateYtgt(MUonERecoOutputTrackAnalysis track, double 
 
 double FairMUanalyzer::CalculateRtgt(MUonERecoOutputTrackAnalysis track, double zTgt){
 
-    return sqrt(CalculateXtgt(MUonERecoOutputTrackAnalysis track, double zTgt)*CalculateXtgt(MUonERecoOutputTrackAnalysis track, double zTgt)+CalculateYtgt(MUonERecoOutputTrack track, double zTgt)*CalculateYtgt(MUonERecoOutputTrack track, double zTgt));
+    return sqrt(CalculateXtgt( track,  zTgt)*CalculateXtgt( track,  zTgt)+CalculateYtgt( track,  zTgt)*CalculateYtgt( track,  zTgt));
 
 }
 
