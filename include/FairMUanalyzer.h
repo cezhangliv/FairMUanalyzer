@@ -36,6 +36,8 @@ public:
     static double Eevsth(double* x, double* par);
     static double thmu_vs_the(double* x, double* par);
 
+
+
     void ProcessEvent(Long64_t i, int debug=0);
     bool IsGoldenEvent() const;
 
@@ -81,6 +83,8 @@ private:
     TH1F* h_hitsPerMuonTrack_zcut[5];
     TH1F* h_goldenMuon_isMuon[3];
 
+    TH1F* h_vertex;
+
     TH1F* h_vtxchi2;
     TH1F* h_isMuon;
     TH1F* h_Ntracks;
@@ -101,8 +105,24 @@ private:
     std::map<std::string, int> case_counts;
     std::map<std::string, TH2D *> case_h2d;
     std::map<std::string, TH2D *> case_h2d_bstvtx;
+    
     //std::map<std::string, TGraph *> case_g2d;
     //std::map<std::string, TGraph *> case_g2d_bstvtx;
+
+    std::map<std::string, TH1D *> case_h1d_x[3];
+    std::map<std::string, TH1D *> case_h1d_bstvtx_x[3];
+    std::map<std::string, TH1D *> case_h1d_y[3];
+    std::map<std::string, TH1D *> case_h1d_bstvtx_y[3];
+    std::map<std::string, TH1D *> case_h1d_r[3];
+    std::map<std::string, TH1D *> case_h1d_bstvtx_r[3];
+    
+    std::map<std::string, TH1D *> case_h1d_dx[3];
+    std::map<std::string, TH1D *> case_h1d_bstvtx_dx[3];
+    std::map<std::string, TH1D *> case_h1d_dy[3];
+    std::map<std::string, TH1D *> case_h1d_bstvtx_dy[3];
+    std::map<std::string, TH1D *> case_h1d_dr[3];
+    std::map<std::string, TH1D *> case_h1d_bstvtx_dr[3];
+
 
     static constexpr double me_ = 0.51099906e-3;   // Electron mass [GeV]
     static constexpr double mu_ = 105.65836900e-3; // Muon mass [GeV]
@@ -124,6 +144,10 @@ private:
     double computeSigned2DResidualMF(const TVector3& p3D, const TVector3& x0, const TVector3& h, int moduleID);
     double acoplanarity(const TVector3 in, const TVector3 out1, const TVector3 out2);
     
+    double CalculateXtgt(MUonERecoOutputTrack track, double zTgt);
+    double CalculateYtgt(MUonERecoOutputTrack track, double zTgt);
+    double CalculateRtgt(MUonERecoOutputTrack track, double zTgt);
+
 };
 
 #endif

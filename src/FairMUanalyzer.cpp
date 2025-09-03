@@ -80,6 +80,8 @@ FairMUanalyzer::FairMUanalyzer() : inputFile_(nullptr), cbmsim_(nullptr), reco_(
 
     h_2d_bstvtx = new TH2D("h_2d_bstvtx",mf_?"Electron VS Muon angle (BestVtx); Electron [rad]; Muon [rad]":"Large VS Small angle (BestVtx); Large angle [rad]; Small angle [rad]" ,500,0.,0.032,500,0.,0.005);
 
+    h_vertex = new TH1F("h_vertex","Reconstructed Z of best vertex [cm]",200,600,800);//660,780
+
     //count the cases:
     hCaseDist = new TH1I("hCaseDist", "Case Distribution", 13, 0, 13);
     int ikey=1;
@@ -87,6 +89,23 @@ FairMUanalyzer::FairMUanalyzer() : inputFile_(nullptr), cbmsim_(nullptr), reco_(
         hCaseDist->GetXaxis()->SetBinLabel(ikey, key.c_str());ikey++;
         case_h2d[key] = new TH2D(("h2d_"+key).c_str(), mf_?("Electron VS Muon angle "+key+"; Electron [rad]; Muon [rad]").c_str():("Large VS Small angle "+key+"; Large angle [rad]; Small angle [rad]").c_str(), 500,0.,0.032,500,0.,0.005);
         case_h2d_bstvtx[key] = new TH2D(("h2d_bstvtx_"+key).c_str(), mf_?("Electron VS Muon angle "+key+"; Electron [rad]; Muon [rad]").c_str():("Large VS Small angle "+key+"; Large angle [rad]; Small angle [rad]").c_str(), 500,0.,0.032,500,0.,0.005);
+
+        for(int j = 0; j<3;j++){
+
+            case_h1d_x[j][key] = new TH1D(("case_h1d_x_"+key+"_"+std::to_string(j)).c_str(),  ("x at target "+key+"_"+std::to_string(j)+";x at target [cm]").c_str(),120,-6,6 );
+            case_h1d_bstvtx_x[j][key] = new TH1D(("case_h1d_bstvtx_x_"+key+"_"+std::to_string(j)).c_str(),  ("bestvertex x at target "+key+"_"+std::to_string(j)+";bestvertex x at target [cm]").c_str(),120,-6,6 );
+            case_h1d_y[j][key] = new TH1D(("case_h1d_y_"+key+"_"+std::to_string(j)).c_str(),  ("y at target "+key+"_"+std::to_string(j)+";y at target [cm]").c_str(),120,-6,6 );
+            case_h1d_bstvtx_y[j][key] = new TH1D(("case_h1d_bstvtx_y_"+key+"_"+std::to_string(j)).c_str(),  ("bestvertex y at target "+key+"_"+std::to_string(j)+";bestvertex y at target [cm]").c_str(),120,-6,6 );
+            case_h1d_r[j][key] = new TH1D(("case_h1d_r_"+key+"_"+std::to_string(j)).c_str(),  ("r at target "+key+"_"+std::to_string(j)+";r at target [cm]").c_str(),120,-6,6 );
+            case_h1d_bstvtx_r[j][key] = new TH1D(("case_h1d_bstvtx_r_"+key+"_"+std::to_string(j)).c_str(),  ("bestvertex r at target "+key+"_"+std::to_string(j)+";bestvertex r at target [cm]").c_str(),120,-6,6 );
+            
+            case_h1d_dx[j][key] = new TH1D(("case_h1d_dx_"+key+"_"+std::to_string(j)).c_str(),  ("dx at target"+key+"_"+std::to_string(j)+";dx at target [cm]").c_str(), 120, -6,6 );
+            case_h1d_bstvtx_dx[j][key] = new TH1D(("case_h1d_bstvtx_dx_"+key+"_"+std::to_string(j)).c_str(),  ("bestvertex dx at target"+key+"_"+std::to_string(j)+";bestvertex dx at target [cm]").c_str(),120, -6,6 );
+            case_h1d_dy[j][key] = new TH1D(("case_h1d_dy_"+key+"_"+std::to_string(j)).c_str(),  ("dy at target"+key+"_"+std::to_string(j)+";dy at target [cm]").c_str(), 120, -6,6);
+            case_h1d_bstvtx_dy[j][key] = new TH1D(("case_h1d_bstvtx_dy_"+key+"_"+std::to_string(j)).c_str(),  ("bestvertex dy at target"+key+"_"+std::to_string(j)+";bestvertex dy at target [cm]").c_str(), 120, -6,6);
+            case_h1d_dr[j][key] = new TH1D(("case_h1d_dr_"+key+"_"+std::to_string(j)).c_str(),  ("dr at target"+key+"_"+std::to_string(j)+";dr at target [cm]").c_str(), 120, -6,6);
+            case_h1d_bstvtx_dr[j][key] = new TH1D(("case_h1d_bstvtx_dr_"+key+"_"+std::to_string(j)).c_str(),  ("bestvertex dr at target"+key+"_"+std::to_string(j)+";bestvertex dr at target [cm]").c_str(), 120, -6,6);
+        }
     }
 
     /*
@@ -256,6 +275,21 @@ double FairMUanalyzer::acoplanarity(const TVector3 in, const TVector3 out1, cons
     T_v = T_v>0? 1:-1;
     double acoplanarity_v= T_v*(TMath::Pi() - acos( ((im_v).Dot(ie_v))/(im_v.Mag()*ie_v.Mag()) ));
     return acoplanarity_v;//rad
+
+}
+
+
+double FairMUanalyzer::CalculateXtgt(MUonERecoOutputTrack track, double zTgt){
+    return track.xSlope()*(zTgt-track.z0())+track.x0();
+}
+
+double FairMUanalyzer::CalculateYtgt(MUonERecoOutputTrack track, double zTgt){
+    return track.ySlope()*(zTgt-track.z0())+track.y0();
+}
+
+double FairMUanalyzer::CalculateRtgt(MUonERecoOutputTrack track, double zTgt){
+
+    return sqrt(CalculateXtgt(MUonERecoOutputTrack track, double zTgt)*CalculateXtgt(MUonERecoOutputTrack track, double zTgt)+CalculateYtgt(MUonERecoOutputTrack track, double zTgt)*CalculateYtgt(MUonERecoOutputTrack track, double zTgt));
 
 }
 
