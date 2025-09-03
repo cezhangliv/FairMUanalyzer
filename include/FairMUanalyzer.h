@@ -144,9 +144,9 @@ private:
     double computeSigned2DResidualMF(const TVector3& p3D, const TVector3& x0, const TVector3& h, int moduleID);
     double acoplanarity(const TVector3 in, const TVector3 out1, const TVector3 out2);
     
-    double CalculateXtgt(MUonERecoOutputTrack track, double zTgt);
-    double CalculateYtgt(MUonERecoOutputTrack track, double zTgt);
-    double CalculateRtgt(MUonERecoOutputTrack track, double zTgt);
+    double CalculateXtgt(MUonERecoOutputTrackAnalysis track, double zTgt);
+    double CalculateYtgt(MUonERecoOutputTrackAnalysis track, double zTgt);
+    double CalculateRtgt(MUonERecoOutputTrackAnalysis track, double zTgt);
 
 };
 
