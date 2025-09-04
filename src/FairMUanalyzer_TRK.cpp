@@ -188,10 +188,10 @@ void FairMUanalyzer::AnalyzeTRK() {
                 std::vector<TVector3> oute; oute.reserve(12);
                 std::vector<TVector3> outmuon; outmuon.reserve(12);
 
-                std::vector<const MUonERecoOutputTrackAnalysis*> muone_in; muone_in.reserve(12);
-                std::vector<const MUonERecoOutputTrackAnalysis*> muone_out; muone_out.reserve(12);
-                std::vector<const MUonERecoOutputTrackAnalysis*> muone_oute; muone_oute.reserve(12);
-                std::vector<const MUonERecoOutputTrackAnalysis*> muone_outmuon; muone_outmuon.reserve(12);
+                std::vector<MUonERecoOutputTrackAnalysis*> muone_in; muone_in.reserve(12);
+                std::vector<MUonERecoOutputTrackAnalysis*> muone_out; muone_out.reserve(12);
+                std::vector<MUonERecoOutputTrackAnalysis*> muone_oute; muone_oute.reserve(12);
+                std::vector<MUonERecoOutputTrackAnalysis*> muone_outmuon; muone_outmuon.reserve(12);
 
                 //Elastic step #3: aco (following)
                 int acocut = 0;
