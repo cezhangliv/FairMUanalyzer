@@ -29,8 +29,8 @@ void FairMUanalyzer::AnalyzeTRK() {
         cbmsim_->GetEntry(i);
 
         // apply cut: ECAL cluster energy <= 2/3 GeV
-        if (clusterE_ > 2.0) continue;
-        //if (clusterE_ > 3.0) continue;
+        //if (clusterE_ > 2.0) continue;
+        if (clusterE_ > 3.0) continue;
 
         const auto& tracks = reco_->reconstructedTracks();
         const auto& hits = reco_->reconstructedHits();
