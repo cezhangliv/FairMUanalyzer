@@ -448,13 +448,13 @@ void FairMUanalyzer::SaveResults() {
     h_vertex->Draw();
     c5021->SaveAs(Form("%s_c5021_h_vertex.pdf", outputPrefix_.Data()));
 
-    TCanvas* c5022 = new TCanvas(Form("c5022_%s", outputPrefix_.Data()), "Tracks case_h1d_vertex at target", 1600, 400);
+    TCanvas* c5022 = new TCanvas(Form("c5022_%s", outputPrefix_.Data()), "Tracks case_h1d_bstvtx_z at target", 1600, 400);
     c5022->Divide(4,1);
     c5022->cd(1);case_h1d_vertex["t1all"]->Draw();
     c5022->cd(2);case_h1d_vertex["t1mem"]->Draw();
     c5022->cd(3);case_h1d_vertex["t1mee"]->Draw();
     c5022->cd(4);case_h1d_vertex["t1mmm"]->Draw();
-    c5022->SaveAs(Form("%s_c5022_case_h1d_vertex.pdf", outputPrefix_.Data()));
+    c5022->SaveAs(Form("%s_c5022_case_h1d_bstvtx_z.pdf", outputPrefix_.Data()));
 
     TCanvas* c5023 = new TCanvas(Form("c5023_%s", outputPrefix_.Data()), "Tracks case_h1d_bstvtx_x at target", 1600, 400);
     c5023->Divide(4,1);
@@ -490,6 +490,61 @@ void FairMUanalyzer::SaveResults() {
         kk--;
     }
     c5026->SaveAs(Form("%s_c5026_case_h1d_x.pdf", outputPrefix_.Data()));
+
+    TCanvas* c5027 = new TCanvas(Form("c5027_%s", outputPrefix_.Data()), "Tracks case_h1d_y at target", 1600, 1200);
+    c5027->Divide(4,3);
+    for(int kk = 1; kk<17; kk++){
+        c5027->cd(kk++);case_h1d_y[ (kk-2)/4]["t1all"]->Draw();
+        c5027->cd(kk++);case_h1d_y[ (kk-2)/4]["t1mem"]->Draw();
+        c5027->cd(kk++);case_h1d_y[ (kk-2)/4]["t1mee"]->Draw();
+        c5027->cd(kk++);case_h1d_y[ (kk-2)/4]["t1mmm"]->Draw();
+        kk--;
+    }
+    c5027->SaveAs(Form("%s_c5027_case_h1d_y.pdf", outputPrefix_.Data()));
+
+    TCanvas* c5028 = new TCanvas(Form("c5028_%s", outputPrefix_.Data()), "Tracks case_h1d_r at target", 1600, 1200);
+    c5028->Divide(4,3);
+    for(int kk = 1; kk<17; kk++){
+        c5028->cd(kk++);case_h1d_r[ (kk-2)/4]["t1all"]->Draw();
+        c5028->cd(kk++);case_h1d_r[ (kk-2)/4]["t1mem"]->Draw();
+        c5028->cd(kk++);case_h1d_r[ (kk-2)/4]["t1mee"]->Draw();
+        c5028->cd(kk++);case_h1d_r[ (kk-2)/4]["t1mmm"]->Draw();
+        kk--;
+    }
+    c5028->SaveAs(Form("%s_c5028_case_h1d_r.pdf", outputPrefix_.Data()));
+
+    TCanvas* c5029 = new TCanvas(Form("c5029_%s", outputPrefix_.Data()), "Tracks case_h1d_dx at target", 1600, 1200);
+    c5029->Divide(4,3);
+    for(int kk = 1; kk<17; kk++){
+        c5029->cd(kk++);case_h1d_dx[ (kk-2)/4]["t1all"]->Draw();
+        c5029->cd(kk++);case_h1d_dx[ (kk-2)/4]["t1mem"]->Draw();
+        c5029->cd(kk++);case_h1d_dx[ (kk-2)/4]["t1mee"]->Draw();
+        c5029->cd(kk++);case_h1d_dx[ (kk-2)/4]["t1mmm"]->Draw();
+        kk--;
+    }
+    c5029->SaveAs(Form("%s_c5029_case_h1d_dx.pdf", outputPrefix_.Data()));
+
+    TCanvas* c50210 = new TCanvas(Form("c50210_%s", outputPrefix_.Data()), "Tracks case_h1d_dy at target", 1600, 1200);
+    c50210->Divide(4,3);
+    for(int kk = 1; kk<17; kk++){
+        c50210->cd(kk++);case_h1d_dy[ (kk-2)/4]["t1all"]->Draw();
+        c50210->cd(kk++);case_h1d_dy[ (kk-2)/4]["t1mem"]->Draw();
+        c50210->cd(kk++);case_h1d_dy[ (kk-2)/4]["t1mee"]->Draw();
+        c50210->cd(kk++);case_h1d_dy[ (kk-2)/4]["t1mmm"]->Draw();
+        kk--;
+    }
+    c50210->SaveAs(Form("%s_c50210_case_h1d_dy.pdf", outputPrefix_.Data()));
+
+    TCanvas* c50211 = new TCanvas(Form("c50211_%s", outputPrefix_.Data()), "Tracks case_h1d_dr at target", 1600, 1200);
+    c50211->Divide(4,3);
+    for(int kk = 1; kk<17; kk++){
+        c50211->cd(kk++);case_h1d_dr[ (kk-2)/4]["t1all"]->Draw();
+        c50211->cd(kk++);case_h1d_dr[ (kk-2)/4]["t1mem"]->Draw();
+        c50211->cd(kk++);case_h1d_dr[ (kk-2)/4]["t1mee"]->Draw();
+        c50211->cd(kk++);case_h1d_dr[ (kk-2)/4]["t1mmm"]->Draw();
+        kk--;
+    }
+    c50211->SaveAs(Form("%s_c50211_case_h1d_dr.pdf", outputPrefix_.Data()));
 
 
 
