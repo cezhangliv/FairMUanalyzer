@@ -133,6 +133,9 @@ private:
     static constexpr int maxNhitInStat_ = 100;//30; // Giovanni A suggested to set a max hit cut in a station, either 30 or 15
 
     double intersecX_ = -1;
+
+    Double_t totalE_ = 0.0;
+    Double_t clusterE_ = 0.0;
     
     void Analyze();
     void AnalyzeTRK();
