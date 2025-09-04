@@ -99,8 +99,11 @@
 ./run_FairMUanalyzer402 root/single_muon_interaction_0_CDbugfix11July25_run8_muedaq04-1750227094-1750228937_MF1.root result/FairMUanalyzer_29Aug25_GAtest402_single_muon_interaction_0_CDbugfix11July25_run8_muedaq04-1750227094-1750228937_MF0 -1 0 0
 '
 
+### vertex check, without mmm matching but very nice results
+#./run_FairMUanalyzer502 root/single_muon_interaction_1_CDbugfix11July25_run8_muedaq04-1750227094-1750228937_MF1.root result/FairMUanalyzer_04Sep25_GAtest502_single_muon_interaction_1_CDbugfix11July25_run8_muedaq04-1750227094-1750228937_MF1 -1 1
 
-./run_FairMUanalyzer502 root/single_muon_interaction_1_CDbugfix11July25_run8_muedaq04-1750227094-1750228937_MF1.root result/FairMUanalyzer_04Sep25_GAtest502_single_muon_interaction_1_CDbugfix11July25_run8_muedaq04-1750227094-1750228937_MF1 -1 1
+### vertex check, w/ mmm matching
+./run_FairMUanalyzer602 root/single_muon_interaction_1_CDbugfix11July25_run8_muedaq04-1750227094-1750228937_MF1.root result/FairMUanalyzer_04Sep25_GAtest602_single_muon_interaction_1_CDbugfix11July25_run8_muedaq04-1750227094-1750228937_MF1 -1 1
 
 
 
