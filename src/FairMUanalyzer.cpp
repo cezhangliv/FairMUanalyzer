@@ -79,7 +79,7 @@ FairMUanalyzer::FairMUanalyzer() : inputFile_(nullptr), cbmsim_(nullptr), reco_(
     h_2d_ref = new TH2D("h_2d_ref",mf_?"Electron VS Muon angle; Electron [rad]; Muon [rad]":"Large VS Small angle; Large angle [rad]; Small angle [rad]" ,500,0.,0.032,500,0.,0.005);
     h_2d_bstvtx = new TH2D("h_2d_bstvtx",mf_?"Electron VS Muon angle (BestVtx); Electron [rad]; Muon [rad]":"Large VS Small angle (BestVtx); Large angle [rad]; Small angle [rad]" ,500,0.,0.032,500,0.,0.005);
 
-    h_vertex = new TH1F("h_vertex","h_vertex",200,600,800);    
+    h_vertex = new TH1F("h_vertex","h_vertex",600,600,1200);    
 
     //count the cases:
     hCaseDist = new TH1I("hCaseDist", "Case Distribution", 13, 0, 13);
@@ -90,7 +90,7 @@ FairMUanalyzer::FairMUanalyzer() : inputFile_(nullptr), cbmsim_(nullptr), reco_(
         case_h2d_bstvtx[key] = new TH2D(("h2d_bstvtx_"+key).c_str(), mf_?("Electron VS Muon angle "+key+"; Electron [rad]; Muon [rad]").c_str():("Large VS Small angle "+key+"; Large angle [rad]; Small angle [rad]").c_str(), 500,0.,0.032,500,0.,0.005);
 
 
-        case_h1d_vertex[key] = new TH1D( ("h_vertex_"+key).c_str(),(key+";Reconstructed Z of best vertex [cm]").c_str(),200,600,800);//660,780
+        case_h1d_vertex[key] = new TH1D( ("h_vertex_"+key).c_str(),(key+";Reconstructed Z of best vertex [cm]").c_str(),600,600,1200);//660,780
 
 
         case_h1d_bstvtx_x[key] = new TH1D(("case_h1d_bstvtx_x_"+key).c_str(),  ("bestvertex x at target "+key+";bestvertex x at target [cm]").c_str(),120,-6,6 );
@@ -103,9 +103,9 @@ FairMUanalyzer::FairMUanalyzer() : inputFile_(nullptr), cbmsim_(nullptr), reco_(
             case_h1d_y[j][key] = new TH1D(("case_h1d_y_"+key+"_"+std::to_string(j)).c_str(),  ("y at target "+key+"_"+std::to_string(j)+";y at target [cm]").c_str(),120,-6,6 );
             case_h1d_r[j][key] = new TH1D(("case_h1d_r_"+key+"_"+std::to_string(j)).c_str(),  ("r at target "+key+"_"+std::to_string(j)+";r at target [cm]").c_str(),120,-6,6 );
             
-            case_h1d_dx[j][key] = new TH1D(("case_h1d_dx_"+key+"_"+std::to_string(j)).c_str(),  ("dx at target"+key+"_"+std::to_string(j)+";dx at target [cm]").c_str(), 120, -6,6 );
-            case_h1d_dy[j][key] = new TH1D(("case_h1d_dy_"+key+"_"+std::to_string(j)).c_str(),  ("dy at target"+key+"_"+std::to_string(j)+";dy at target [cm]").c_str(), 120, -6,6);
-            case_h1d_dr[j][key] = new TH1D(("case_h1d_dr_"+key+"_"+std::to_string(j)).c_str(),  ("dr at target"+key+"_"+std::to_string(j)+";dr at target [cm]").c_str(), 120, -6,6);
+            case_h1d_dx[j][key] = new TH1D(("case_h1d_dx_"+key+"_"+std::to_string(j)).c_str(),  ("dx at target "+key+"_"+std::to_string(j)+";dx at target [cm]").c_str(), 120, -6,6 );
+            case_h1d_dy[j][key] = new TH1D(("case_h1d_dy_"+key+"_"+std::to_string(j)).c_str(),  ("dy at target "+key+"_"+std::to_string(j)+";dy at target [cm]").c_str(), 120, -6,6);
+            case_h1d_dr[j][key] = new TH1D(("case_h1d_dr_"+key+"_"+std::to_string(j)).c_str(),  ("dr at target "+key+"_"+std::to_string(j)+";dr at target [cm]").c_str(), 120, -6,6);
         }
     }
 
@@ -443,6 +443,54 @@ void FairMUanalyzer::SaveResults() {
     fout->Close();
 
     if(!savepdf_)return;
+
+    TCanvas* c5021 = new TCanvas(Form("c5021_%s", outputPrefix_.Data()), "Tracks XYZ at target", 600, 400);
+    h_vertex->Draw();
+    c5021->SaveAs(Form("%s_c5021_h_vertex.pdf", outputPrefix_.Data()));
+
+    TCanvas* c5022 = new TCanvas(Form("c5022_%s", outputPrefix_.Data()), "Tracks case_h1d_vertex at target", 1600, 400);
+    c5022->Divide(4,1);
+    c5022->cd(1);case_h1d_vertex["t1all"]->Draw();
+    c5022->cd(2);case_h1d_vertex["t1mem"]->Draw();
+    c5022->cd(3);case_h1d_vertex["t1mee"]->Draw();
+    c5022->cd(4);case_h1d_vertex["t1mmm"]->Draw();
+    c5022->SaveAs(Form("%s_c5022_case_h1d_vertex.pdf", outputPrefix_.Data()));
+
+    TCanvas* c5023 = new TCanvas(Form("c5023_%s", outputPrefix_.Data()), "Tracks case_h1d_bstvtx_x at target", 1600, 400);
+    c5023->Divide(4,1);
+    c5023->cd(1);case_h1d_bstvtx_x["t1all"]->Draw();
+    c5023->cd(2);case_h1d_bstvtx_x["t1mem"]->Draw();
+    c5023->cd(3);case_h1d_bstvtx_x["t1mee"]->Draw();
+    c5023->cd(4);case_h1d_bstvtx_x["t1mmm"]->Draw();
+    c5023->SaveAs(Form("%s_c5023_case_h1d_bstvtx_x.pdf", outputPrefix_.Data()));
+
+    TCanvas* c5024 = new TCanvas(Form("c5024_%s", outputPrefix_.Data()), "Tracks case_h1d_bstvtx_y at target", 1600, 400);
+    c5024->Divide(4,1);
+    c5024->cd(1);case_h1d_bstvtx_y["t1all"]->Draw();
+    c5024->cd(2);case_h1d_bstvtx_y["t1mem"]->Draw();
+    c5024->cd(3);case_h1d_bstvtx_y["t1mee"]->Draw();
+    c5024->cd(4);case_h1d_bstvtx_y["t1mmm"]->Draw();
+    c5024->SaveAs(Form("%s_c5024_case_h1d_bstvtx_y.pdf", outputPrefix_.Data()));
+
+    TCanvas* c5025 = new TCanvas(Form("c5025_%s", outputPrefix_.Data()), "Tracks case_h1d_bstvtx_r at target", 1600, 400);
+    c5025->Divide(4,1);
+    c5025->cd(1);case_h1d_bstvtx_r["t1all"]->Draw();
+    c5025->cd(2);case_h1d_bstvtx_r["t1mem"]->Draw();
+    c5025->cd(3);case_h1d_bstvtx_r["t1mee"]->Draw();
+    c5025->cd(4);case_h1d_bstvtx_r["t1mmm"]->Draw();
+    c5025->SaveAs(Form("%s_c5025_case_h1d_bstvtx_r.pdf", outputPrefix_.Data()));
+
+    TCanvas* c5026 = new TCanvas(Form("c5026_%s", outputPrefix_.Data()), "Tracks case_h1d_x at target", 1600, 1200);
+    c5026->Divide(4,3);
+    for(int kk = 1; kk<17; kk++){
+        c5026->cd(kk++);case_h1d_x[ (kk-2)/4]["t1all"]->Draw();
+        c5026->cd(kk++);case_h1d_x[ (kk-2)/4]["t1mem"]->Draw();
+        c5026->cd(kk++);case_h1d_x[ (kk-2)/4]["t1mee"]->Draw();
+        c5026->cd(kk++);case_h1d_x[ (kk-2)/4]["t1mmm"]->Draw();
+        kk--;
+    }
+    c5026->SaveAs(Form("%s_c5026_case_h1d_x.pdf", outputPrefix_.Data()));
+
 
 
     TCanvas* c0 = new TCanvas(Form("c0_%s", outputPrefix_.Data()), "Tracks multiplicity", 600, 400);
