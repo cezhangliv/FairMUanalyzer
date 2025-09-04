@@ -188,10 +188,10 @@ void FairMUanalyzer::AnalyzeTRK() {
                 std::vector<TVector3> oute; oute.reserve(12);
                 std::vector<TVector3> outmuon; outmuon.reserve(12);
 
-                std::vector<MUonERecoOutputTrackAnalysis*> muone_in; muone_in.reserve(12);
-                std::vector<MUonERecoOutputTrackAnalysis*> muone_out; muone_out.reserve(12);
-                std::vector<MUonERecoOutputTrackAnalysis*> muone_oute; muone_oute.reserve(12);
-                std::vector<MUonERecoOutputTrackAnalysis*> muone_outmuon; muone_outmuon.reserve(12);
+                std::vector<const MUonERecoOutputTrackAnalysis*> muone_in; muone_in.reserve(12);
+                std::vector<const MUonERecoOutputTrackAnalysis*> muone_out; muone_out.reserve(12);
+                std::vector<const MUonERecoOutputTrackAnalysis*> muone_oute; muone_oute.reserve(12);
+                std::vector<const MUonERecoOutputTrackAnalysis*> muone_outmuon; muone_outmuon.reserve(12);
 
                 //Elastic step #3: aco (following)
                 int acocut = 0;
@@ -239,18 +239,18 @@ void FairMUanalyzer::AnalyzeTRK() {
                     if(TGT1)continue;
 
                     if(tracks.at(j).sector()==1) {
-                        TVector3 v(tracks.at(j).xSlope(),tracks.at(j).ySlope(),1.0); v=v.Unit(); in.push_back(v);muone_in.push_back(tracks.at(j));
+                        TVector3 v(tracks.at(j).xSlope(),tracks.at(j).ySlope(),1.0); v=v.Unit(); in.push_back(v);muone_in.push_back(&tracks.at(j));
 
                         //Eugenia's cut https://indico.cern.ch/event/1476217/contributions/6217032/attachments/2962101/5210167/tesi_phd_weekly.pdf
                         //if(v.Theta()>4e-3)continue;
                         sec1++;
                     }
                     if(tracks.at(j).sector()==2 && MF) {
-                        if(tracks.at(j).isMuon()){sec2muon++; TVector3 v(tracks.at(j).xSlope(),tracks.at(j).ySlope(),1.0); v=v.Unit(); outmuon.push_back(v);muone_outmuon.push_back(tracks.at(j));}
-                        else {sec2e++; TVector3 v(tracks.at(j).xSlope(),tracks.at(j).ySlope(),1.0); v=v.Unit(); oute.push_back(v);muone_oute.push_back(tracks.at(j));}
+                        if(tracks.at(j).isMuon()){sec2muon++; TVector3 v(tracks.at(j).xSlope(),tracks.at(j).ySlope(),1.0); v=v.Unit(); outmuon.push_back(v);muone_outmuon.push_back(&tracks.at(j));}
+                        else {sec2e++; TVector3 v(tracks.at(j).xSlope(),tracks.at(j).ySlope(),1.0); v=v.Unit(); oute.push_back(v);muone_oute.push_back(&tracks.at(j));}
                     }    
                     else if(tracks.at(j).sector()==2){
-                        sec2++; TVector3 v(tracks.at(j).xSlope(),tracks.at(j).ySlope(),1.0); v=v.Unit(); out.push_back(v);muone_out.push_back(tracks.at(j));
+                        sec2++; TVector3 v(tracks.at(j).xSlope(),tracks.at(j).ySlope(),1.0); v=v.Unit(); out.push_back(v);muone_out.push_back(&tracks.at(j));
                     }
 
                 }
@@ -260,7 +260,7 @@ void FairMUanalyzer::AnalyzeTRK() {
                     if(TGT2)continue;
                     
                     if(tracks.at(j).sector()==0) {
-                        TVector3 v(tracks.at(j).xSlope(),tracks.at(j).ySlope(),1.0); v=v.Unit(); in.push_back(v);muone_in.push_back(tracks.at(j));
+                        TVector3 v(tracks.at(j).xSlope(),tracks.at(j).ySlope(),1.0); v=v.Unit(); in.push_back(v);muone_in.push_back(&tracks.at(j));
                         
                         //Eugenia's cut https://indico.cern.ch/event/1476217/contributions/6217032/attachments/2962101/5210167/tesi_phd_weekly.pdf
                         //if(v.Theta()>4e-3 )continue;
@@ -268,11 +268,11 @@ void FairMUanalyzer::AnalyzeTRK() {
                         sec0++;
                     }
                     if(tracks.at(j).sector()==1 && MF) {
-                        if(tracks.at(j).isMuon()){sec1muon++; TVector3 v(tracks.at(j).xSlope(),tracks.at(j).ySlope(),1.0); v=v.Unit(); outmuon.push_back(v);muone_outmuon.push_back(tracks.at(j));}
-                        else {sec1e++; TVector3 v(tracks.at(j).xSlope(),tracks.at(j).ySlope(),1.0); v=v.Unit(); oute.push_back(v);muone_oute.push_back(tracks.at(j));}
+                        if(tracks.at(j).isMuon()){sec1muon++; TVector3 v(tracks.at(j).xSlope(),tracks.at(j).ySlope(),1.0); v=v.Unit(); outmuon.push_back(v);muone_outmuon.push_back(&tracks.at(j));}
+                        else {sec1e++; TVector3 v(tracks.at(j).xSlope(),tracks.at(j).ySlope(),1.0); v=v.Unit(); oute.push_back(v);muone_oute.push_back(&tracks.at(j));}
                     }    
                     else if(tracks.at(j).sector()==1){
-                        sec1++; TVector3 v(tracks.at(j).xSlope(),tracks.at(j).ySlope(),1.0); v=v.Unit(); out.push_back(v);muone_out.push_back(tracks.at(j));
+                        sec1++; TVector3 v(tracks.at(j).xSlope(),tracks.at(j).ySlope(),1.0); v=v.Unit(); out.push_back(v);muone_out.push_back(&tracks.at(j));
                     }
 
                 }
