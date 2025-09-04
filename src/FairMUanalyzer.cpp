@@ -90,7 +90,7 @@ FairMUanalyzer::FairMUanalyzer() : inputFile_(nullptr), cbmsim_(nullptr), reco_(
         case_h2d_bstvtx[key] = new TH2D(("h2d_bstvtx_"+key).c_str(), mf_?("Electron VS Muon angle "+key+"; Electron [rad]; Muon [rad]").c_str():("Large VS Small angle "+key+"; Large angle [rad]; Small angle [rad]").c_str(), 500,0.,0.032,500,0.,0.005);
 
 
-        case_h1d_vertex[key] = new TH1F( ("h_vertex_"+key).c_str(),(key+";Reconstructed Z of best vertex [cm]").c_str(),200,600,800);//660,780
+        case_h1d_vertex[key] = new TH1D( ("h_vertex_"+key).c_str(),(key+";Reconstructed Z of best vertex [cm]").c_str(),200,600,800);//660,780
 
 
         case_h1d_bstvtx_x[key] = new TH1D(("case_h1d_bstvtx_x_"+key).c_str(),  ("bestvertex x at target "+key+";bestvertex x at target [cm]").c_str(),120,-6,6 );
