@@ -331,30 +331,30 @@ void FairMUanalyzer::AnalyzeTRK() {
                     tmp_h1d_dx = tmp_h1d_x[0]-tmp_h1d_x[1];
                     case_h1d_dx[0]["t1all"]->Fill(tmp_h1d_dx);
                     case_h1d_dx[0]["t1mem"]->Fill(tmp_h1d_dx);
-                    tmp_h1d_dy = tmp_h1d_y[0]-tmp_h1d_y[1]
+                    tmp_h1d_dy = tmp_h1d_y[0]-tmp_h1d_y[1];
                     case_h1d_dy[0]["t1all"]->Fill(tmp_h1d_dy);
                     case_h1d_dy[0]["t1mem"]->Fill(tmp_h1d_dy);
-                    tmp_h1d_dr = tmp_h1d_r[0]-tmp_h1d_r[1]
+                    tmp_h1d_dr = tmp_h1d_r[0]-tmp_h1d_r[1];
                     case_h1d_dr[0]["t1all"]->Fill(tmp_h1d_dr);
                     case_h1d_dr[0]["t1mem"]->Fill(tmp_h1d_dr);
 
                     tmp_h1d_dx = tmp_h1d_x[0]-tmp_h1d_x[2];
                     case_h1d_dx[1]["t1all"]->Fill(tmp_h1d_dx);
                     case_h1d_dx[1]["t1mem"]->Fill(tmp_h1d_dx);
-                    tmp_h1d_dy = tmp_h1d_y[0]-tmp_h1d_y[2]
+                    tmp_h1d_dy = tmp_h1d_y[0]-tmp_h1d_y[2];
                     case_h1d_dy[1]["t1all"]->Fill(tmp_h1d_dy);
                     case_h1d_dy[1]["t1mem"]->Fill(tmp_h1d_dy);
-                    tmp_h1d_dr = tmp_h1d_r[0]-tmp_h1d_r[2]
+                    tmp_h1d_dr = tmp_h1d_r[0]-tmp_h1d_r[2];
                     case_h1d_dr[1]["t1all"]->Fill(tmp_h1d_dr);
                     case_h1d_dr[1]["t1mem"]->Fill(tmp_h1d_dr);
 
                     tmp_h1d_dx = tmp_h1d_x[1]-tmp_h1d_x[2];
                     case_h1d_dx[2]["t1all"]->Fill(tmp_h1d_dx);
                     case_h1d_dx[2]["t1mem"]->Fill(tmp_h1d_dx);
-                    tmp_h1d_dy = tmp_h1d_y[1]-tmp_h1d_y[2]
+                    tmp_h1d_dy = tmp_h1d_y[1]-tmp_h1d_y[2];
                     case_h1d_dy[2]["t1all"]->Fill(tmp_h1d_dy);
                     case_h1d_dy[2]["t1mem"]->Fill(tmp_h1d_dy);
-                    tmp_h1d_dr = tmp_h1d_r[1]-tmp_h1d_r[2]
+                    tmp_h1d_dr = tmp_h1d_r[1]-tmp_h1d_r[2];
                     case_h1d_dr[2]["t1all"]->Fill(tmp_h1d_dr);
                     case_h1d_dr[2]["t1mem"]->Fill(tmp_h1d_dr);
                     
@@ -444,30 +444,30 @@ void FairMUanalyzer::AnalyzeTRK() {
                     tmp_h1d_dx = tmp_h1d_x[0]-tmp_h1d_x[1];
                     case_h1d_dx[0]["t1all"]->Fill(tmp_h1d_dx);
                     case_h1d_dx[0]["t1mee"]->Fill(tmp_h1d_dx);
-                    tmp_h1d_dy = tmp_h1d_y[0]-tmp_h1d_y[1]
+                    tmp_h1d_dy = tmp_h1d_y[0]-tmp_h1d_y[1];
                     case_h1d_dy[0]["t1all"]->Fill(tmp_h1d_dy);
                     case_h1d_dy[0]["t1mee"]->Fill(tmp_h1d_dy);
-                    tmp_h1d_dr = tmp_h1d_r[0]-tmp_h1d_r[1]
+                    tmp_h1d_dr = tmp_h1d_r[0]-tmp_h1d_r[1];
                     case_h1d_dr[0]["t1all"]->Fill(tmp_h1d_dr);
                     case_h1d_dr[0]["t1mee"]->Fill(tmp_h1d_dr);
 
                     tmp_h1d_dx = tmp_h1d_x[0]-tmp_h1d_x[2];
                     case_h1d_dx[1]["t1all"]->Fill(tmp_h1d_dx);
                     case_h1d_dx[1]["t1mee"]->Fill(tmp_h1d_dx);
-                    tmp_h1d_dy = tmp_h1d_y[0]-tmp_h1d_y[2]
+                    tmp_h1d_dy = tmp_h1d_y[0]-tmp_h1d_y[2];
                     case_h1d_dy[1]["t1all"]->Fill(tmp_h1d_dy);
                     case_h1d_dy[1]["t1mee"]->Fill(tmp_h1d_dy);
-                    tmp_h1d_dr = tmp_h1d_r[0]-tmp_h1d_r[2]
+                    tmp_h1d_dr = tmp_h1d_r[0]-tmp_h1d_r[2];
                     case_h1d_dr[1]["t1all"]->Fill(tmp_h1d_dr);
                     case_h1d_dr[1]["t1mee"]->Fill(tmp_h1d_dr);
 
                     tmp_h1d_dx = tmp_h1d_x[1]-tmp_h1d_x[2];
                     case_h1d_dx[2]["t1all"]->Fill(tmp_h1d_dx);
                     case_h1d_dx[2]["t1mee"]->Fill(tmp_h1d_dx);
-                    tmp_h1d_dy = tmp_h1d_y[1]-tmp_h1d_y[2]
+                    tmp_h1d_dy = tmp_h1d_y[1]-tmp_h1d_y[2];
                     case_h1d_dy[2]["t1all"]->Fill(tmp_h1d_dy);
                     case_h1d_dy[2]["t1mee"]->Fill(tmp_h1d_dy);
-                    tmp_h1d_dr = tmp_h1d_r[1]-tmp_h1d_r[2]
+                    tmp_h1d_dr = tmp_h1d_r[1]-tmp_h1d_r[2];
                     case_h1d_dr[2]["t1all"]->Fill(tmp_h1d_dr);
                     case_h1d_dr[2]["t1mee"]->Fill(tmp_h1d_dr);
                     
@@ -551,30 +551,30 @@ void FairMUanalyzer::AnalyzeTRK() {
                     tmp_h1d_dx = tmp_h1d_x[0]-tmp_h1d_x[1];
                     case_h1d_dx[0]["t1all"]->Fill(tmp_h1d_dx);
                     case_h1d_dx[0]["t1mmm"]->Fill(tmp_h1d_dx);
-                    tmp_h1d_dy = tmp_h1d_y[0]-tmp_h1d_y[1]
+                    tmp_h1d_dy = tmp_h1d_y[0]-tmp_h1d_y[1];
                     case_h1d_dy[0]["t1all"]->Fill(tmp_h1d_dy);
                     case_h1d_dy[0]["t1mmm"]->Fill(tmp_h1d_dy);
-                    tmp_h1d_dr = tmp_h1d_r[0]-tmp_h1d_r[1]
+                    tmp_h1d_dr = tmp_h1d_r[0]-tmp_h1d_r[1];
                     case_h1d_dr[0]["t1all"]->Fill(tmp_h1d_dr);
                     case_h1d_dr[0]["t1mmm"]->Fill(tmp_h1d_dr);
 
                     tmp_h1d_dx = tmp_h1d_x[0]-tmp_h1d_x[2];
                     case_h1d_dx[1]["t1all"]->Fill(tmp_h1d_dx);
                     case_h1d_dx[1]["t1mmm"]->Fill(tmp_h1d_dx);
-                    tmp_h1d_dy = tmp_h1d_y[0]-tmp_h1d_y[2]
+                    tmp_h1d_dy = tmp_h1d_y[0]-tmp_h1d_y[2];
                     case_h1d_dy[1]["t1all"]->Fill(tmp_h1d_dy);
                     case_h1d_dy[1]["t1mmm"]->Fill(tmp_h1d_dy);
-                    tmp_h1d_dr = tmp_h1d_r[0]-tmp_h1d_r[2]
+                    tmp_h1d_dr = tmp_h1d_r[0]-tmp_h1d_r[2];
                     case_h1d_dr[1]["t1all"]->Fill(tmp_h1d_dr);
                     case_h1d_dr[1]["t1mmm"]->Fill(tmp_h1d_dr);
 
                     tmp_h1d_dx = tmp_h1d_x[1]-tmp_h1d_x[2];
                     case_h1d_dx[2]["t1all"]->Fill(tmp_h1d_dx);
                     case_h1d_dx[2]["t1mmm"]->Fill(tmp_h1d_dx);
-                    tmp_h1d_dy = tmp_h1d_y[1]-tmp_h1d_y[2]
+                    tmp_h1d_dy = tmp_h1d_y[1]-tmp_h1d_y[2];
                     case_h1d_dy[2]["t1all"]->Fill(tmp_h1d_dy);
                     case_h1d_dy[2]["t1mmm"]->Fill(tmp_h1d_dy);
-                    tmp_h1d_dr = tmp_h1d_r[1]-tmp_h1d_r[2]
+                    tmp_h1d_dr = tmp_h1d_r[1]-tmp_h1d_r[2];
                     case_h1d_dr[2]["t1all"]->Fill(tmp_h1d_dr);
                     case_h1d_dr[2]["t1mmm"]->Fill(tmp_h1d_dr);
 
