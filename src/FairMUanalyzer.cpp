@@ -187,8 +187,8 @@ void FairMUanalyzer::Init() {
 
     cbmsim_->SetBranchAddress("ReconstructionOutput", &reco_);
 
-    cbmsim->SetBranchAddress("ReconstructedCalorimeterCluster.TotalEnergy", &totalE_);
-    cbmsim->SetBranchAddress("ReconstructedCalorimeterCluster.ClusterEnergy", &clusterE_);
+    cbmsim_->SetBranchAddress("ReconstructedCalorimeterCluster.TotalEnergy", &totalE_);
+    cbmsim_->SetBranchAddress("ReconstructedCalorimeterCluster.ClusterEnergy", &clusterE_);
 
 }
 
