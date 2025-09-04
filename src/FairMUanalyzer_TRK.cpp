@@ -43,6 +43,9 @@ void FairMUanalyzer::AnalyzeTRK() {
         h_isMuon->Fill(n_muons);
         h_Ntracks->Fill(tracks.size());
 
+        h_vertex->Fill(bestvtx.zPositionFit());
+        case_h1d_vertex["Total"]->Fill(bestvtx.zPositionFit());
+
         int nhits_zcut = 0;
         int nhits_sec0=0; 
         int nhits_sec1=0;
@@ -157,6 +160,9 @@ void FairMUanalyzer::AnalyzeTRK() {
                 goldenevents_++;
                 case_counts["golden"]++;
 
+                case_h1d_vertex["golden"]->Fill(bestvtx.zPositionFit());
+
+
                 //event selection #1: within target
                 int intgt=0;
                 if(TGT2 && bestvtx.zPositionFit()<=z_tgt2_+2 && bestvtx.zPositionFit()>=z_tgt2_-2)intgt=1;
@@ -270,6 +276,8 @@ void FairMUanalyzer::AnalyzeTRK() {
                 double angle0, angle1;
                 double aco = 1000;
 
+                double tmp_h1d_x[3],tmp_h1d_y[3],tmp_h1d_r[3],tmp_h1d_dx,tmp_h1d_dy,tmp_h1d_dr;
+
                 //case1: with MF
                 if (sec1 == 1 && sec2e == 1 && sec2muon == 1 && MF){ 
                     angle_e=in.at(0).Angle(oute.at(0));    
@@ -278,6 +286,78 @@ void FairMUanalyzer::AnalyzeTRK() {
                     
                     if( abs(aco)>0.4 && acocut)continue;//0.4 rad
                     //if( abs(aco)>0.3)continue;//0.3 rad
+
+                    // follow mem
+                    tmp_h1d_x[0] = CalculateXtgt(in.at(0),z_tgt2_);
+                    case_h1d_x[0]["t1all"]->Fill(tmp_h1d_x[0]);
+                    case_h1d_x[0]["t1mem"]->Fill(tmp_h1d_x[0]);
+                    tmp_h1d_x[1] = CalculateXtgt(oute.at(0),z_tgt2_);
+                    case_h1d_x[1]["t1all"]->Fill(tmp_h1d_x[1]);
+                    case_h1d_x[1]["t1mem"]->Fill(tmp_h1d_x[1]);
+                    tmp_h1d_x[2] = CalculateXtgt(outmuon.at(0),z_tgt2_);
+                    case_h1d_x[2]["t1all"]->Fill(tmp_h1d_x[2]);
+                    case_h1d_x[2]["t1mem"]->Fill(tmp_h1d_x[2]);
+
+                    case_h1d_bstvtx_x["t1all"]->Fill(bestvtx.xPositionFit());
+                    case_h1d_bstvtx_x["t1mem"]->Fill(bestvtx.xPositionFit());
+
+                    tmp_h1d_y[0] = CalculateYtgt(in.at(0),z_tgt2_);
+                    case_h1d_y[0]["t1all"]->Fill(tmp_h1d_y[0]);
+                    case_h1d_y[0]["t1mem"]->Fill(tmp_h1d_y[0]);
+                    tmp_h1d_y[1] = CalculateYtgt(oute.at(0),z_tgt2_);
+                    case_h1d_y[1]["t1all"]->Fill(tmp_h1d_y[1]);
+                    case_h1d_y[1]["t1mem"]->Fill(tmp_h1d_y[1]);
+                    tmp_h1d_y[2] = CalculateYtgt(outmuon.at(0),z_tgt2_);
+                    case_h1d_y[2]["t1all"]->Fill(tmp_h1d_y[2]);
+                    case_h1d_y[2]["t1mem"]->Fill(tmp_h1d_y[2]);
+
+                    case_h1d_bstvtx_y["t1all"]->Fill(bestvtx.yPositionFit());
+                    case_h1d_bstvtx_y["t1mem"]->Fill(bestvtx.yPositionFit());
+
+                    tmp_h1d_r[0] = CalculateRtgt(in.at(0),z_tgt2_);
+                    case_h1d_r[0]["t1all"]->Fill(tmp_h1d_r[0]);
+                    case_h1d_r[0]["t1mem"]->Fill(tmp_h1d_r[0]);
+                    tmp_h1d_r[1] = CalculateRtgt(oute.at(0),z_tgt2_);
+                    case_h1d_r[1]["t1all"]->Fill(tmp_h1d_r[1]);
+                    case_h1d_r[1]["t1mem"]->Fill(tmp_h1d_r[1]);
+                    tmp_h1d_r[2] = CalculateRtgt(outmuon.at(0),z_tgt2_);
+                    case_h1d_r[2]["t1all"]->Fill(tmp_h1d_r[2]);
+                    case_h1d_r[2]["t1mem"]->Fill(tmp_h1d_r[2]);
+
+                    case_h1d_bstvtx_r["t1all"]->Fill( sqrt( bestvtx.yPositionFit()*bestvtx.yPositionFit()+bestvtx.xPositionFit()*bestvtx.xPositionFit()) );
+                    case_h1d_bstvtx_r["t1mem"]->Fill( sqrt( bestvtx.yPositionFit()*bestvtx.yPositionFit()+bestvtx.xPositionFit()*bestvtx.xPositionFit()) );
+
+                    
+                    tmp_h1d_dx = tmp_h1d_x[0]-tmp_h1d_x[1];
+                    case_h1d_dx[0]["t1all"]->Fill(tmp_h1d_dx);
+                    case_h1d_dx[0]["t1mem"]->Fill(tmp_h1d_dx);
+                    tmp_h1d_dy = tmp_h1d_y[0]-tmp_h1d_y[1]
+                    case_h1d_dy[0]["t1all"]->Fill(tmp_h1d_dy);
+                    case_h1d_dy[0]["t1mem"]->Fill(tmp_h1d_dy);
+                    tmp_h1d_dr = tmp_h1d_r[0]-tmp_h1d_r[1]
+                    case_h1d_dr[0]["t1all"]->Fill(tmp_h1d_dr);
+                    case_h1d_dr[0]["t1mem"]->Fill(tmp_h1d_dr);
+
+                    tmp_h1d_dx = tmp_h1d_x[0]-tmp_h1d_x[2];
+                    case_h1d_dx[1]["t1all"]->Fill(tmp_h1d_dx);
+                    case_h1d_dx[1]["t1mem"]->Fill(tmp_h1d_dx);
+                    tmp_h1d_dy = tmp_h1d_y[0]-tmp_h1d_y[2]
+                    case_h1d_dy[1]["t1all"]->Fill(tmp_h1d_dy);
+                    case_h1d_dy[1]["t1mem"]->Fill(tmp_h1d_dy);
+                    tmp_h1d_dr = tmp_h1d_r[0]-tmp_h1d_r[2]
+                    case_h1d_dr[1]["t1all"]->Fill(tmp_h1d_dr);
+                    case_h1d_dr[1]["t1mem"]->Fill(tmp_h1d_dr);
+
+                    tmp_h1d_dx = tmp_h1d_x[1]-tmp_h1d_x[2];
+                    case_h1d_dx[2]["t1all"]->Fill(tmp_h1d_dx);
+                    case_h1d_dx[2]["t1mem"]->Fill(tmp_h1d_dx);
+                    tmp_h1d_dy = tmp_h1d_y[1]-tmp_h1d_y[2]
+                    case_h1d_dy[2]["t1all"]->Fill(tmp_h1d_dy);
+                    case_h1d_dy[2]["t1mem"]->Fill(tmp_h1d_dy);
+                    tmp_h1d_dr = tmp_h1d_r[1]-tmp_h1d_r[2]
+                    case_h1d_dr[2]["t1all"]->Fill(tmp_h1d_dr);
+                    case_h1d_dr[2]["t1mem"]->Fill(tmp_h1d_dr);
+                    
                     
                     case_counts["t1all"]++;
                     case_counts["t1mem"]++;
@@ -285,6 +365,9 @@ void FairMUanalyzer::AnalyzeTRK() {
                     case_h2d["t1mem"]->Fill(angle_e,angle_mu);
                     case_h2d_bstvtx["t1all"]->Fill(bestvtx.electronTheta(),bestvtx.muonTheta());
                     case_h2d_bstvtx["t1mem"]->Fill(bestvtx.electronTheta(),bestvtx.muonTheta());
+
+                    case_h1d_vertex["t1all"]->Fill(bestvtx.zPositionFit());
+                    case_h1d_vertex["t1mem"]->Fill(bestvtx.zPositionFit());
 
                     //case_g2d["t1all"]->SetPoint(case_g2d["t1all"]->GetN(),angle_e,angle_mu);
                     //case_g2d["t1mem"]->SetPoint(case_g2d["t1mem"]->GetN(),angle_e,angle_mu);
@@ -301,6 +384,8 @@ void FairMUanalyzer::AnalyzeTRK() {
                         case_h2d["t1me<m"]->Fill(angle_e,angle_mu);
                         case_h2d_bstvtx["t1me<m"]->Fill(bestvtx.electronTheta(),bestvtx.muonTheta());
                         
+                        case_h1d_vertex["t1me<m"]->Fill(bestvtx.zPositionFit());
+
                         //case_g2d["t1me<m"]->SetPoint(case_g2d["t1me<m"]->GetN(),angle_e,angle_mu);
                         //case_g2d_bstvtx["t1me<m"]->SetPoint(case_g2d_bstvtx["t1me<m"]->GetN(), bestvtx.electronTheta(),bestvtx.muonTheta());
                     }
@@ -314,9 +399,84 @@ void FairMUanalyzer::AnalyzeTRK() {
                     
                     if( abs(aco)>0.4 && acocut)continue;//0.4 rad
                     //if( abs(aco)>0.3)continue;//0.3 rad
+
+                    // follow mee
+                    tmp_h1d_x[0] = CalculateXtgt(in.at(0),z_tgt2_);
+                    case_h1d_x[0]["t1all"]->Fill(tmp_h1d_x[0]);
+                    case_h1d_x[0]["t1mee"]->Fill(tmp_h1d_x[0]);
+                    tmp_h1d_x[1] = CalculateXtgt(oute.at(0),z_tgt2_);
+                    case_h1d_x[1]["t1all"]->Fill(tmp_h1d_x[1]);
+                    case_h1d_x[1]["t1mee"]->Fill(tmp_h1d_x[1]);
+                    tmp_h1d_x[2] = CalculateXtgt(oute.at(1),z_tgt2_);
+                    case_h1d_x[2]["t1all"]->Fill(tmp_h1d_x[2]);
+                    case_h1d_x[2]["t1mee"]->Fill(tmp_h1d_x[2]);
+
+                    case_h1d_bstvtx_x["t1all"]->Fill(bestvtx.xPositionFit());
+                    case_h1d_bstvtx_x["t1mee"]->Fill(bestvtx.xPositionFit());
+
+                    tmp_h1d_y[0] = CalculateYtgt(in.at(0),z_tgt2_);
+                    case_h1d_y[0]["t1all"]->Fill(tmp_h1d_y[0]);
+                    case_h1d_y[0]["t1mee"]->Fill(tmp_h1d_y[0]);
+                    tmp_h1d_y[1] = CalculateYtgt(oute.at(0),z_tgt2_);
+                    case_h1d_y[1]["t1all"]->Fill(tmp_h1d_y[1]);
+                    case_h1d_y[1]["t1mee"]->Fill(tmp_h1d_y[1]);
+                    tmp_h1d_y[2] = CalculateYtgt(oute.at(1),z_tgt2_);
+                    case_h1d_y[2]["t1all"]->Fill(tmp_h1d_y[2]);
+                    case_h1d_y[2]["t1mee"]->Fill(tmp_h1d_y[2]);
+
+                    case_h1d_bstvtx_y["t1all"]->Fill(bestvtx.yPositionFit());
+                    case_h1d_bstvtx_y["t1mee"]->Fill(bestvtx.yPositionFit());
+
+                    tmp_h1d_r[0] = CalculateRtgt(in.at(0),z_tgt2_);
+                    case_h1d_r[0]["t1all"]->Fill(tmp_h1d_r[0]);
+                    case_h1d_r[0]["t1mee"]->Fill(tmp_h1d_r[0]);
+                    tmp_h1d_r[1] = CalculateRtgt(oute.at(0),z_tgt2_);
+                    case_h1d_r[1]["t1all"]->Fill(tmp_h1d_r[1]);
+                    case_h1d_r[1]["t1mee"]->Fill(tmp_h1d_r[1]);
+                    tmp_h1d_r[2] = CalculateRtgt(oute.at(1),z_tgt2_);
+                    case_h1d_r[2]["t1all"]->Fill(tmp_h1d_r[2]);
+                    case_h1d_r[2]["t1mee"]->Fill(tmp_h1d_r[2]);
+
+                    case_h1d_bstvtx_r["t1all"]->Fill( sqrt( bestvtx.yPositionFit()*bestvtx.yPositionFit()+bestvtx.xPositionFit()*bestvtx.xPositionFit()) );
+                    case_h1d_bstvtx_r["t1mee"]->Fill( sqrt( bestvtx.yPositionFit()*bestvtx.yPositionFit()+bestvtx.xPositionFit()*bestvtx.xPositionFit()) );
+
+                    
+                    tmp_h1d_dx = tmp_h1d_x[0]-tmp_h1d_x[1];
+                    case_h1d_dx[0]["t1all"]->Fill(tmp_h1d_dx);
+                    case_h1d_dx[0]["t1mee"]->Fill(tmp_h1d_dx);
+                    tmp_h1d_dy = tmp_h1d_y[0]-tmp_h1d_y[1]
+                    case_h1d_dy[0]["t1all"]->Fill(tmp_h1d_dy);
+                    case_h1d_dy[0]["t1mee"]->Fill(tmp_h1d_dy);
+                    tmp_h1d_dr = tmp_h1d_r[0]-tmp_h1d_r[1]
+                    case_h1d_dr[0]["t1all"]->Fill(tmp_h1d_dr);
+                    case_h1d_dr[0]["t1mee"]->Fill(tmp_h1d_dr);
+
+                    tmp_h1d_dx = tmp_h1d_x[0]-tmp_h1d_x[2];
+                    case_h1d_dx[1]["t1all"]->Fill(tmp_h1d_dx);
+                    case_h1d_dx[1]["t1mee"]->Fill(tmp_h1d_dx);
+                    tmp_h1d_dy = tmp_h1d_y[0]-tmp_h1d_y[2]
+                    case_h1d_dy[1]["t1all"]->Fill(tmp_h1d_dy);
+                    case_h1d_dy[1]["t1mee"]->Fill(tmp_h1d_dy);
+                    tmp_h1d_dr = tmp_h1d_r[0]-tmp_h1d_r[2]
+                    case_h1d_dr[1]["t1all"]->Fill(tmp_h1d_dr);
+                    case_h1d_dr[1]["t1mee"]->Fill(tmp_h1d_dr);
+
+                    tmp_h1d_dx = tmp_h1d_x[1]-tmp_h1d_x[2];
+                    case_h1d_dx[2]["t1all"]->Fill(tmp_h1d_dx);
+                    case_h1d_dx[2]["t1mee"]->Fill(tmp_h1d_dx);
+                    tmp_h1d_dy = tmp_h1d_y[1]-tmp_h1d_y[2]
+                    case_h1d_dy[2]["t1all"]->Fill(tmp_h1d_dy);
+                    case_h1d_dy[2]["t1mee"]->Fill(tmp_h1d_dy);
+                    tmp_h1d_dr = tmp_h1d_r[1]-tmp_h1d_r[2]
+                    case_h1d_dr[2]["t1all"]->Fill(tmp_h1d_dr);
+                    case_h1d_dr[2]["t1mee"]->Fill(tmp_h1d_dr);
                     
                     case_counts["t1mee"]++; 
                     case_counts["t1all"]++; 
+                    
+                    case_h1d_vertex["t1all"]->Fill(bestvtx.zPositionFit());
+                    case_h1d_vertex["t1mee"]->Fill(bestvtx.zPositionFit());
+
                     if(angle_e>angle_mu){
                         case_h2d["t1mee"]->Fill(angle_e,angle_mu);case_h2d["t1all"]->Fill(angle_e,angle_mu);
                         //case_g2d["t1mee"]->SetPoint(case_g2d["t1mee"]->GetN(),angle_e,angle_mu);
@@ -330,6 +490,8 @@ void FairMUanalyzer::AnalyzeTRK() {
                     
                     case_h2d_bstvtx["t1all"]->Fill(bestvtx.electronTheta(),bestvtx.muonTheta());
                     case_h2d_bstvtx["t1mee"]->Fill(bestvtx.electronTheta(),bestvtx.muonTheta());
+
+                    
 
                     //case_g2d_bstvtx["t1all"]->SetPoint(case_g2d_bstvtx["t1all"]->GetN(), bestvtx.electronTheta(),bestvtx.muonTheta());
                     //case_g2d_bstvtx["t1mee"]->SetPoint(case_g2d_bstvtx["t1mee"]->GetN(), bestvtx.electronTheta(),bestvtx.muonTheta());
@@ -345,8 +507,82 @@ void FairMUanalyzer::AnalyzeTRK() {
                     if( abs(aco)>0.4 && acocut)continue;//0.4 rad
                     //if( abs(aco)>0.3)continue;//0.3 rad
                     
+                    // follow mmm
+                    tmp_h1d_x[0] = CalculateXtgt(in.at(0),z_tgt2_);
+                    case_h1d_x[0]["t1all"]->Fill(tmp_h1d_x[0]);
+                    case_h1d_x[0]["t1mmm"]->Fill(tmp_h1d_x[0]);
+                    tmp_h1d_x[1] = CalculateXtgt(outmuon.at(0),z_tgt2_);
+                    case_h1d_x[1]["t1all"]->Fill(tmp_h1d_x[1]);
+                    case_h1d_x[1]["t1mmm"]->Fill(tmp_h1d_x[1]);
+                    tmp_h1d_x[2] = CalculateXtgt(outmuon.at(1),z_tgt2_);
+                    case_h1d_x[2]["t1all"]->Fill(tmp_h1d_x[2]);
+                    case_h1d_x[2]["t1mmm"]->Fill(tmp_h1d_x[2]);
+
+                    case_h1d_bstvtx_x["t1all"]->Fill(bestvtx.xPositionFit());
+                    case_h1d_bstvtx_x["t1mmm"]->Fill(bestvtx.xPositionFit());
+
+                    tmp_h1d_y[0] = CalculateYtgt(in.at(0),z_tgt2_);
+                    case_h1d_y[0]["t1all"]->Fill(tmp_h1d_y[0]);
+                    case_h1d_y[0]["t1mmm"]->Fill(tmp_h1d_y[0]);
+                    tmp_h1d_y[1] = CalculateYtgt(outmuon.at(0),z_tgt2_);
+                    case_h1d_y[1]["t1all"]->Fill(tmp_h1d_y[1]);
+                    case_h1d_y[1]["t1mmm"]->Fill(tmp_h1d_y[1]);
+                    tmp_h1d_y[2] = CalculateYtgt(outmuon.at(1),z_tgt2_);
+                    case_h1d_y[2]["t1all"]->Fill(tmp_h1d_y[2]);
+                    case_h1d_y[2]["t1mmm"]->Fill(tmp_h1d_y[2]);
+
+                    case_h1d_bstvtx_y["t1all"]->Fill(bestvtx.yPositionFit());
+                    case_h1d_bstvtx_y["t1mmm"]->Fill(bestvtx.yPositionFit());
+
+                    tmp_h1d_r[0] = CalculateRtgt(in.at(0),z_tgt2_);
+                    case_h1d_r[0]["t1all"]->Fill(tmp_h1d_r[0]);
+                    case_h1d_r[0]["t1mmm"]->Fill(tmp_h1d_r[0]);
+                    tmp_h1d_r[1] = CalculateRtgt(outmuon.at(0),z_tgt2_);
+                    case_h1d_r[1]["t1all"]->Fill(tmp_h1d_r[1]);
+                    case_h1d_r[1]["t1mmm"]->Fill(tmp_h1d_r[1]);
+                    tmp_h1d_r[2] = CalculateRtgt(outmuon.at(1),z_tgt2_);
+                    case_h1d_r[2]["t1all"]->Fill(tmp_h1d_r[2]);
+                    case_h1d_r[2]["t1mmm"]->Fill(tmp_h1d_r[2]);
+
+                    case_h1d_bstvtx_r["t1all"]->Fill( sqrt( bestvtx.yPositionFit()*bestvtx.yPositionFit()+bestvtx.xPositionFit()*bestvtx.xPositionFit()) );
+                    case_h1d_bstvtx_r["t1mmm"]->Fill( sqrt( bestvtx.yPositionFit()*bestvtx.yPositionFit()+bestvtx.xPositionFit()*bestvtx.xPositionFit()) );
+
+                    
+                    tmp_h1d_dx = tmp_h1d_x[0]-tmp_h1d_x[1];
+                    case_h1d_dx[0]["t1all"]->Fill(tmp_h1d_dx);
+                    case_h1d_dx[0]["t1mmm"]->Fill(tmp_h1d_dx);
+                    tmp_h1d_dy = tmp_h1d_y[0]-tmp_h1d_y[1]
+                    case_h1d_dy[0]["t1all"]->Fill(tmp_h1d_dy);
+                    case_h1d_dy[0]["t1mmm"]->Fill(tmp_h1d_dy);
+                    tmp_h1d_dr = tmp_h1d_r[0]-tmp_h1d_r[1]
+                    case_h1d_dr[0]["t1all"]->Fill(tmp_h1d_dr);
+                    case_h1d_dr[0]["t1mmm"]->Fill(tmp_h1d_dr);
+
+                    tmp_h1d_dx = tmp_h1d_x[0]-tmp_h1d_x[2];
+                    case_h1d_dx[1]["t1all"]->Fill(tmp_h1d_dx);
+                    case_h1d_dx[1]["t1mmm"]->Fill(tmp_h1d_dx);
+                    tmp_h1d_dy = tmp_h1d_y[0]-tmp_h1d_y[2]
+                    case_h1d_dy[1]["t1all"]->Fill(tmp_h1d_dy);
+                    case_h1d_dy[1]["t1mmm"]->Fill(tmp_h1d_dy);
+                    tmp_h1d_dr = tmp_h1d_r[0]-tmp_h1d_r[2]
+                    case_h1d_dr[1]["t1all"]->Fill(tmp_h1d_dr);
+                    case_h1d_dr[1]["t1mmm"]->Fill(tmp_h1d_dr);
+
+                    tmp_h1d_dx = tmp_h1d_x[1]-tmp_h1d_x[2];
+                    case_h1d_dx[2]["t1all"]->Fill(tmp_h1d_dx);
+                    case_h1d_dx[2]["t1mmm"]->Fill(tmp_h1d_dx);
+                    tmp_h1d_dy = tmp_h1d_y[1]-tmp_h1d_y[2]
+                    case_h1d_dy[2]["t1all"]->Fill(tmp_h1d_dy);
+                    case_h1d_dy[2]["t1mmm"]->Fill(tmp_h1d_dy);
+                    tmp_h1d_dr = tmp_h1d_r[1]-tmp_h1d_r[2]
+                    case_h1d_dr[2]["t1all"]->Fill(tmp_h1d_dr);
+                    case_h1d_dr[2]["t1mmm"]->Fill(tmp_h1d_dr);
+
                     case_counts["t1mmm"]++; 
                     case_counts["t1all"]++; 
+
+                    case_h1d_vertex["t1all"]->Fill(bestvtx.zPositionFit());
+                    case_h1d_vertex["t1mmm"]->Fill(bestvtx.zPositionFit());
                     
                     if(angle_e>angle_mu){
                         case_h2d["t1mmm"]->Fill(angle_e,angle_mu);case_h2d["t1all"]->Fill(angle_e,angle_mu);
@@ -382,12 +618,17 @@ void FairMUanalyzer::AnalyzeTRK() {
                     //case_g2d["t0mem"]->SetPoint(case_g2d["t0mem"]->GetN(), angle_e,angle_mu); 
                     //case_g2d["t0all"]->SetPoint(case_g2d["t0all"]->GetN(), angle_e,angle_mu); 
                     
+                    case_h1d_vertex["t0mem"]->Fill(bestvtx.zPositionFit());
+                    case_h1d_vertex["t0all"]->Fill(bestvtx.zPositionFit());
+
                     h_2d->Fill(angle_e,angle_mu); 
                     //g_2d->SetPoint(g_2d->GetN(), angle_e,angle_mu); 
                     
                     if(angle_e<=intersecX_){
                         case_counts["t0me<m"]++;
                         case_h2d["t0me<m"]->Fill(angle_e,angle_mu); 
+                        case_h1d_vertex["t0me<m"]->Fill(bestvtx.zPositionFit());
+                    
                         //case_g2d["t0me<m"]->SetPoint(case_g2d["t0me<m"]->GetN(),angle_e,angle_mu); 
                     }
                     //case_h2d["golden"]->Fill(angle_e,angle_mu);
@@ -401,6 +642,10 @@ void FairMUanalyzer::AnalyzeTRK() {
                     
                     case_counts["t0mee"]++; 
                     case_counts["t0all"]++; 
+
+                    case_h1d_vertex["t0mee"]->Fill(bestvtx.zPositionFit());
+                    case_h1d_vertex["t0all"]->Fill(bestvtx.zPositionFit());
+
                     if(angle_e>angle_mu){
                         case_h2d["t0mee"]->Fill(angle_e,angle_mu);case_h2d["t0all"]->Fill(angle_e,angle_mu);
                         //case_g2d["t0mee"]->SetPoint(case_g2d["t0mee"]->GetN(), angle_e,angle_mu);
@@ -422,6 +667,9 @@ void FairMUanalyzer::AnalyzeTRK() {
                     
                     case_counts["t0mmm"]++; 
                     case_counts["t0all"]++; 
+
+                    case_h1d_vertex["t0mmm"]->Fill(bestvtx.zPositionFit());
+                    case_h1d_vertex["t0all"]->Fill(bestvtx.zPositionFit());
                     
                     if(angle_e>angle_mu){
                         case_h2d["t0mmm"]->Fill(angle_e,angle_mu);case_h2d["t0all"]->Fill(angle_e,angle_mu);

@@ -105,24 +105,23 @@ private:
     std::map<std::string, int> case_counts;
     std::map<std::string, TH2D *> case_h2d;
     std::map<std::string, TH2D *> case_h2d_bstvtx;
+
+    std::map<std::string, TH1D *> case_h1d_vertex;
     
     //std::map<std::string, TGraph *> case_g2d;
     //std::map<std::string, TGraph *> case_g2d_bstvtx;
 
     std::map<std::string, TH1D *> case_h1d_x[3];
-    std::map<std::string, TH1D *> case_h1d_bstvtx_x[3];
     std::map<std::string, TH1D *> case_h1d_y[3];
-    std::map<std::string, TH1D *> case_h1d_bstvtx_y[3];
     std::map<std::string, TH1D *> case_h1d_r[3];
-    std::map<std::string, TH1D *> case_h1d_bstvtx_r[3];
-    
-    std::map<std::string, TH1D *> case_h1d_dx[3];
-    std::map<std::string, TH1D *> case_h1d_bstvtx_dx[3];
-    std::map<std::string, TH1D *> case_h1d_dy[3];
-    std::map<std::string, TH1D *> case_h1d_bstvtx_dy[3];
-    std::map<std::string, TH1D *> case_h1d_dr[3];
-    std::map<std::string, TH1D *> case_h1d_bstvtx_dr[3];
 
+    std::map<std::string, TH1D *> case_h1d_dx[3];
+    std::map<std::string, TH1D *> case_h1d_dy[3];
+    std::map<std::string, TH1D *> case_h1d_dr[3];
+
+    std::map<std::string, TH1D *> case_h1d_bstvtx_x;
+    std::map<std::string, TH1D *> case_h1d_bstvtx_y;
+    std::map<std::string, TH1D *> case_h1d_bstvtx_r;
 
     static constexpr double me_ = 0.51099906e-3;   // Electron mass [GeV]
     static constexpr double mu_ = 105.65836900e-3; // Muon mass [GeV]

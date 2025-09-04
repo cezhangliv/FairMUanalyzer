@@ -77,10 +77,9 @@ FairMUanalyzer::FairMUanalyzer() : inputFile_(nullptr), cbmsim_(nullptr), reco_(
 
     h_2d = new TH2D("h_2d",mf_?"Electron VS Muon angle; Electron [rad]; Muon [rad]":"Large VS Small angle; Large angle [rad]; Small angle [rad]" ,500,0.,0.032,500,0.,0.005);
     h_2d_ref = new TH2D("h_2d_ref",mf_?"Electron VS Muon angle; Electron [rad]; Muon [rad]":"Large VS Small angle; Large angle [rad]; Small angle [rad]" ,500,0.,0.032,500,0.,0.005);
-
     h_2d_bstvtx = new TH2D("h_2d_bstvtx",mf_?"Electron VS Muon angle (BestVtx); Electron [rad]; Muon [rad]":"Large VS Small angle (BestVtx); Large angle [rad]; Small angle [rad]" ,500,0.,0.032,500,0.,0.005);
 
-    h_vertex = new TH1F("h_vertex","Reconstructed Z of best vertex [cm]",200,600,800);//660,780
+    h_vertex = new TH1F("h_vertex","h_vertex",200,600,800);    
 
     //count the cases:
     hCaseDist = new TH1I("hCaseDist", "Case Distribution", 13, 0, 13);
@@ -90,21 +89,23 @@ FairMUanalyzer::FairMUanalyzer() : inputFile_(nullptr), cbmsim_(nullptr), reco_(
         case_h2d[key] = new TH2D(("h2d_"+key).c_str(), mf_?("Electron VS Muon angle "+key+"; Electron [rad]; Muon [rad]").c_str():("Large VS Small angle "+key+"; Large angle [rad]; Small angle [rad]").c_str(), 500,0.,0.032,500,0.,0.005);
         case_h2d_bstvtx[key] = new TH2D(("h2d_bstvtx_"+key).c_str(), mf_?("Electron VS Muon angle "+key+"; Electron [rad]; Muon [rad]").c_str():("Large VS Small angle "+key+"; Large angle [rad]; Small angle [rad]").c_str(), 500,0.,0.032,500,0.,0.005);
 
+
+        case_h1d_vertex[key] = new TH1F( ("h_vertex_"+key).c_str(),(key+";Reconstructed Z of best vertex [cm]").c_str(),200,600,800);//660,780
+
+
+        case_h1d_bstvtx_x[key] = new TH1D(("case_h1d_bstvtx_x_"+key).c_str(),  ("bestvertex x at target "+key+";bestvertex x at target [cm]").c_str(),120,-6,6 );
+        case_h1d_bstvtx_y[key] = new TH1D(("case_h1d_bstvtx_y_"+key).c_str(),  ("bestvertex y at target "+key+";bestvertex y at target [cm]").c_str(),120,-6,6 );
+        case_h1d_bstvtx_r[key] = new TH1D(("case_h1d_bstvtx_r_"+key).c_str(),  ("bestvertex r at target "+key+";bestvertex r at target [cm]").c_str(),120,-6,6 );
+
         for(int j = 0; j<3;j++){
 
             case_h1d_x[j][key] = new TH1D(("case_h1d_x_"+key+"_"+std::to_string(j)).c_str(),  ("x at target "+key+"_"+std::to_string(j)+";x at target [cm]").c_str(),120,-6,6 );
-            case_h1d_bstvtx_x[j][key] = new TH1D(("case_h1d_bstvtx_x_"+key+"_"+std::to_string(j)).c_str(),  ("bestvertex x at target "+key+"_"+std::to_string(j)+";bestvertex x at target [cm]").c_str(),120,-6,6 );
             case_h1d_y[j][key] = new TH1D(("case_h1d_y_"+key+"_"+std::to_string(j)).c_str(),  ("y at target "+key+"_"+std::to_string(j)+";y at target [cm]").c_str(),120,-6,6 );
-            case_h1d_bstvtx_y[j][key] = new TH1D(("case_h1d_bstvtx_y_"+key+"_"+std::to_string(j)).c_str(),  ("bestvertex y at target "+key+"_"+std::to_string(j)+";bestvertex y at target [cm]").c_str(),120,-6,6 );
             case_h1d_r[j][key] = new TH1D(("case_h1d_r_"+key+"_"+std::to_string(j)).c_str(),  ("r at target "+key+"_"+std::to_string(j)+";r at target [cm]").c_str(),120,-6,6 );
-            case_h1d_bstvtx_r[j][key] = new TH1D(("case_h1d_bstvtx_r_"+key+"_"+std::to_string(j)).c_str(),  ("bestvertex r at target "+key+"_"+std::to_string(j)+";bestvertex r at target [cm]").c_str(),120,-6,6 );
             
             case_h1d_dx[j][key] = new TH1D(("case_h1d_dx_"+key+"_"+std::to_string(j)).c_str(),  ("dx at target"+key+"_"+std::to_string(j)+";dx at target [cm]").c_str(), 120, -6,6 );
-            case_h1d_bstvtx_dx[j][key] = new TH1D(("case_h1d_bstvtx_dx_"+key+"_"+std::to_string(j)).c_str(),  ("bestvertex dx at target"+key+"_"+std::to_string(j)+";bestvertex dx at target [cm]").c_str(),120, -6,6 );
             case_h1d_dy[j][key] = new TH1D(("case_h1d_dy_"+key+"_"+std::to_string(j)).c_str(),  ("dy at target"+key+"_"+std::to_string(j)+";dy at target [cm]").c_str(), 120, -6,6);
-            case_h1d_bstvtx_dy[j][key] = new TH1D(("case_h1d_bstvtx_dy_"+key+"_"+std::to_string(j)).c_str(),  ("bestvertex dy at target"+key+"_"+std::to_string(j)+";bestvertex dy at target [cm]").c_str(), 120, -6,6);
             case_h1d_dr[j][key] = new TH1D(("case_h1d_dr_"+key+"_"+std::to_string(j)).c_str(),  ("dr at target"+key+"_"+std::to_string(j)+";dr at target [cm]").c_str(), 120, -6,6);
-            case_h1d_bstvtx_dr[j][key] = new TH1D(("case_h1d_bstvtx_dr_"+key+"_"+std::to_string(j)).c_str(),  ("bestvertex dr at target"+key+"_"+std::to_string(j)+";bestvertex dr at target [cm]").c_str(), 120, -6,6);
         }
     }
 
