@@ -482,7 +482,7 @@ void FairMUanalyzer::SaveResults() {
 
     TCanvas* c5026 = new TCanvas(Form("c5026_%s", outputPrefix_.Data()), "Tracks case_h1d_x at target", 1600, 1200);
     c5026->Divide(4,3);
-    for(int kk = 1; kk<17; kk++){
+    for(int kk = 1; kk<13; kk++){
         c5026->cd(kk++);case_h1d_x[ (kk-2)/4]["t1all"]->Draw();
         c5026->cd(kk++);case_h1d_x[ (kk-2)/4]["t1mem"]->Draw();
         c5026->cd(kk++);case_h1d_x[ (kk-2)/4]["t1mee"]->Draw();
@@ -493,7 +493,7 @@ void FairMUanalyzer::SaveResults() {
 
     TCanvas* c5027 = new TCanvas(Form("c5027_%s", outputPrefix_.Data()), "Tracks case_h1d_y at target", 1600, 1200);
     c5027->Divide(4,3);
-    for(int kk = 1; kk<17; kk++){
+    for(int kk = 1; kk<13; kk++){
         c5027->cd(kk++);case_h1d_y[ (kk-2)/4]["t1all"]->Draw();
         c5027->cd(kk++);case_h1d_y[ (kk-2)/4]["t1mem"]->Draw();
         c5027->cd(kk++);case_h1d_y[ (kk-2)/4]["t1mee"]->Draw();
@@ -504,7 +504,7 @@ void FairMUanalyzer::SaveResults() {
 
     TCanvas* c5028 = new TCanvas(Form("c5028_%s", outputPrefix_.Data()), "Tracks case_h1d_r at target", 1600, 1200);
     c5028->Divide(4,3);
-    for(int kk = 1; kk<17; kk++){
+    for(int kk = 1; kk<13; kk++){
         c5028->cd(kk++);case_h1d_r[ (kk-2)/4]["t1all"]->Draw();
         c5028->cd(kk++);case_h1d_r[ (kk-2)/4]["t1mem"]->Draw();
         c5028->cd(kk++);case_h1d_r[ (kk-2)/4]["t1mee"]->Draw();
@@ -515,7 +515,7 @@ void FairMUanalyzer::SaveResults() {
 
     TCanvas* c5029 = new TCanvas(Form("c5029_%s", outputPrefix_.Data()), "Tracks case_h1d_dx at target", 1600, 1200);
     c5029->Divide(4,3);
-    for(int kk = 1; kk<17; kk++){
+    for(int kk = 1; kk<13; kk++){
         c5029->cd(kk++);case_h1d_dx[ (kk-2)/4]["t1all"]->Draw();
         c5029->cd(kk++);case_h1d_dx[ (kk-2)/4]["t1mem"]->Draw();
         c5029->cd(kk++);case_h1d_dx[ (kk-2)/4]["t1mee"]->Draw();
@@ -526,7 +526,7 @@ void FairMUanalyzer::SaveResults() {
 
     TCanvas* c50210 = new TCanvas(Form("c50210_%s", outputPrefix_.Data()), "Tracks case_h1d_dy at target", 1600, 1200);
     c50210->Divide(4,3);
-    for(int kk = 1; kk<17; kk++){
+    for(int kk = 1; kk<13; kk++){
         c50210->cd(kk++);case_h1d_dy[ (kk-2)/4]["t1all"]->Draw();
         c50210->cd(kk++);case_h1d_dy[ (kk-2)/4]["t1mem"]->Draw();
         c50210->cd(kk++);case_h1d_dy[ (kk-2)/4]["t1mee"]->Draw();
@@ -537,7 +537,7 @@ void FairMUanalyzer::SaveResults() {
 
     TCanvas* c50211 = new TCanvas(Form("c50211_%s", outputPrefix_.Data()), "Tracks case_h1d_dr at target", 1600, 1200);
     c50211->Divide(4,3);
-    for(int kk = 1; kk<17; kk++){
+    for(int kk = 1; kk<13; kk++){
         c50211->cd(kk++);case_h1d_dr[ (kk-2)/4]["t1all"]->Draw();
         c50211->cd(kk++);case_h1d_dr[ (kk-2)/4]["t1mem"]->Draw();
         c50211->cd(kk++);case_h1d_dr[ (kk-2)/4]["t1mee"]->Draw();
