@@ -280,15 +280,15 @@ double FairMUanalyzer::acoplanarity(const TVector3 in, const TVector3 out1, cons
 }
 
 
-double FairMUanalyzer::CalculateXtgt(MUonERecoOutputTrackAnalysis track, double zTgt){
-    return track.xSlope()*(zTgt-track.z0())+track.x0();
+double FairMUanalyzer::CalculateXtgt(MUonERecoOutputTrackAnalysis* track, double zTgt){
+    return track->xSlope()*(zTgt-track->z0())+track->x0();
 }
 
-double FairMUanalyzer::CalculateYtgt(MUonERecoOutputTrackAnalysis track, double zTgt){
-    return track.ySlope()*(zTgt-track.z0())+track.y0();
+double FairMUanalyzer::CalculateYtgt(MUonERecoOutputTrackAnalysis* track, double zTgt){
+    return track->ySlope()*(zTgt-track->z0())+track->y0();
 }
 
-double FairMUanalyzer::CalculateRtgt(MUonERecoOutputTrackAnalysis track, double zTgt){
+double FairMUanalyzer::CalculateRtgt(MUonERecoOutputTrackAnalysis* track, double zTgt){
 
     return sqrt(CalculateXtgt( track,  zTgt)*CalculateXtgt( track,  zTgt)+CalculateYtgt( track,  zTgt)*CalculateYtgt( track,  zTgt));
 
