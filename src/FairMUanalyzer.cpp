@@ -374,6 +374,46 @@ void FairMUanalyzer::SaveResults() {
     for (auto& [key, hist] : case_h2d_bstvtx) {
         hist->Write();
     }
+
+    for (auto& [key, hist] : case_h1d_vertex) {
+        hist->Write();
+    }
+
+    for (auto& [key, hist] : case_h1d_bstvtx_x) {
+        hist->Write();
+    }
+    for (auto& [key, hist] : case_h1d_bstvtx_y) {
+        hist->Write();
+    }
+    for (auto& [key, hist] : case_h1d_bstvtx_r) {
+        hist->Write();
+    }
+
+    for(int j = 0; j<3;j++){
+
+        for (auto& [key, hist] : case_h1d_x[j]) {
+            hist->Write();
+        }
+        for (auto& [key, hist] : case_h1d_y[j]) {
+            hist->Write();
+        }
+        for (auto& [key, hist] : case_h1d_r[j]) {
+            hist->Write();
+        }
+
+        for (auto& [key, hist] : case_h1d_dx[j]) {
+            hist->Write();
+        }
+        for (auto& [key, hist] : case_h1d_dy[j]) {
+            hist->Write();
+        }
+        for (auto& [key, hist] : case_h1d_dr[j]) {
+            hist->Write();
+        }
+
+    }
+
+
     /*
     for (auto& [key, graph] : case_g2d) {
         graph->Write();
@@ -395,6 +435,11 @@ void FairMUanalyzer::SaveResults() {
     h_isMuon->GetYaxis()->SetRangeUser(0, h_isMuon->GetMaximum() * 1.2);
     h_isMuon->SetLineColor(kRed);
     h_isMuon->Write();
+
+
+    h_vertex->Write();
+
+
     fout->Close();
 
     if(!savepdf_)return;
