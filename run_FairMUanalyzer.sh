@@ -102,7 +102,7 @@
 ### vertex check, without mmm matching but very nice results
 #./run_FairMUanalyzer502 root/single_muon_interaction_1_CDbugfix11July25_run8_muedaq04-1750227094-1750228937_MF1.root result/FairMUanalyzer_04Sep25_GAtest502_single_muon_interaction_1_CDbugfix11July25_run8_muedaq04-1750227094-1750228937_MF1 -1 1
 
-### vertex check, w/ mmm matching
+### vertex check, w/ mmm matching - see GA chat mattermost
 ./run_FairMUanalyzer602 root/single_muon_interaction_1_CDbugfix11July25_run8_muedaq04-1750227094-1750228937_MF1.root result/FairMUanalyzer_04Sep25_GAtest602_single_muon_interaction_1_CDbugfix11July25_run8_muedaq04-1750227094-1750228937_MF1 -1 1
 
 
