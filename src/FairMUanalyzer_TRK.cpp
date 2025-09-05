@@ -30,7 +30,7 @@ void FairMUanalyzer::AnalyzeTRK() {
 
         // apply cut: ECAL cluster energy <= 2/3 GeV
         //if (clusterE_ > 2.0) continue;
-        if (clusterE_ > 3.0) continue;
+        //if (clusterE_ > 3.0) continue;
 
         const auto& tracks = reco_->reconstructedTracks();
         const auto& hits = reco_->reconstructedHits();
@@ -571,28 +571,28 @@ void FairMUanalyzer::AnalyzeTRK() {
 
                     
                     tmp_h1d_dx = tmp_h1d_x[0]-tmp_h1d_x[1];
-                    if(mmm_matching &&  tmp_h1d_dx> (tmp_h1d_x[0]-tmp_h1d_x[2]) )tmp_h1d_dx = tmp_h1d_x[0]-tmp_h1d_x[2];
+                    if(mmm_matching &&  abs(tmp_h1d_dx)> abs(tmp_h1d_x[0]-tmp_h1d_x[2]) )tmp_h1d_dx = tmp_h1d_x[0]-tmp_h1d_x[2];
                     case_h1d_dx[0]["t1all"]->Fill(tmp_h1d_dx);
                     case_h1d_dx[0]["t1mmm"]->Fill(tmp_h1d_dx);
                     tmp_h1d_dy = tmp_h1d_y[0]-tmp_h1d_y[1];
-                    if(mmm_matching &&  tmp_h1d_dy> (tmp_h1d_y[0]-tmp_h1d_y[2]) )tmp_h1d_dy = tmp_h1d_y[0]-tmp_h1d_y[2];
+                    if(mmm_matching &&  abs(tmp_h1d_dy)> abs(tmp_h1d_y[0]-tmp_h1d_y[2]) )tmp_h1d_dy = tmp_h1d_y[0]-tmp_h1d_y[2];
                     case_h1d_dy[0]["t1all"]->Fill(tmp_h1d_dy);
                     case_h1d_dy[0]["t1mmm"]->Fill(tmp_h1d_dy);
                     tmp_h1d_dr = tmp_h1d_r[0]-tmp_h1d_r[1];
-                    if(mmm_matching &&  tmp_h1d_dr> (tmp_h1d_r[0]-tmp_h1d_r[2]) )tmp_h1d_dr = tmp_h1d_r[0]-tmp_h1d_r[2];
+                    if(mmm_matching &&  abs(tmp_h1d_dr)> abs(tmp_h1d_r[0]-tmp_h1d_r[2]) )tmp_h1d_dr = tmp_h1d_r[0]-tmp_h1d_r[2];
                     case_h1d_dr[0]["t1all"]->Fill(tmp_h1d_dr);
                     case_h1d_dr[0]["t1mmm"]->Fill(tmp_h1d_dr);
 
                     tmp_h1d_dx = tmp_h1d_x[0]-tmp_h1d_x[2];
-                    if(mmm_matching &&  tmp_h1d_dx< (tmp_h1d_x[0]-tmp_h1d_x[1]) )tmp_h1d_dx = tmp_h1d_x[0]-tmp_h1d_x[1];
+                    if(mmm_matching &&  abs(tmp_h1d_dx)< abs(tmp_h1d_x[0]-tmp_h1d_x[1]) )tmp_h1d_dx = tmp_h1d_x[0]-tmp_h1d_x[1];
                     case_h1d_dx[1]["t1all"]->Fill(tmp_h1d_dx);
                     case_h1d_dx[1]["t1mmm"]->Fill(tmp_h1d_dx);
                     tmp_h1d_dy = tmp_h1d_y[0]-tmp_h1d_y[2];
-                    if(mmm_matching &&  tmp_h1d_dy< (tmp_h1d_y[0]-tmp_h1d_y[1]) )tmp_h1d_dy = tmp_h1d_y[0]-tmp_h1d_y[1];
+                    if(mmm_matching &&  abs(tmp_h1d_dy)< abs(tmp_h1d_y[0]-tmp_h1d_y[1]) )tmp_h1d_dy = tmp_h1d_y[0]-tmp_h1d_y[1];
                     case_h1d_dy[1]["t1all"]->Fill(tmp_h1d_dy);
                     case_h1d_dy[1]["t1mmm"]->Fill(tmp_h1d_dy);
                     tmp_h1d_dr = tmp_h1d_r[0]-tmp_h1d_r[2];
-                    if(mmm_matching &&  tmp_h1d_dr< (tmp_h1d_r[0]-tmp_h1d_r[1]) )tmp_h1d_dr = tmp_h1d_r[0]-tmp_h1d_r[1];
+                    if(mmm_matching &&  abs(tmp_h1d_dr)< abs(tmp_h1d_r[0]-tmp_h1d_r[1]) )tmp_h1d_dr = tmp_h1d_r[0]-tmp_h1d_r[1];
                     case_h1d_dr[1]["t1all"]->Fill(tmp_h1d_dr);
                     case_h1d_dr[1]["t1mmm"]->Fill(tmp_h1d_dr);
 
