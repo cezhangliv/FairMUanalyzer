@@ -79,7 +79,10 @@ FairMUanalyzer::FairMUanalyzer() : inputFile_(nullptr), cbmsim_(nullptr), reco_(
     h_2d_ref = new TH2D("h_2d_ref",mf_?"Electron VS Muon angle; Electron [rad]; Muon [rad]":"Large VS Small angle; Large angle [rad]; Small angle [rad]" ,500,0.,0.032,500,0.,0.005);
     h_2d_bstvtx = new TH2D("h_2d_bstvtx",mf_?"Electron VS Muon angle (BestVtx); Electron [rad]; Muon [rad]":"Large VS Small angle (BestVtx); Large angle [rad]; Small angle [rad]" ,500,0.,0.032,500,0.,0.005);
 
-    h_vertex = new TH1F("h_vertex","h_vertex",600,600,1200);    
+    h_vertex = new TH1F("h_vertex","h_vertex",600,600,1200);   
+
+    h_totalE = new TH1F("h_totalE","h_totalE",100,0,50);
+    h_clusterE = new TH1F("h_clusterE","h_clusterE",100,0,50); 
 
     //count the cases:
     hCaseDist = new TH1I("hCaseDist", "Case Distribution", 13, 0, 13);
@@ -442,6 +445,8 @@ void FairMUanalyzer::SaveResults() {
 
 
     h_vertex->Write();
+    h_totalE->Write();
+    h_clusterE->Write();
 
 
     fout->Close();
