@@ -9,8 +9,8 @@ void draw_three_files() {
     
     std::vector<TString> filenames = {
         "../result/FairMUanalyzer_04Sep25_GAtest502_single_muon_interaction_1_CDbugfix11July25_run8_muedaq04-1750227094-1750228937_MF1_output.root",
-        "../result/FairMUanalyzer_04Sep25_GAtest603_single_muon_interaction_1_CDbugfix11July25_run8_muedaq04-1750227094-1750228937_MF1_output.root",
-        "../result/FairMUanalyzer_04Sep25_GAtest604_single_muon_interaction_1_CDbugfix11July25_run8_muedaq04-1750227094-1750228937_MF1_output.root"
+        "../result/FairMUanalyzer_04Sep25_GAtest605_single_muon_interaction_1_CDbugfix11July25_run8_muedaq04-1750227094-1750228937_MF1_output.root",
+        "../result/FairMUanalyzer_04Sep25_GAtest606_single_muon_interaction_1_CDbugfix11July25_run8_muedaq04-1750227094-1750228937_MF1_output.root"
     };
 
     
@@ -35,8 +35,8 @@ void draw_three_files() {
         TRegexp re("GAtest[0-9]+");
         TString match;
         if (filenames[i].Index(re) != kNPOS) {
-            match = filenames[i](re);  // 结果是 "GAtest603"
-            match.ReplaceAll("GAtest", ""); // 结果就是 "603"
+            match = filenames[i](re);  //  "GAtest603"
+            match.ReplaceAll("GAtest", ""); //  "603"
         }
 
         TString cname = TString::Format("c%s", match.Data());
@@ -55,6 +55,6 @@ void draw_three_files() {
         }
 
         c->SaveAs(TString::Format("%s.pdf", cname.Data()));
-        f->Close();
+        //f->Close();
     }
 }
