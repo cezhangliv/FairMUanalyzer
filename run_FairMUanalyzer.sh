@@ -103,8 +103,23 @@
 #./run_FairMUanalyzer502 root/single_muon_interaction_1_CDbugfix11July25_run8_muedaq04-1750227094-1750228937_MF1.root result/FairMUanalyzer_04Sep25_GAtest502_single_muon_interaction_1_CDbugfix11July25_run8_muedaq04-1750227094-1750228937_MF1 -1 1
 
 ### vertex check, w/ mmm matching - see GA chat mattermost
-./run_FairMUanalyzer602 root/single_muon_interaction_1_CDbugfix11July25_run8_muedaq04-1750227094-1750228937_MF1.root result/FairMUanalyzer_04Sep25_GAtest602_single_muon_interaction_1_CDbugfix11July25_run8_muedaq04-1750227094-1750228937_MF1 -1 1
+#./run_FairMUanalyzer602 root/single_muon_interaction_1_CDbugfix11July25_run8_muedaq04-1750227094-1750228937_MF1.root result/FairMUanalyzer_04Sep25_GAtest602_single_muon_interaction_1_CDbugfix11July25_run8_muedaq04-1750227094-1750228937_MF1 -1 1
 
+
+##### 6Sep Final day Nufact
+
+### 2Gev cut - cluserE
+    ./run_FairMUanalyzer603 root/single_muon_interaction_1_CDbugfix11July25_run8_muedaq04-1750227094-1750228937_MF1.root result/FairMUanalyzer_06Sep25_GAtest603_single_muon_interaction_1_CDbugfix11July25_run8_muedaq04-1750227094-1750228937_MF1 -1 1
+
+### 3Gev cut - cluserE
+    ./run_FairMUanalyzer604 root/single_muon_interaction_1_CDbugfix11July25_run8_muedaq04-1750227094-1750228937_MF1.root result/FairMUanalyzer_06Sep25_GAtest604_single_muon_interaction_1_CDbugfix11July25_run8_muedaq04-1750227094-1750228937_MF1 -1 1
+
+
+### 2Gev cut - totalE
+    ./run_FairMUanalyzer605 root/single_muon_interaction_1_CDbugfix11July25_run8_muedaq04-1750227094-1750228937_MF1.root result/FairMUanalyzer_06Sep25_GAtest605_single_muon_interaction_1_CDbugfix11July25_run8_muedaq04-1750227094-1750228937_MF1 -1 1
+
+### 3Gev cut - totalE
+    ./run_FairMUanalyzer606 root/single_muon_interaction_1_CDbugfix11July25_run8_muedaq04-1750227094-1750228937_MF1.root result/FairMUanalyzer_06Sep25_GAtest606_single_muon_interaction_1_CDbugfix11July25_run8_muedaq04-1750227094-1750228937_MF1 -1 1
 
 
 
