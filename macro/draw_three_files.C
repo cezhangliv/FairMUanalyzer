@@ -9,8 +9,10 @@ void draw_three_files() {
     
     std::vector<TString> filenames = {
         "../result/FairMUanalyzer_04Sep25_GAtest502_single_muon_interaction_1_CDbugfix11July25_run8_muedaq04-1750227094-1750228937_MF1_output.root",
-        "../result/FairMUanalyzer_04Sep25_GAtest605_single_muon_interaction_1_CDbugfix11July25_run8_muedaq04-1750227094-1750228937_MF1_output.root",
-        "../result/FairMUanalyzer_04Sep25_GAtest606_single_muon_interaction_1_CDbugfix11July25_run8_muedaq04-1750227094-1750228937_MF1_output.root"
+        "../result/FairMUanalyzer_06Sep25_GAtest603_single_muon_interaction_1_CDbugfix11July25_run8_muedaq04-1750227094-1750228937_MF1_output.root",
+        "../result/FairMUanalyzer_06Sep25_GAtest604_single_muon_interaction_1_CDbugfix11July25_run8_muedaq04-1750227094-1750228937_MF1_output.root",
+        "../result/FairMUanalyzer_06Sep25_GAtest605_single_muon_interaction_1_CDbugfix11July25_run8_muedaq04-1750227094-1750228937_MF1_output.root",
+        "../result/FairMUanalyzer_06Sep25_GAtest606_single_muon_interaction_1_CDbugfix11July25_run8_muedaq04-1750227094-1750228937_MF1_output.root"
     };
 
     
@@ -26,6 +28,12 @@ void draw_three_files() {
     };
 
     for (size_t i = 0; i < filenames.size(); i++) {
+
+        //if(i==1 || i==3)gStyle->SetPalette(kBird);
+        //else gStyle->SetPalette(1);
+        //gStyle->SetPalette(kViridis);
+
+
         TFile *f = TFile::Open(filenames[i], "READ");
         if (!f || f->IsZombie()) {
             std::cerr << "Error: cannot open " << filenames[i] << std::endl;
