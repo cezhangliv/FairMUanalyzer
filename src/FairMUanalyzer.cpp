@@ -81,8 +81,8 @@ FairMUanalyzer::FairMUanalyzer() : inputFile_(nullptr), cbmsim_(nullptr), reco_(
 
     h_vertex = new TH1F("h_vertex","h_vertex",600,600,1200);   
 
-    h_totalE = new TH1F("h_totalE","h_totalE",100,0,50);
-    h_clusterE = new TH1F("h_clusterE","h_clusterE",100,0,50); 
+    h_totalE = new TH1F("h_totalE","h_totalE",400,0,200);
+    h_clusterE = new TH1F("h_clusterE","h_clusterE",400,0,200); 
 
     //count the cases:
     hCaseDist = new TH1I("hCaseDist", "Case Distribution", 13, 0, 13);
@@ -555,6 +555,17 @@ void FairMUanalyzer::SaveResults() {
     }
     c50211->SaveAs(Form("%s_c50211_case_h1d_dr.pdf", outputPrefix_.Data()));
 
+    TCanvas* c50212 = new TCanvas(Form("c50212_%s", outputPrefix_.Data()), "ECAL totalE;Energy [GeV]", 600, 400);
+    c50212->Divide(4,3);
+    c50212->SetLogy();
+    h_totalE->Draw();
+    c50212->SaveAs(Form("%s_c50212_h_totalE.pdf", outputPrefix_.Data()));
+
+    TCanvas* c50213 = new TCanvas(Form("c50213_%s", outputPrefix_.Data()), "ECAL clusterE; Energy [GeV]", 600, 400);
+    c50213->Divide(4,3);
+    c50213->SetLogy();
+    h_clusterE->Draw();
+    c50213->SaveAs(Form("%s_c50213_h_clusterE.pdf", outputPrefix_.Data()));
 
 
     TCanvas* c0 = new TCanvas(Form("c0_%s", outputPrefix_.Data()), "Tracks multiplicity", 600, 400);
