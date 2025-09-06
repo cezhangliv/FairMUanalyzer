@@ -33,8 +33,8 @@ void FairMUanalyzer::AnalyzeTRK() {
 
         // apply cut: ECAL cluster energy <= 2/3 GeV
         //if (clusterE_ < 2.0) continue;//603
-        if (clusterE_ < 3.0) continue;//604
-        //if (totalE_ < 2.0) continue;//605
+        //if (clusterE_ < 3.0) continue;//604
+        if (totalE_ < 2.0) continue;//605
         //if (totalE_ < 3.0) continue;//606
 
         const auto& tracks = reco_->reconstructedTracks();
