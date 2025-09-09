@@ -177,9 +177,9 @@ void FairMUanalyzer::AnalyzeTRK() {
                 ( sectors.size() != 3 || !(ntrk_sec0==1 && ntrk_sec1>=1 && ntrk_sec2>=2) || (nhits_sec2 > maxNhitInStat_ ) ) // suggested by Giovanni A, can be tested by turning HitCutsOn ON/OFF
                 )isGolden = false;
 
-            h_Nhits0->Fill(nhits_sec0);
-            h_Nhits1->Fill(nhits_sec1);
-            h_Nhits2->Fill(nhits_sec2);
+            if(isGolden==true)h_Nhits0->Fill(nhits_sec0);
+            if(isGolden==true)h_Nhits1->Fill(nhits_sec1);
+            if(isGolden==true)h_Nhits2->Fill(nhits_sec2);
 
             
             if(TGT1
