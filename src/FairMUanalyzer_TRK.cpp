@@ -191,7 +191,8 @@ void FairMUanalyzer::AnalyzeTRK() {
             if(TGT2 
                 && useTightTrackCutTgt2_
                 && 
-                (  !(nhits_sec0==6 && nhits_sec1==6 && nhits_sec2==12) ) 
+                //(  !(nhits_sec0==6 && nhits_sec1==6 && nhits_sec2==12) ) 
+                (  !(nhits_sec1==6 ) ) 
                 )isGolden = false;
             else if(TGT2 
                 && !useTightTrackCutTgt2_
