@@ -88,6 +88,9 @@ private:
     TH1F* h_vtxchi2;
     TH1F* h_isMuon;
     TH1F* h_Ntracks;
+    TH1F* h_Nhits0;
+    TH1F* h_Nhits1;
+    TH1F* h_Nhits2;
 
     TH1F* h_totalE;
     TH1F* h_clusterE;

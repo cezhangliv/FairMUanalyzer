@@ -35,7 +35,7 @@ void FairMUanalyzer::AnalyzeTRK() {
         //if (clusterE_ < 2.0) continue;//603
         //if (clusterE_ < 3.0) continue;//604
         //if (totalE_ < 2.0) continue;//605
-        if (totalE_ < 3.0) continue;//606
+        //if (totalE_ < 3.0) continue;//606
 
         const auto& tracks = reco_->reconstructedTracks();
         const auto& hits = reco_->reconstructedHits();
@@ -73,6 +73,7 @@ void FairMUanalyzer::AnalyzeTRK() {
         }
         h_hits_zcut->Fill(nhits_zcut);
 
+        /*
         if (n_muons >= 1 && n_muons <= 4) {
             for (auto const* track : muon_tracks) {
                 int nhit_zcut = 0;
@@ -93,6 +94,7 @@ void FairMUanalyzer::AnalyzeTRK() {
                 h_hitsPerMuonTrack_zcut[n_muons]->Fill(nhit_zcut);
             }
         }
+        */
 
         
         //golden muon step #1: N tracks
@@ -115,6 +117,12 @@ void FairMUanalyzer::AnalyzeTRK() {
                 for (auto const& h : track.hits()) {
                     modules.insert(h.moduleID());
                 }
+
+                if (track.hits().size() != 6) {
+                    isGolden = false;
+                    break;
+                }
+
                 if (modules.size() != 6   && (TGT1) && track.sector()<2 ) {
                     //golden muon step #2: 1 hit/module
                     isGolden = false;
@@ -147,9 +155,13 @@ void FairMUanalyzer::AnalyzeTRK() {
             //note we don't require muonid at this moment, just (1track + 2track + (1+) tracks) or (1track + 1track + 2 tracks) signature is ok
             //we have to do this way because we  need those 'wrong' events (even if we know by MF) to for the next step to see the count/distributions
 
+            //h_Nhits0
+            //h_Nhits1
+            //h_Nhits2
+
             if(TGT1
                 && 
-                ( sectors01.size() != 2 || !(ntrk_sec0==1 && ntrk_sec1==2) || (nhits_sec1 > maxNhitInStat_ ) ) // suggested by Giovanni A, can be tested by turning HitCutsOn ON/OFF
+                ( sectors01.size() != 2 || !(ntrk_sec0==1 && ntrk_sec1==2) ||(nhits_sec1 > maxNhitInStat_ ) ) // suggested by Giovanni A, can be tested by turning HitCutsOn ON/OFF
                 )isGolden = false;
                 
 
@@ -164,6 +176,30 @@ void FairMUanalyzer::AnalyzeTRK() {
                 //( sectors.size() != 3 || !(ntrk_sec0==1 && ntrk_sec1==1 && ntrk_sec2>=2) || (nhits_sec2 > maxNhitInStat_ ) ) // suggested by Giovanni A, can be tested by turning HitCutsOn ON/OFF
                 ( sectors.size() != 3 || !(ntrk_sec0==1 && ntrk_sec1>=1 && ntrk_sec2>=2) || (nhits_sec2 > maxNhitInStat_ ) ) // suggested by Giovanni A, can be tested by turning HitCutsOn ON/OFF
                 )isGolden = false;
+
+            h_Nhits0->Fill(nhits_sec0);
+            h_Nhits1->Fill(nhits_sec1);
+            h_Nhits2->Fill(nhits_sec2);
+
+            /*
+            if(TGT1
+                && 
+                ( !(nhits_sec0==6 && nhits_sec1==12 ) ) 
+                )isGolden = false;
+                
+
+            if(TGT2 
+                && useTightTrackCutTgt2_
+                && 
+                (  !(nhits_sec0==6 && nhits_sec1==6 && nhits_sec2==12) ) 
+                )isGolden = false;
+            else if(TGT2 
+                && !useTightTrackCutTgt2_
+                && 
+                //( sectors.size() != 3 || !(ntrk_sec0==1 && ntrk_sec1==1 && ntrk_sec2>=2) || (nhits_sec2 > maxNhitInStat_ ) ) // suggested by Giovanni A, can be tested by turning HitCutsOn ON/OFF
+                ( !(nhits_sec0==6 && nhits_sec1>=6 && nhits_sec2>=12) ) // suggested by Giovanni A, can be tested by turning HitCutsOn ON/OFF
+                )isGolden = false;
+            */
 
             if (isGolden) {
 

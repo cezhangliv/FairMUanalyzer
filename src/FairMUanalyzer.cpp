@@ -45,6 +45,9 @@ FairMUanalyzer::FairMUanalyzer() : inputFile_(nullptr), cbmsim_(nullptr), reco_(
     h_hits_zcut = new TH1F("h_hits_zcut (MF hits)", "Number of hits in MF; Hits;Entries", 20, 0, 20);
     h_isMuon = new TH1F("h_isMuon", "Number of 'Muon' tracks; isMuon tracks per event;Entries", 20, 0, 20);
     h_Ntracks = new TH1F("h_Ntracks", "Tracks multiplicity; tracks per event;Entries", 20, 0, 20);
+    h_Nhits0 = new TH1F("h_Nhits0","h_Nhits station 0",20,0,20);
+    h_Nhits1 = new TH1F("h_Nhits1","h_Nhits station 1",20,0,20);
+    h_Nhits2 = new TH1F("h_Nhits2","h_Nhits station 2",20,0,20);
     
     h_vtxchi2 = new TH1F("h_vtxchi2", "BestVtx chi2perDOF; BestVtx chi2perDOF;Entries", 100, 0, 100);
 
@@ -438,6 +441,9 @@ void FairMUanalyzer::SaveResults() {
 
     h_Ntracks->GetYaxis()->SetRangeUser(0, h_Ntracks->GetMaximum() * 1.2);
     h_Ntracks->Write();
+    h_Nhits0->Write();
+    h_Nhits1->Write();
+    h_Nhits2->Write();
 
     h_isMuon->GetYaxis()->SetRangeUser(0, h_isMuon->GetMaximum() * 1.2);
     h_isMuon->SetLineColor(kRed);
