@@ -181,7 +181,7 @@ void FairMUanalyzer::AnalyzeTRK() {
             if(isGolden==true)h_Nhits1->Fill(nhits_sec1);
             if(isGolden==true)h_Nhits2->Fill(nhits_sec2);
 
-            
+            /*
             if(TGT1
                 && 
                 ( !(nhits_sec0==6 && nhits_sec1==12 ) ) 
@@ -200,7 +200,7 @@ void FairMUanalyzer::AnalyzeTRK() {
                 //( sectors.size() != 3 || !(ntrk_sec0==1 && ntrk_sec1==1 && ntrk_sec2>=2) || (nhits_sec2 > maxNhitInStat_ ) ) // suggested by Giovanni A, can be tested by turning HitCutsOn ON/OFF
                 ( !(nhits_sec0==6 && nhits_sec1>=6 && nhits_sec2>=12) ) // suggested by Giovanni A, can be tested by turning HitCutsOn ON/OFF
                 )isGolden = false;
-            
+            */
 
             if (isGolden) {
 
@@ -653,6 +653,7 @@ void FairMUanalyzer::AnalyzeTRK() {
 
                     case_h1d_vertex["t1all"]->Fill(bestvtx.zPositionFit());
                     case_h1d_vertex["t1mmm"]->Fill(bestvtx.zPositionFit());
+                    if(bestvtx.zPositionFit()<600 || bestvtx.zPositionFit()>1200)cout<<"strange mmm: "<<bestvtx.zPositionFit()<<endl;
                     
                     if(angle_e>angle_mu){
                         case_h2d["t1mmm"]->Fill(angle_e,angle_mu);case_h2d["t1all"]->Fill(angle_e,angle_mu);

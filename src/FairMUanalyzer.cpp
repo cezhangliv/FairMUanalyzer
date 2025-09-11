@@ -88,7 +88,7 @@ FairMUanalyzer::FairMUanalyzer() : inputFile_(nullptr), cbmsim_(nullptr), reco_(
     h_clusterE = new TH1F("h_clusterE","ECAL clusterE;Energy [GeV]",400,0,200); 
 
     //count the cases:
-    hCaseDist = new TH1I("hCaseDist", "Case Distribution", 13, 0, 13);
+    hCaseDist = new TH1I("hCaseDist", "Case Distribution", 14, 0, 14);
     int ikey=1;
     for (const auto& key : case_keys) {
         hCaseDist->GetXaxis()->SetBinLabel(ikey, key.c_str());ikey++;
@@ -96,7 +96,7 @@ FairMUanalyzer::FairMUanalyzer() : inputFile_(nullptr), cbmsim_(nullptr), reco_(
         case_h2d_bstvtx[key] = new TH2D(("h2d_bstvtx_"+key).c_str(), mf_?("Electron VS Muon angle "+key+"; Electron [rad]; Muon [rad]").c_str():("Large VS Small angle "+key+"; Large angle [rad]; Small angle [rad]").c_str(), 500,0.,0.032,500,0.,0.005);
 
 
-        case_h1d_vertex[key] = new TH1D( ("h_vertex_"+key).c_str(),(key+";Reconstructed Z of best vertex [cm]").c_str(),600,600,1200);//660,780
+        case_h1d_vertex[key] = new TH1D( ("h_vertex_"+key).c_str(),(key+";Reconstructed Z of best vertex [cm]").c_str(),1200,0,1200);//660,780
 
 
         case_h1d_bstvtx_x[key] = new TH1D(("case_h1d_bstvtx_x_"+key).c_str(),  ("bestvertex x at target "+key+";bestvertex x at target [cm]").c_str(),120,-6,6 );

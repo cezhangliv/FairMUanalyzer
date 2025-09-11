@@ -107,12 +107,20 @@ private:
     TF1 *f_elastic;
     TGraph* g_elastic;
     TH1I* hCaseDist;
-    std::vector<std::string> case_keys = {"Total","golden","t0all","t0mem","t0mee","t0mmm","t0me<m","t1all","t1mem","t1mee","t1mmm","t1me<m"};
+    std::vector<std::string> case_keys = {"Total","golden","t0all","t0mem","t0mee","t0mmm","t0me<m","t1all","t1mem","t1mee","t1mmm","t1mmmband","t1me<m"};
     std::map<std::string, int> case_counts;
     std::map<std::string, TH2D *> case_h2d;
     std::map<std::string, TH2D *> case_h2d_bstvtx;
-
     std::map<std::string, TH1D *> case_h1d_vertex;
+
+    std::map<std::string, TH1D *> case_h1d_LeftOverhits0;
+    std::map<std::string, TH1D *> case_h1d_LeftOverhits1;
+    std::map<std::string, TH1D *> case_h1d_LeftOverhits2;
+    std::map<std::string, TH1D *> case_h1d_LeftOverhits0perModule;
+    std::map<std::string, TH1D *> case_h1d_LeftOverhits1perModule;
+    std::map<std::string, TH1D *> case_h1d_LeftOverhits2perModule;
+    std::map<std::string, TH1D *> case_h1d_Vtxchi2;
+    std::map<std::string, TH1D *> case_h1d_aco;
     
     //std::map<std::string, TGraph *> case_g2d;
     //std::map<std::string, TGraph *> case_g2d_bstvtx;

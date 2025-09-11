@@ -8,11 +8,15 @@
 void draw_three_files() {
     
     std::vector<TString> filenames = {
-        "../result/FairMUanalyzer_04Sep25_GAtest502_single_muon_interaction_1_CDbugfix11July25_run8_muedaq04-1750227094-1750228937_MF1_output.root",
-        "../result/FairMUanalyzer_06Sep25_GAtest603_single_muon_interaction_1_CDbugfix11July25_run8_muedaq04-1750227094-1750228937_MF1_output.root",
-        "../result/FairMUanalyzer_06Sep25_GAtest604_single_muon_interaction_1_CDbugfix11July25_run8_muedaq04-1750227094-1750228937_MF1_output.root",
-        "../result/FairMUanalyzer_06Sep25_GAtest605_single_muon_interaction_1_CDbugfix11July25_run8_muedaq04-1750227094-1750228937_MF1_output.root",
-        "../result/FairMUanalyzer_06Sep25_GAtest606_single_muon_interaction_1_CDbugfix11July25_run8_muedaq04-1750227094-1750228937_MF1_output.root"
+        //"../result/FairMUanalyzer_04Sep25_GAtest502_single_muon_interaction_1_CDbugfix11July25_run8_muedaq04-1750227094-1750228937_MF1_output.root",
+        //"../result/FairMUanalyzer_06Sep25_GAtest603_single_muon_interaction_1_CDbugfix11July25_run8_muedaq04-1750227094-1750228937_MF1_output.root",
+        //"../result/FairMUanalyzer_06Sep25_GAtest604_single_muon_interaction_1_CDbugfix11July25_run8_muedaq04-1750227094-1750228937_MF1_output.root",
+        //"../result/FairMUanalyzer_06Sep25_GAtest605_single_muon_interaction_1_CDbugfix11July25_run8_muedaq04-1750227094-1750228937_MF1_output.root",
+        //"../result/FairMUanalyzer_06Sep25_GAtest606_single_muon_interaction_1_CDbugfix11July25_run8_muedaq04-1750227094-1750228937_MF1_output.root",
+        "../result/FairMUanalyzer_09Sep25_GAtest802_single_muon_interaction_1_CDbugfix11July25_run8_muedaq04-1750227094-1750228937_MF1_output.root",
+        "../result/FairMUanalyzer_09Sep25_GAtest812_single_muon_interaction_1_CDbugfix11July25_run8_muedaq04-1750227094-1750228937_MF1_output.root",
+        "../result/FairMUanalyzer_09Sep25_GAtest813_single_muon_interaction_1_CDbugfix11July25_run8_muedaq04-1750227094-1750228937_MF1_output.root"
+                   
     };
 
     
