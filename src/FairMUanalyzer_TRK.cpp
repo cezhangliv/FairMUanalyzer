@@ -653,7 +653,7 @@ void FairMUanalyzer::AnalyzeTRK() {
 
                     case_h1d_vertex["t1all"]->Fill(bestvtx.zPositionFit());
                     case_h1d_vertex["t1mmm"]->Fill(bestvtx.zPositionFit());
-                    if( bestvtx.muonTheta()>0.0003 &&(bestvtx.zPositionFit()<600 || bestvtx.zPositionFit()>1200))std::cout<<"strange mmm: "<<bestvtx.zPositionFit()<<std::endl;
+                    if( bestvtx.muonTheta()>0.0003 && (bestvtx.zPositionFit()<600 || bestvtx.zPositionFit()>1200))std::cout<<"strange mmm: "<<bestvtx.zPositionFit()<<std::endl;
                     
                     if(angle_e>angle_mu){
                         case_h2d["t1mmm"]->Fill(angle_e,angle_mu);case_h2d["t1all"]->Fill(angle_e,angle_mu);
@@ -668,6 +668,10 @@ void FairMUanalyzer::AnalyzeTRK() {
                     
                     case_h2d_bstvtx["t1all"]->Fill(bestvtx.electronTheta(),bestvtx.muonTheta());
                     case_h2d_bstvtx["t1mmm"]->Fill(bestvtx.electronTheta(),bestvtx.muonTheta());
+                    if( bestvtx.muonTheta()>0.0003 ){
+                        case_h2d_bstvtx["t1mmmband"]->Fill(bestvtx.electronTheta(),bestvtx.muonTheta());
+                        case_h1d_vertex["t1mmmband"]->Fill(bestvtx.zPositionFit());
+                    }
 
                     //case_g2d_bstvtx["t1all"]->SetPoint(case_g2d_bstvtx["t1all"]->GetN(), bestvtx.electronTheta(),bestvtx.muonTheta());
                     //case_g2d_bstvtx["t1mmm"]->SetPoint(case_g2d_bstvtx["t1mmm"]->GetN(), bestvtx.electronTheta(),bestvtx.muonTheta());
