@@ -37,22 +37,11 @@ FairMUanalyzer::FairMUanalyzer() : inputFile_(nullptr), cbmsim_(nullptr), reco_(
     }, xmin, xmax, 0);
     intersecX_ = f_diff->GetX(0, xmin, xmax);
     std::cout << "Intersection at x ≈ " << intersecX_ << " for Ebeam = "<<Ebeam_<<" GeV"<< std::endl;
-    
 
     TH1::AddDirectory(kFALSE);
     gStyle->SetOptStat(1111);
 
-    h_hits_zcut = new TH1F("h_hits_zcut (MF hits)", "Number of hits in MF; Hits;Entries", 20, 0, 20);
-    h_isMuon = new TH1F("h_isMuon", "Number of 'Muon' tracks; isMuon tracks per event;Entries", 20, 0, 20);
-    h_Ntracks = new TH1F("h_Ntracks", "Tracks multiplicity; tracks per event;Entries", 20, 0, 20);
-    h_Nhits0 = new TH1F("h_Nhits0","h_Nhits station 0",20,0,20);
-    h_Nhits1 = new TH1F("h_Nhits1","h_Nhits station 1",20,0,20);
-    h_Nhits2 = new TH1F("h_Nhits2","h_Nhits station 2",20,0,20);
-    
-    h_vtxchi2 = new TH1F("h_vtxchi2", "BestVtx chi2perDOF; BestVtx chi2perDOF;Entries", 100, 0, 100);
-
-    h_hitsModuleID_zcut[5];
-    h_hitsPerMuonTrack_zcut[5];
+    /// MF checks
 
     for (int i = 1; i <= 4; i++) {
         h_hitsModuleID_zcut[i] = new TH1F(Form("h_hitsModuleID_zcut_%imu", i),
@@ -78,30 +67,65 @@ FairMUanalyzer::FairMUanalyzer() : inputFile_(nullptr), cbmsim_(nullptr), reco_(
         }
     }
 
-    h_2d = new TH2D("h_2d",mf_?"Electron VS Muon angle; Electron [rad]; Muon [rad]":"Large VS Small angle; Large angle [rad]; Small angle [rad]" ,500,0.,0.032,500,0.,0.005);
-    h_2d_ref = new TH2D("h_2d_ref",mf_?"Electron VS Muon angle; Electron [rad]; Muon [rad]":"Large VS Small angle; Large angle [rad]; Small angle [rad]" ,500,0.,0.032,500,0.,0.005);
-    h_2d_bstvtx = new TH2D("h_2d_bstvtx",mf_?"Electron VS Muon angle (BestVtx); Electron [rad]; Muon [rad]":"Large VS Small angle (BestVtx); Large angle [rad]; Small angle [rad]" ,500,0.,0.032,500,0.,0.005);
+    ///////////////
 
-    h_vertex = new TH1F("h_vertex","h_vertex",600,600,1200);   
+
+    h_2d_ref = new TH2D("h_2d_ref",mf_?"Electron VS Muon angle; Electron [rad]; Muon [rad]":"Large VS Small angle; Large angle [rad]; Small angle [rad]" ,500,0.,0.032,500,0.,0.005);
+
+    ///////////////
+    //// single hist checks
 
     h_totalE = new TH1F("h_totalE","ECAL totalE;Energy [GeV]",400,0,200);
     h_clusterE = new TH1F("h_clusterE","ECAL clusterE;Energy [GeV]",400,0,200); 
 
-    //count the cases:
-    hCaseDist = new TH1I("hCaseDist", "Case Distribution", 14, 0, 14);
+    h_2d = new TH2D("h_2d",mf_?"Electron VS Muon angle; Electron [rad]; Muon [rad]":"Large VS Small angle; Large angle [rad]; Small angle [rad]" ,500,0.,0.032,500,0.,0.005);
+    h_2d_bstvtx = new TH2D("h_2d_bstvtx",mf_?"Electron VS Muon angle (BestVtx); Electron [rad]; Muon [rad]":"Large VS Small angle (BestVtx); Large angle [rad]; Small angle [rad]" ,500,0.,0.032,500,0.,0.005);
+    
+
+    /// to be refine
+    h_isMuon = new TH1F("h_isMuon", "Number of 'Muon' tracks; isMuon tracks per event;Entries", 20, 0, 20);
+    h_Ntracks = new TH1F("h_Ntracks", "Tracks multiplicity; tracks per event;Entries", 20, 0, 20);
+    h_hits_zcut = new TH1F("h_hits_zcut (MF hits)", "Number of hits in MF; Hits;Entries", 20, 0, 20);
+
+    
+    /// probably can be removed
+    h_Nhits0 = new TH1F("h_Nhits0","h_Nhits station 0",20,0,20);
+    h_Nhits1 = new TH1F("h_Nhits1","h_Nhits station 1",20,0,20);
+    h_Nhits2 = new TH1F("h_Nhits2","h_Nhits station 2",20,0,20);
+
+    //h_vertex = new TH1F("h_vertex","h_vertex",600,600,1200);   
+    //h_vtxchi2 = new TH1F("h_vtxchi2", "BestVtx chi2perDOF; BestVtx chi2perDOF;Entries", 100, 0, 100);
+    
+
+    //// case hist checks
+    hCaseDist = new TH1I("hCaseDist", "Case Distribution", case_keys.size()+1, 0, case_keys.size()+1);
+
     int ikey=1;
     for (const auto& key : case_keys) {
+
         hCaseDist->GetXaxis()->SetBinLabel(ikey, key.c_str());ikey++;
         case_h2d[key] = new TH2D(("h2d_"+key).c_str(), mf_?("Electron VS Muon angle "+key+"; Electron [rad]; Muon [rad]").c_str():("Large VS Small angle "+key+"; Large angle [rad]; Small angle [rad]").c_str(), 500,0.,0.032,500,0.,0.005);
         case_h2d_bstvtx[key] = new TH2D(("h2d_bstvtx_"+key).c_str(), mf_?("Electron VS Muon angle "+key+"; Electron [rad]; Muon [rad]").c_str():("Large VS Small angle "+key+"; Large angle [rad]; Small angle [rad]").c_str(), 500,0.,0.032,500,0.,0.005);
 
-
         case_h1d_vertex[key] = new TH1D( ("h_vertex_"+key).c_str(),(key+";Reconstructed Z of best vertex [cm]").c_str(),1200,0,1200);//660,780
-
+        case_h1d_Vtxchi2[key] = new TH1D( ("case_h1d_Vtxchi2_"+key).c_str(),("case_h1d_Vtxchi2_"+key).c_str(),100,0,100 );
 
         case_h1d_bstvtx_x[key] = new TH1D(("case_h1d_bstvtx_x_"+key).c_str(),  ("bestvertex x at target "+key+";bestvertex x at target [cm]").c_str(),120,-6,6 );
         case_h1d_bstvtx_y[key] = new TH1D(("case_h1d_bstvtx_y_"+key).c_str(),  ("bestvertex y at target "+key+";bestvertex y at target [cm]").c_str(),120,-6,6 );
         case_h1d_bstvtx_r[key] = new TH1D(("case_h1d_bstvtx_r_"+key).c_str(),  ("bestvertex r at target "+key+";bestvertex r at target [cm]").c_str(),120,-6,6 );
+
+        case_h1d_LeftOverhits0[key] = new TH1D( ("case_h1d_LeftOverhits0perModule_"+key+";Hits").c_str(),("case_h1d_LeftOverhits0perModule_"+key+";Hits").c_str() ,20,0,20);
+        case_h1d_LeftOverhits1[key] = new TH1D( ("case_h1d_LeftOverhits1perModule_"+key+";Hits").c_str(),("case_h1d_LeftOverhits1perModule_"+key+";Hits").c_str() ,20,0,20);
+        case_h1d_LeftOverhits2[key] = new TH1D( ("case_h1d_LeftOverhits2perModule_"+key+";Hits").c_str(),("case_h1d_LeftOverhits2perModule_"+key+";Hits").c_str() ,20,0,20);
+        
+        case_h1d_aco[key] = new TH1D( ("case_h1d_aco_"+key).c_str(),("case_h1d_aco_"+key).c_str(),100,0,10 );
+
+        for(int j = 0; j<6;j++){
+
+            case_h1d_LeftOverhits0perModule[j][key] = new TH1D( ("case_h1d_LeftOverhits0perModule_"+key+"_Module_"+std::to_string(j)+";Hits").c_str(),("case_h1d_LeftOverhits0perModule_"+key+"_"+std::to_string(j)+";Hits").c_str() ,20,0,20);
+            case_h1d_LeftOverhits1perModule[j][key] = new TH1D( ("case_h1d_LeftOverhits1perModule_"+key+"_Module_"+std::to_string(j)+";Hits").c_str(),("case_h1d_LeftOverhits1perModule_"+key+"_"+std::to_string(j)+";Hits").c_str() ,20,0,20);
+            case_h1d_LeftOverhits2perModule[j][key] = new TH1D( ("case_h1d_LeftOverhits2perModule_"+key+"_Module_"+std::to_string(j)+";Hits").c_str(),("case_h1d_LeftOverhits2perModule_"+key+"_"+std::to_string(j)+";Hits").c_str() ,20,0,20);
+        }
 
         for(int j = 0; j<3;j++){
 
@@ -389,6 +413,14 @@ void FairMUanalyzer::SaveResults() {
         hist->Write();
     }
 
+    for (auto& [key, hist] : case_h1d_Vtxchi2) {
+        hist->Write();
+    }
+
+    for (auto& [key, hist] : case_h1d_aco) {
+        hist->Write();
+    }
+
     for (auto& [key, hist] : case_h1d_bstvtx_x) {
         hist->Write();
     }
@@ -423,6 +455,30 @@ void FairMUanalyzer::SaveResults() {
 
     }
 
+    for (auto& [key, hist] : case_h1d_LeftOverhits0) {
+        hist->Write();
+    }
+    for (auto& [key, hist] : case_h1d_LeftOverhits1) {
+        hist->Write();
+    }
+    for (auto& [key, hist] : case_h1d_LeftOverhits2) {
+        hist->Write();
+    }
+
+    for(int j = 0; j<6;j++){
+
+        for (auto& [key, hist] : case_h1d_LeftOverhits0perModule[j]) {
+            hist->Write();
+        }
+        for (auto& [key, hist] : case_h1d_LeftOverhits1perModule[j]) {
+            hist->Write();
+        }
+        for (auto& [key, hist] : case_h1d_LeftOverhits2perModule[j]) {
+            hist->Write();
+        }
+
+    }
+
 
     /*
     for (auto& [key, graph] : case_g2d) {
@@ -437,7 +493,7 @@ void FairMUanalyzer::SaveResults() {
 
     hCaseDist->Write();
     h_hits_zcut->Write();
-    h_vtxchi2->Write();
+    //h_vtxchi2->Write();
 
     h_Ntracks->GetYaxis()->SetRangeUser(0, h_Ntracks->GetMaximum() * 1.2);
     h_Ntracks->Write();
@@ -450,7 +506,7 @@ void FairMUanalyzer::SaveResults() {
     h_isMuon->Write();
 
 
-    h_vertex->Write();
+    //h_vertex->Write();
     h_totalE->Write();
     h_clusterE->Write();
 
@@ -459,9 +515,9 @@ void FairMUanalyzer::SaveResults() {
 
     if(!savepdf_)return;
 
-    TCanvas* c5021 = new TCanvas(Form("c5021_%s", outputPrefix_.Data()), "Tracks XYZ at target", 600, 400);
-    h_vertex->Draw();
-    c5021->SaveAs(Form("%s_c5021_h_vertex.pdf", outputPrefix_.Data()));
+    //TCanvas* c5021 = new TCanvas(Form("c5021_%s", outputPrefix_.Data()), "Tracks XYZ at target", 600, 400);
+    //h_vertex->Draw();
+    //c5021->SaveAs(Form("%s_c5021_h_vertex.pdf", outputPrefix_.Data()));
 
     TCanvas* c5022 = new TCanvas(Form("c5022_%s", outputPrefix_.Data()), "Tracks case_h1d_bstvtx_z at target", 1600, 400);
     c5022->Divide(4,1);

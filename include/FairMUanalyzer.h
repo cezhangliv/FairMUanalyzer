@@ -51,6 +51,7 @@ public:
 
 
 private:
+
     std::string inputFilePath_;
     TString outputPrefix_;
     
@@ -71,22 +72,22 @@ private:
 
     MUonERecoOutputAnalysis* reco_;
 
-    // Histograms
+    // Histograms - MF checks
     TH1F* h_residual_hitOnTrack[3];
     TH1F* h_residual_hitOffTrack[3];
     TH1F* h_residual_hitOnTrackModule[3][4];
     TH1F* h_residual_hitOffTrackModule[3][4];
     TH1F* h_residual_hitAllTrackModule[3][4];
 
-    TH1F* h_hits_zcut;
+    TH1F* h_hits_zcut; // MF hits
     TH1F* h_hitsModuleID_zcut[5];
     TH1F* h_hitsPerMuonTrack_zcut[5];
     TH1F* h_goldenMuon_isMuon[3];
 
-    TH1F* h_vertex;
+    //TH1F* h_vertex;
+    //TH1F* h_vtxchi2;
 
-    TH1F* h_vtxchi2;
-    TH1F* h_isMuon;
+    TH1F* h_isMuon; 
     TH1F* h_Ntracks;
     TH1F* h_Nhits0;
     TH1F* h_Nhits1;
@@ -107,18 +108,19 @@ private:
     TF1 *f_elastic;
     TGraph* g_elastic;
     TH1I* hCaseDist;
-    std::vector<std::string> case_keys = {"Total","golden","t0all","t0mem","t0mee","t0mmm","t0me<m","t1all","t1mem","t1mee","t1mmm","t1mmmband","t1me<m"};
+    std::vector<std::string> case_keys = {"Total","TotalECALCut","TotalHitCut","TotalTrackChiCut","TotalNTrackCut","LeftOverhitCut","golden","t0all","t0mem","t0mee","t0mmm","t0me<m","t1all","t1mem","t1mee","t1mmm","t1mmmband","t1mmmoutofband","t1me<m"};
     std::map<std::string, int> case_counts;
     std::map<std::string, TH2D *> case_h2d;
     std::map<std::string, TH2D *> case_h2d_bstvtx;
+    
     std::map<std::string, TH1D *> case_h1d_vertex;
 
     std::map<std::string, TH1D *> case_h1d_LeftOverhits0;
     std::map<std::string, TH1D *> case_h1d_LeftOverhits1;
     std::map<std::string, TH1D *> case_h1d_LeftOverhits2;
-    std::map<std::string, TH1D *> case_h1d_LeftOverhits0perModule;
-    std::map<std::string, TH1D *> case_h1d_LeftOverhits1perModule;
-    std::map<std::string, TH1D *> case_h1d_LeftOverhits2perModule;
+    std::map<std::string, TH1D *> case_h1d_LeftOverhits0perModule[6];
+    std::map<std::string, TH1D *> case_h1d_LeftOverhits1perModule[6];
+    std::map<std::string, TH1D *> case_h1d_LeftOverhits2perModule[6];
     std::map<std::string, TH1D *> case_h1d_Vtxchi2;
     std::map<std::string, TH1D *> case_h1d_aco;
     

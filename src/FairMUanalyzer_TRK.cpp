@@ -24,12 +24,17 @@ void FairMUanalyzer::AnalyzeTRK() {
     for (Long64_t i = 0; i < N; ++i) {
 
         if (i % (N / 10) == 0 || i == N - 1) {double progress = 100.0 * i / N;printf("Processing: %.1f%% (%lld/%lld)\n", progress, i, N);}
-        case_counts["Total"]++;
+        
 
         cbmsim_->GetEntry(i);
 
         h_totalE->Fill(totalE_);
         h_clusterE->Fill(clusterE_);
+
+        /// total
+        case_counts["Total"]++;
+        case_h1d_vertex["Total"]->Fill(bestvtx.zPositionFit());
+        case_h1d_Vtxchi2["Total"]->Fill(bestvtx.chi2perDegreeOfFreedom());
 
         // apply cut: ECAL cluster energy <= 2/3 GeV
         //if (clusterE_ < 2.0) continue;//603
@@ -41,8 +46,11 @@ void FairMUanalyzer::AnalyzeTRK() {
         const auto& hits = reco_->reconstructedHits();
         const auto& bestvtx = reco_->bestVertex();
 
+        std::vector<const MUonERecoOutputHitAnalysis*> LeftOverHits0;
+        std::vector<const MUonERecoOutputHitAnalysis*> LeftOverHits1;
+        std::vector<const MUonERecoOutputHitAnalysis*> LeftOverHits2;
+
         int n_muons = 0;
-        
         std::vector<const MUonERecoOutputTrackAnalysis*> muon_tracks;
         for (auto const& track : tracks) {
             if (track.isMuon() ) {
@@ -52,15 +60,14 @@ void FairMUanalyzer::AnalyzeTRK() {
         }
         h_isMuon->Fill(n_muons);
         h_Ntracks->Fill(tracks.size());
-
-        h_vertex->Fill(bestvtx.zPositionFit());
-        case_h1d_vertex["Total"]->Fill(bestvtx.zPositionFit());
+        
 
         int nhits_zcut = 0;
         int nhits_sec0=0; 
         int nhits_sec1=0;
         int nhits_sec2=0;
 
+        // MF checks
         for (auto const& hit : hits) {
             if (hit.z() > 1000) {
                 nhits_zcut++;
@@ -151,6 +158,12 @@ void FairMUanalyzer::AnalyzeTRK() {
 
             }
 
+            if(isGolden==true){
+
+                case_h1d_vertex["TotalHitCut"]->Fill(bestvtx.zPositionFit());
+                case_h1d_Vtxchi2["TotalHitCut"]->Fill(bestvtx.chi2perDegreeOfFreedom());
+            }
+
             //golden muon step #4: 1/2 tracks/station, and nhit_giovanni cut
             //note we don't require muonid at this moment, just (1track + 2track + (1+) tracks) or (1track + 1track + 2 tracks) signature is ok
             //we have to do this way because we  need those 'wrong' events (even if we know by MF) to for the next step to see the count/distributions
@@ -177,15 +190,23 @@ void FairMUanalyzer::AnalyzeTRK() {
                 ( sectors.size() != 3 || !(ntrk_sec0==1 && ntrk_sec1>=1 && ntrk_sec2>=2) || (nhits_sec2 > maxNhitInStat_ ) ) // suggested by Giovanni A, can be tested by turning HitCutsOn ON/OFF
                 )isGolden = false;
 
-            if(isGolden==true)h_Nhits0->Fill(nhits_sec0);
-            if(isGolden==true)h_Nhits1->Fill(nhits_sec1);
-            if(isGolden==true)h_Nhits2->Fill(nhits_sec2);
+            if(isGolden==true){
 
-            /*
+                h_Nhits0->Fill(nhits_sec0);
+                h_Nhits1->Fill(nhits_sec1);
+                h_Nhits2->Fill(nhits_sec2);
+
+                case_h1d_vertex["TotalNTrackCut"]->Fill(bestvtx.zPositionFit());
+                case_h1d_Vtxchi2["TotalNTrackCut"]->Fill(bestvtx.chi2perDegreeOfFreedom());
+
+            }
+
+            bool LeftOverHit = false;
+            
             if(TGT1
                 && 
                 ( !(nhits_sec0==6 && nhits_sec1==12 ) ) 
-                )isGolden = false;
+                )LeftOverHit = true;//isGolden = false;
                 
 
             if(TGT2 
@@ -193,14 +214,31 @@ void FairMUanalyzer::AnalyzeTRK() {
                 && 
                 //(  !(nhits_sec0==6 && nhits_sec1==6 && nhits_sec2==12) ) 
                 (  !(nhits_sec1==6 ) ) 
-                )isGolden = false;
+                )LeftOverHit = true;//isGolden = false;
             else if(TGT2 
                 && !useTightTrackCutTgt2_
                 && 
                 //( sectors.size() != 3 || !(ntrk_sec0==1 && ntrk_sec1==1 && ntrk_sec2>=2) || (nhits_sec2 > maxNhitInStat_ ) ) // suggested by Giovanni A, can be tested by turning HitCutsOn ON/OFF
                 ( !(nhits_sec0==6 && nhits_sec1>=6 && nhits_sec2>=12) ) // suggested by Giovanni A, can be tested by turning HitCutsOn ON/OFF
-                )isGolden = false;
-            */
+                )LeftOverHit = true;//isGolden = false;
+            
+
+            if(LeftOverHit){
+
+                case_h1d_vertex["LeftOverhitCut"]->Fill(bestvtx.zPositionFit());
+                case_h1d_Vtxchi2["LeftOverhitCut"]->Fill(bestvtx.chi2perDegreeOfFreedom());
+
+                case_h1d_LeftOverhits0["LeftOverhitCut"]->Fill(nhits_sec0);
+                case_h1d_LeftOverhits1["LeftOverhitCut"]->Fill(nhits_sec1);
+                case_h1d_LeftOverhits2["LeftOverhitCut"]->Fill(nhits_sec2);
+                
+                case_h1d_LeftOverhits0perModule[6];
+                case_h1d_LeftOverhits1perModule[6];
+                case_h1d_LeftOverhits2perModule[6];
+
+
+
+            }
 
             if (isGolden) {
 
@@ -217,7 +255,7 @@ void FairMUanalyzer::AnalyzeTRK() {
                 //Elastic step #1: tgt position
                 //if(!intgt)continue;
 
-                h_vtxchi2->Fill(bestvtx.chi2perDegreeOfFreedom());
+                //h_vtxchi2->Fill(bestvtx.chi2perDegreeOfFreedom());
                 //Elastic step #2 (optional): bestvtx chi2perDOF
                 //if(bestvtx.chi2perDegreeOfFreedom()>10)continue;
 
@@ -672,6 +710,10 @@ void FairMUanalyzer::AnalyzeTRK() {
                         case_h2d_bstvtx["t1mmmband"]->Fill(bestvtx.electronTheta(),bestvtx.muonTheta());
                         case_h1d_vertex["t1mmmband"]->Fill(bestvtx.zPositionFit());
                     }
+                    else{
+                        case_h2d_bstvtx["t1mmmoutofband"]->Fill(bestvtx.electronTheta(),bestvtx.muonTheta());
+                        case_h1d_vertex["t1mmmoutofband"]->Fill(bestvtx.zPositionFit());
+                    }
 
                     //case_g2d_bstvtx["t1all"]->SetPoint(case_g2d_bstvtx["t1all"]->GetN(), bestvtx.electronTheta(),bestvtx.muonTheta());
                     //case_g2d_bstvtx["t1mmm"]->SetPoint(case_g2d_bstvtx["t1mmm"]->GetN(), bestvtx.electronTheta(),bestvtx.muonTheta());
@@ -680,6 +722,7 @@ void FairMUanalyzer::AnalyzeTRK() {
                     //case_h2d_bstvtx["golden"]->Fill(bestvtx.electronTheta(),bestvtx.muonTheta());
                 }    
                 if (sec0 == 1 && sec1e == 1 && sec1muon == 1 && MF){ 
+
                     angle_e=in.at(0).Angle(oute.at(0));    
                     angle_mu=in.at(0).Angle(outmuon.at(0)); 
                     aco=acoplanarity(in.at(0),oute.at(0),outmuon.at(0)); 
