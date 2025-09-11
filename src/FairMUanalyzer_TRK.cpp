@@ -28,23 +28,25 @@ void FairMUanalyzer::AnalyzeTRK() {
 
         cbmsim_->GetEntry(i);
 
-        h_totalE->Fill(totalE_);
-        h_clusterE->Fill(clusterE_);
+        const auto& tracks = reco_->reconstructedTracks();
+        const auto& hits = reco_->reconstructedHits();
+        const auto& bestvtx = reco_->bestVertex();
 
+        
+        
         /// total
         case_counts["Total"]++;
         case_h1d_vertex["Total"]->Fill(bestvtx.zPositionFit());
         case_h1d_Vtxchi2["Total"]->Fill(bestvtx.chi2perDegreeOfFreedom());
+
+        h_totalE->Fill(totalE_);
+        h_clusterE->Fill(clusterE_);
 
         // apply cut: ECAL cluster energy <= 2/3 GeV
         //if (clusterE_ < 2.0) continue;//603
         //if (clusterE_ < 3.0) continue;//604
         //if (totalE_ < 2.0) continue;//605
         //if (totalE_ < 3.0) continue;//606
-
-        const auto& tracks = reco_->reconstructedTracks();
-        const auto& hits = reco_->reconstructedHits();
-        const auto& bestvtx = reco_->bestVertex();
 
         std::vector<const MUonERecoOutputHitAnalysis*> LeftOverHits0;
         std::vector<const MUonERecoOutputHitAnalysis*> LeftOverHits1;
