@@ -66,6 +66,35 @@ void FairMUanalyzer::AnalyzeTRK() {
             if (hit.stationID()==1)nhits_sec1++;
             if (hit.stationID()==2)nhits_sec2++;
 
+            bool found = false;
+
+            for (const auto& track : tracks) {
+                for (const auto& trkHit : track.hits()) {
+                    if (trkHit->index() == hit.index()) {
+                        found = true;
+                        break;
+                    }
+                }
+                if (found) break;
+            }
+            if (!found) {
+                switch (hit.sector()) {
+                    case 0:
+                        LeftOverHits0.push_back(&hit);
+                        break;
+                    case 1:
+                        LeftOverHits1.push_back(&hit);
+                        break;
+                    case 2:
+                        LeftOverHits2.push_back(&hit);
+                        break;
+                    default:
+                        std::cerr << "Warning: unexpected sector " << hit.sector()
+                                  << " for hit index " << hit.index() << std::endl;
+                        break;
+                }
+            }
+
         }
         h_hits_zcut->Fill(nhits_MF);
 
@@ -169,18 +198,20 @@ void FairMUanalyzer::AnalyzeTRK() {
 
             bool LeftOverHit = false;
             
-            if(TGT1
-                && 
-                ( !(nhits_sec0==6 && nhits_sec1==12 ) ) 
-                )LeftOverHit = true;//isGolden = false;
-                
-
+            if(TGT1 && ( !(nhits_sec0==6 && nhits_sec1==12 ) ) ){
+                if(LeftOverHits0.size()==0 && LeftOverHits1.size()==0)std::cerr << "Warning: unexpected LeftOverHit check " << std::endl;
+                LeftOverHit = true;//isGolden = false;    
+            }
+            
             if(TGT2 
                 && useTightTrackCutTgt2_
                 && 
                 //(  !(nhits_sec0==6 && nhits_sec1==6 && nhits_sec2==12) ) 
                 (  !(nhits_sec1==6 ) ) 
-                )LeftOverHit = true;//isGolden = false;
+                ){
+                if(LeftOverHits0.size()==0 && LeftOverHits1.size()==0 && LeftOverHits2.size()==0)std::cerr << "Warning: unexpected LeftOverHit check " << std::endl;
+                LeftOverHit = true;//isGolden = false;
+            }
             else if(TGT2 
                 && !useTightTrackCutTgt2_
                 && 
@@ -191,18 +222,16 @@ void FairMUanalyzer::AnalyzeTRK() {
 
             if(LeftOverHit){
 
-                case_h1d_vertex["LeftOverhitCut"]->Fill(bestvtx.zPositionFit());
-                case_h1d_Vtxchi2["LeftOverhitCut"]->Fill(bestvtx.chi2perDegreeOfFreedom());
+                case_h1d_vertex["AllLeftOverhit"]->Fill(bestvtx.zPositionFit());
+                case_h1d_Vtxchi2["AllLeftOverhit"]->Fill(bestvtx.chi2perDegreeOfFreedom());
 
-                case_h1d_LeftOverhits0["LeftOverhitCut"]->Fill(nhits_sec0);
-                case_h1d_LeftOverhits1["LeftOverhitCut"]->Fill(nhits_sec1);
-                case_h1d_LeftOverhits2["LeftOverhitCut"]->Fill(nhits_sec2);
+                case_h1d_LeftOverhits0["AllLeftOverhit"]->Fill(LeftOverHits0.size());
+                case_h1d_LeftOverhits1["AllLeftOverhit"]->Fill(LeftOverHits1.size());
+                case_h1d_LeftOverhits2["AllLeftOverhit"]->Fill(LeftOverHits2.size());
                 
-                case_h1d_LeftOverhits0perModule[6];
-                case_h1d_LeftOverhits1perModule[6];
-                case_h1d_LeftOverhits2perModule[6];
-
-
+                for (auto const& hit : LeftOverHits0)case_h1d_LeftOverhits0perModule[LeftOverHits0.moduleID()]["AllLeftOverhit"]->Fill(LeftOverHits0.size());
+                for (auto const& hit : LeftOverHits1)case_h1d_LeftOverhits1perModule[LeftOverHits1.moduleID()]["AllLeftOverhit"]->Fill(LeftOverHits1.size());
+                for (auto const& hit : LeftOverHits2)case_h1d_LeftOverhits2perModule[LeftOverHits2.moduleID()]["AllLeftOverhit"]->Fill(LeftOverHits2.size());
 
             }
 
@@ -212,6 +241,15 @@ void FairMUanalyzer::AnalyzeTRK() {
                 case_counts["golden"]++;
 
                 case_h1d_vertex["golden"]->Fill(bestvtx.zPositionFit());
+                case_h1d_Vtxchi2["golden"]->Fill(bestvtx.chi2perDegreeOfFreedom());
+
+                case_h1d_LeftOverhits0["golden"]->Fill(LeftOverHits0.size());
+                case_h1d_LeftOverhits1["golden"]->Fill(LeftOverHits1.size());
+                case_h1d_LeftOverhits2["golden"]->Fill(LeftOverHits2.size());
+                
+                for (auto const& hit : LeftOverHits0)case_h1d_LeftOverhits0perModule[LeftOverHits0.moduleID()]["golden"]->Fill(LeftOverHits0.size());
+                for (auto const& hit : LeftOverHits1)case_h1d_LeftOverhits1perModule[LeftOverHits1.moduleID()]["golden"]->Fill(LeftOverHits1.size());
+                for (auto const& hit : LeftOverHits2)case_h1d_LeftOverhits2perModule[LeftOverHits2.moduleID()]["golden"]->Fill(LeftOverHits2.size());
 
 
                 //event selection #1: within target
@@ -272,6 +310,28 @@ void FairMUanalyzer::AnalyzeTRK() {
                         case_h2d["t1me<m"]->Fill(bestvtx.electronTheta(),bestvtx.muonTheta());
                         //case_g2d["t1me<m"]->SetPoint(case_g2d["t1me<m"]->GetN(),bestvtx.electronTheta(),bestvtx.muonTheta());
                     }
+
+                    case_h1d_aco["t1mem"]->Fill(abs(bestvtx.modifiedAcoplanarity()));
+                    case_h1d_vertex["t1mem"]->Fill(bestvtx.zPositionFit());
+                    case_h1d_Vtxchi2["t1mem"]->Fill(bestvtx.chi2perDegreeOfFreedom());
+                    case_h1d_LeftOverhits0["t1mem"]->Fill(LeftOverHits0.size());
+                    case_h1d_LeftOverhits1["t1mem"]->Fill(LeftOverHits1.size());
+                    case_h1d_LeftOverhits2["t1mem"]->Fill(LeftOverHits2.size());
+                    for (auto const& hit : LeftOverHits0)case_h1d_LeftOverhits0perModule[LeftOverHits0.moduleID()]["t1mem"]->Fill(LeftOverHits0.size());
+                    for (auto const& hit : LeftOverHits1)case_h1d_LeftOverhits1perModule[LeftOverHits1.moduleID()]["t1mem"]->Fill(LeftOverHits1.size());
+                    for (auto const& hit : LeftOverHits2)case_h1d_LeftOverhits2perModule[LeftOverHits2.moduleID()]["t1mem"]->Fill(LeftOverHits2.size());
+
+                    case_h1d_aco["t1all"]->Fill(abs(bestvtx.modifiedAcoplanarity()));
+                    case_h1d_vertex["t1all"]->Fill(bestvtx.zPositionFit());
+                    case_h1d_Vtxchi2["t1all"]->Fill(bestvtx.chi2perDegreeOfFreedom());
+                    case_h1d_LeftOverhits0["t1all"]->Fill(LeftOverHits0.size());
+                    case_h1d_LeftOverhits1["t1all"]->Fill(LeftOverHits1.size());
+                    case_h1d_LeftOverhits2["t1all"]->Fill(LeftOverHits2.size());
+                    for (auto const& hit : LeftOverHits0)case_h1d_LeftOverhits0perModule[LeftOverHits0.moduleID()]["t1all"]->Fill(LeftOverHits0.size());
+                    for (auto const& hit : LeftOverHits1)case_h1d_LeftOverhits1perModule[LeftOverHits1.moduleID()]["t1all"]->Fill(LeftOverHits1.size());
+                    for (auto const& hit : LeftOverHits2)case_h1d_LeftOverhits2perModule[LeftOverHits2.moduleID()]["t1all"]->Fill(LeftOverHits2.size());
+
+
                     continue; // so skip the rest part using useTightTrackCutTgt2_ Ntrack==2
                 }
 
@@ -291,7 +351,6 @@ void FairMUanalyzer::AnalyzeTRK() {
 
                     if(tracks.at(j).sector()==1) {
                         TVector3 v(tracks.at(j).xSlope(),tracks.at(j).ySlope(),1.0); v=v.Unit(); in.push_back(v);muone_in.push_back(&tracks.at(j));
-
                         //Eugenia's cut https://indico.cern.ch/event/1476217/contributions/6217032/attachments/2962101/5210167/tesi_phd_weekly.pdf
                         //if(v.Theta()>4e-3)continue;
                         sec1++;
@@ -312,10 +371,6 @@ void FairMUanalyzer::AnalyzeTRK() {
                     
                     if(tracks.at(j).sector()==0) {
                         TVector3 v(tracks.at(j).xSlope(),tracks.at(j).ySlope(),1.0); v=v.Unit(); in.push_back(v);muone_in.push_back(&tracks.at(j));
-                        
-                        //Eugenia's cut https://indico.cern.ch/event/1476217/contributions/6217032/attachments/2962101/5210167/tesi_phd_weekly.pdf
-                        //if(v.Theta()>4e-3 )continue;
-
                         sec0++;
                     }
                     if(tracks.at(j).sector()==1 && MF) {
@@ -422,9 +477,6 @@ void FairMUanalyzer::AnalyzeTRK() {
                     case_h2d_bstvtx["t1all"]->Fill(bestvtx.electronTheta(),bestvtx.muonTheta());
                     case_h2d_bstvtx["t1mem"]->Fill(bestvtx.electronTheta(),bestvtx.muonTheta());
 
-                    case_h1d_vertex["t1all"]->Fill(bestvtx.zPositionFit());
-                    case_h1d_vertex["t1mem"]->Fill(bestvtx.zPositionFit());
-
                     //case_g2d["t1all"]->SetPoint(case_g2d["t1all"]->GetN(),angle_e,angle_mu);
                     //case_g2d["t1mem"]->SetPoint(case_g2d["t1mem"]->GetN(),angle_e,angle_mu);
                     //case_g2d_bstvtx["t1all"]->SetPoint(case_g2d_bstvtx["t1all"]->GetN(),bestvtx.electronTheta(),bestvtx.muonTheta());
@@ -447,6 +499,29 @@ void FairMUanalyzer::AnalyzeTRK() {
                     }
                     //case_h2d["golden"]->Fill(angle_e,angle_mu);
                     //case_h2d_bstvtx["golden"]->Fill(bestvtx.electronTheta(),bestvtx.muonTheta());
+
+                    case_h1d_aco["t1mem"]->Fill(abs(aco));
+                    case_h1d_vertex["t1mem"]->Fill(bestvtx.zPositionFit());
+                    case_h1d_Vtxchi2["t1mem"]->Fill(bestvtx.chi2perDegreeOfFreedom());
+                    case_h1d_LeftOverhits0["t1mem"]->Fill(LeftOverHits0.size());
+                    case_h1d_LeftOverhits1["t1mem"]->Fill(LeftOverHits1.size());
+                    case_h1d_LeftOverhits2["t1mem"]->Fill(LeftOverHits2.size());
+                    for (auto const& hit : LeftOverHits0)case_h1d_LeftOverhits0perModule[LeftOverHits0.moduleID()]["t1mem"]->Fill(LeftOverHits0.size());
+                    for (auto const& hit : LeftOverHits1)case_h1d_LeftOverhits1perModule[LeftOverHits1.moduleID()]["t1mem"]->Fill(LeftOverHits1.size());
+                    for (auto const& hit : LeftOverHits2)case_h1d_LeftOverhits2perModule[LeftOverHits2.moduleID()]["t1mem"]->Fill(LeftOverHits2.size());
+
+                    case_h1d_aco["t1all"]->Fill(abs(aco));
+                    case_h1d_vertex["t1all"]->Fill(bestvtx.zPositionFit());
+                    case_h1d_Vtxchi2["t1all"]->Fill(bestvtx.chi2perDegreeOfFreedom());
+                    case_h1d_LeftOverhits0["t1all"]->Fill(LeftOverHits0.size());
+                    case_h1d_LeftOverhits1["t1all"]->Fill(LeftOverHits1.size());
+                    case_h1d_LeftOverhits2["t1all"]->Fill(LeftOverHits2.size());
+                    for (auto const& hit : LeftOverHits0)case_h1d_LeftOverhits0perModule[LeftOverHits0.moduleID()]["t1all"]->Fill(LeftOverHits0.size());
+                    for (auto const& hit : LeftOverHits1)case_h1d_LeftOverhits1perModule[LeftOverHits1.moduleID()]["t1all"]->Fill(LeftOverHits1.size());
+                    for (auto const& hit : LeftOverHits2)case_h1d_LeftOverhits2perModule[LeftOverHits2.moduleID()]["t1all"]->Fill(LeftOverHits2.size());
+
+
+
                 }    
                 if (sec1 == 1 && sec2e == 2 && sec2muon == 0 && MF){ 
                     angle_e=in.at(0).Angle(oute.at(0));    
@@ -529,9 +604,6 @@ void FairMUanalyzer::AnalyzeTRK() {
                     
                     case_counts["t1mee"]++; 
                     case_counts["t1all"]++; 
-                    
-                    case_h1d_vertex["t1all"]->Fill(bestvtx.zPositionFit());
-                    case_h1d_vertex["t1mee"]->Fill(bestvtx.zPositionFit());
 
                     if(angle_e>angle_mu){
                         case_h2d["t1mee"]->Fill(angle_e,angle_mu);case_h2d["t1all"]->Fill(angle_e,angle_mu);
@@ -546,6 +618,27 @@ void FairMUanalyzer::AnalyzeTRK() {
                     
                     case_h2d_bstvtx["t1all"]->Fill(bestvtx.electronTheta(),bestvtx.muonTheta());
                     case_h2d_bstvtx["t1mee"]->Fill(bestvtx.electronTheta(),bestvtx.muonTheta());
+
+                    case_h1d_aco["t1mee"]->Fill(abs(aco));
+                    case_h1d_vertex["t1mee"]->Fill(bestvtx.zPositionFit());
+                    case_h1d_Vtxchi2["t1mee"]->Fill(bestvtx.chi2perDegreeOfFreedom());
+                    case_h1d_LeftOverhits0["t1mee"]->Fill(LeftOverHits0.size());
+                    case_h1d_LeftOverhits1["t1mee"]->Fill(LeftOverHits1.size());
+                    case_h1d_LeftOverhits2["t1mee"]->Fill(LeftOverHits2.size());
+                    for (auto const& hit : LeftOverHits0)case_h1d_LeftOverhits0perModule[LeftOverHits0.moduleID()]["t1mee"]->Fill(LeftOverHits0.size());
+                    for (auto const& hit : LeftOverHits1)case_h1d_LeftOverhits1perModule[LeftOverHits1.moduleID()]["t1mee"]->Fill(LeftOverHits1.size());
+                    for (auto const& hit : LeftOverHits2)case_h1d_LeftOverhits2perModule[LeftOverHits2.moduleID()]["t1mee"]->Fill(LeftOverHits2.size());
+
+                    case_h1d_aco["t1all"]->Fill(abs(aco));
+                    case_h1d_vertex["t1all"]->Fill(bestvtx.zPositionFit());
+                    case_h1d_Vtxchi2["t1all"]->Fill(bestvtx.chi2perDegreeOfFreedom());
+                    case_h1d_LeftOverhits0["t1all"]->Fill(LeftOverHits0.size());
+                    case_h1d_LeftOverhits1["t1all"]->Fill(LeftOverHits1.size());
+                    case_h1d_LeftOverhits2["t1all"]->Fill(LeftOverHits2.size());
+                    for (auto const& hit : LeftOverHits0)case_h1d_LeftOverhits0perModule[LeftOverHits0.moduleID()]["t1all"]->Fill(LeftOverHits0.size());
+                    for (auto const& hit : LeftOverHits1)case_h1d_LeftOverhits1perModule[LeftOverHits1.moduleID()]["t1all"]->Fill(LeftOverHits1.size());
+                    for (auto const& hit : LeftOverHits2)case_h1d_LeftOverhits2perModule[LeftOverHits2.moduleID()]["t1all"]->Fill(LeftOverHits2.size());
+
 
                     
 
@@ -655,8 +748,7 @@ void FairMUanalyzer::AnalyzeTRK() {
                     case_counts["t1mmm"]++; 
                     case_counts["t1all"]++; 
 
-                    case_h1d_vertex["t1all"]->Fill(bestvtx.zPositionFit());
-                    case_h1d_vertex["t1mmm"]->Fill(bestvtx.zPositionFit());
+                    
                     if( bestvtx.muonTheta()>0.0003 && (bestvtx.zPositionFit()<600 || bestvtx.zPositionFit()>1200))std::cout<<"strange mmm: "<<bestvtx.zPositionFit()<<std::endl;
                     
                     if(angle_e>angle_mu){
@@ -672,20 +764,61 @@ void FairMUanalyzer::AnalyzeTRK() {
                     
                     case_h2d_bstvtx["t1all"]->Fill(bestvtx.electronTheta(),bestvtx.muonTheta());
                     case_h2d_bstvtx["t1mmm"]->Fill(bestvtx.electronTheta(),bestvtx.muonTheta());
-                    if( bestvtx.muonTheta()>0.0003 ){
-                        case_h2d_bstvtx["t1mmmband"]->Fill(bestvtx.electronTheta(),bestvtx.muonTheta());
-                        case_h1d_vertex["t1mmmband"]->Fill(bestvtx.zPositionFit());
-                    }
-                    else{
-                        case_h2d_bstvtx["t1mmmoutofband"]->Fill(bestvtx.electronTheta(),bestvtx.muonTheta());
-                        case_h1d_vertex["t1mmmoutofband"]->Fill(bestvtx.zPositionFit());
-                    }
-
+                    
                     //case_g2d_bstvtx["t1all"]->SetPoint(case_g2d_bstvtx["t1all"]->GetN(), bestvtx.electronTheta(),bestvtx.muonTheta());
                     //case_g2d_bstvtx["t1mmm"]->SetPoint(case_g2d_bstvtx["t1mmm"]->GetN(), bestvtx.electronTheta(),bestvtx.muonTheta());
 
                     //case_h2d["golden"]->Fill(angle_e,angle_mu);
                     //case_h2d_bstvtx["golden"]->Fill(bestvtx.electronTheta(),bestvtx.muonTheta());
+
+                    case_h1d_aco["t1mmm"]->Fill(abs(aco));
+                    case_h1d_vertex["t1mmm"]->Fill(bestvtx.zPositionFit());
+                    case_h1d_Vtxchi2["t1mmm"]->Fill(bestvtx.chi2perDegreeOfFreedom());
+                    case_h1d_LeftOverhits0["t1mmm"]->Fill(LeftOverHits0.size());
+                    case_h1d_LeftOverhits1["t1mmm"]->Fill(LeftOverHits1.size());
+                    case_h1d_LeftOverhits2["t1mmm"]->Fill(LeftOverHits2.size());
+                    for (auto const& hit : LeftOverHits0)case_h1d_LeftOverhits0perModule[LeftOverHits0.moduleID()]["t1mmm"]->Fill(LeftOverHits0.size());
+                    for (auto const& hit : LeftOverHits1)case_h1d_LeftOverhits1perModule[LeftOverHits1.moduleID()]["t1mmm"]->Fill(LeftOverHits1.size());
+                    for (auto const& hit : LeftOverHits2)case_h1d_LeftOverhits2perModule[LeftOverHits2.moduleID()]["t1mmm"]->Fill(LeftOverHits2.size());
+
+                    case_h1d_aco["t1all"]->Fill(abs(aco));
+                    case_h1d_vertex["t1all"]->Fill(bestvtx.zPositionFit());
+                    case_h1d_Vtxchi2["t1all"]->Fill(bestvtx.chi2perDegreeOfFreedom());
+                    case_h1d_LeftOverhits0["t1all"]->Fill(LeftOverHits0.size());
+                    case_h1d_LeftOverhits1["t1all"]->Fill(LeftOverHits1.size());
+                    case_h1d_LeftOverhits2["t1all"]->Fill(LeftOverHits2.size());
+                    for (auto const& hit : LeftOverHits0)case_h1d_LeftOverhits0perModule[LeftOverHits0.moduleID()]["t1all"]->Fill(LeftOverHits0.size());
+                    for (auto const& hit : LeftOverHits1)case_h1d_LeftOverhits1perModule[LeftOverHits1.moduleID()]["t1all"]->Fill(LeftOverHits1.size());
+                    for (auto const& hit : LeftOverHits2)case_h1d_LeftOverhits2perModule[LeftOverHits2.moduleID()]["t1all"]->Fill(LeftOverHits2.size());
+
+                    if( bestvtx.muonTheta()>0.0003 ){
+                        case_h2d_bstvtx["t1mmmband"]->Fill(bestvtx.electronTheta(),bestvtx.muonTheta());
+                        case_h1d_vertex["t1mmmband"]->Fill(bestvtx.zPositionFit());
+                        case_h1d_aco["t1mmmband"]->Fill(abs(aco));
+                        case_h1d_Vtxchi2["t1mmmband"]->Fill(bestvtx.chi2perDegreeOfFreedom());
+                        case_h1d_LeftOverhits0["t1mmmband"]->Fill(LeftOverHits0.size());
+                        case_h1d_LeftOverhits1["t1mmmband"]->Fill(LeftOverHits1.size());
+                        case_h1d_LeftOverhits2["t1mmmband"]->Fill(LeftOverHits2.size());
+                        for (auto const& hit : LeftOverHits0)case_h1d_LeftOverhits0perModule[LeftOverHits0.moduleID()]["t1mmmband"]->Fill(LeftOverHits0.size());
+                        for (auto const& hit : LeftOverHits1)case_h1d_LeftOverhits1perModule[LeftOverHits1.moduleID()]["t1mmmband"]->Fill(LeftOverHits1.size());
+                        for (auto const& hit : LeftOverHits2)case_h1d_LeftOverhits2perModule[LeftOverHits2.moduleID()]["t1mmmband"]->Fill(LeftOverHits2.size());
+
+                    }
+                    else{
+
+                        case_h2d_bstvtx["t1mmmoutofband"]->Fill(bestvtx.electronTheta(),bestvtx.muonTheta());
+                        case_h1d_vertex["t1mmmoutofband"]->Fill(bestvtx.zPositionFit());
+                        case_h1d_aco["t1mmmoutofband"]->Fill(abs(aco));
+                        case_h1d_Vtxchi2["t1mmmoutofband"]->Fill(bestvtx.chi2perDegreeOfFreedom());
+                        case_h1d_LeftOverhits0["t1mmmoutofband"]->Fill(LeftOverHits0.size());
+                        case_h1d_LeftOverhits1["t1mmmoutofband"]->Fill(LeftOverHits1.size());
+                        case_h1d_LeftOverhits2["t1mmmoutofband"]->Fill(LeftOverHits2.size());
+                        for (auto const& hit : LeftOverHits0)case_h1d_LeftOverhits0perModule[LeftOverHits0.moduleID()]["t1mmmoutofband"]->Fill(LeftOverHits0.size());
+                        for (auto const& hit : LeftOverHits1)case_h1d_LeftOverhits1perModule[LeftOverHits1.moduleID()]["t1mmmoutofband"]->Fill(LeftOverHits1.size());
+                        for (auto const& hit : LeftOverHits2)case_h1d_LeftOverhits2perModule[LeftOverHits2.moduleID()]["t1mmmoutofband"]->Fill(LeftOverHits2.size());
+
+                    }
+
                 }    
                 if (sec0 == 1 && sec1e == 1 && sec1muon == 1 && MF){ 
 
