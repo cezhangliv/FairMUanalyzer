@@ -104,27 +104,27 @@ FairMUanalyzer::FairMUanalyzer() : inputFile_(nullptr), cbmsim_(nullptr), reco_(
     for (const auto& key : case_keys) {
 
         hCaseDist->GetXaxis()->SetBinLabel(ikey, key.c_str());ikey++;
-        case_h2d[key] = new TH2D(("h2d_"+key).c_str(), mf_?("Electron VS Muon angle "+key+"; Electron [rad]; Muon [rad]").c_str():("Large VS Small angle "+key+"; Large angle [rad]; Small angle [rad]").c_str(), 500,0.,0.032,500,0.,0.005);
-        case_h2d_bstvtx[key] = new TH2D(("h2d_bstvtx_"+key).c_str(), mf_?("Electron VS Muon angle "+key+"; Electron [rad]; Muon [rad]").c_str():("Large VS Small angle "+key+"; Large angle [rad]; Small angle [rad]").c_str(), 500,0.,0.032,500,0.,0.005);
+        case_h2d[key] = new TH2D(("case_h2d_"+key).c_str(), mf_?("Electron VS Muon angle "+key+"; Electron [rad]; Muon [rad]").c_str():("Large VS Small angle "+key+"; Large angle [rad]; Small angle [rad]").c_str(), 500,0.,0.032,500,0.,0.005);
+        case_h2d_bstvtx[key] = new TH2D(("case_h2d_bstvtx_"+key).c_str(), mf_?("Electron VS Muon angle "+key+"; Electron [rad]; Muon [rad]").c_str():("Large VS Small angle "+key+"; Large angle [rad]; Small angle [rad]").c_str(), 500,0.,0.032,500,0.,0.005);
 
-        case_h1d_vertex[key] = new TH1D( ("h_vertex_"+key).c_str(),(key+";Reconstructed Z of best vertex [cm]").c_str(),1200,0,1200);//660,780
+        case_h1d_vertex[key] = new TH1D( ("case_h1d_vertex_"+key).c_str(),(key+";Reconstructed Z of best vertex [cm]").c_str(),1200,0,1200);//660,780
         case_h1d_Vtxchi2[key] = new TH1D( ("case_h1d_Vtxchi2_"+key).c_str(),("case_h1d_Vtxchi2_"+key).c_str(),100,0,100 );
 
         case_h1d_bstvtx_x[key] = new TH1D(("case_h1d_bstvtx_x_"+key).c_str(),  ("bestvertex x at target "+key+";bestvertex x at target [cm]").c_str(),120,-6,6 );
         case_h1d_bstvtx_y[key] = new TH1D(("case_h1d_bstvtx_y_"+key).c_str(),  ("bestvertex y at target "+key+";bestvertex y at target [cm]").c_str(),120,-6,6 );
         case_h1d_bstvtx_r[key] = new TH1D(("case_h1d_bstvtx_r_"+key).c_str(),  ("bestvertex r at target "+key+";bestvertex r at target [cm]").c_str(),120,-6,6 );
 
-        case_h1d_LeftOverhits0[key] = new TH1D( ("case_h1d_LeftOverhits0perModule_"+key+";Hits").c_str(),("case_h1d_LeftOverhits0perModule_"+key+";Hits").c_str() ,20,0,20);
-        case_h1d_LeftOverhits1[key] = new TH1D( ("case_h1d_LeftOverhits1perModule_"+key+";Hits").c_str(),("case_h1d_LeftOverhits1perModule_"+key+";Hits").c_str() ,20,0,20);
-        case_h1d_LeftOverhits2[key] = new TH1D( ("case_h1d_LeftOverhits2perModule_"+key+";Hits").c_str(),("case_h1d_LeftOverhits2perModule_"+key+";Hits").c_str() ,20,0,20);
+        case_h1d_LeftOverhits0[key] = new TH1D( ("case_h1d_Leftoverhits0_"+key+";Hits").c_str(),("case_h1d_Leftoverhits_stat0_"+key+";Hits").c_str() ,20,0,20);
+        case_h1d_LeftOverhits1[key] = new TH1D( ("case_h1d_Leftoverhits1_"+key+";Hits").c_str(),("case_h1d_Leftoverhits_stat1_"+key+";Hits").c_str() ,20,0,20);
+        case_h1d_LeftOverhits2[key] = new TH1D( ("case_h1d_Leftoverhits2_"+key+";Hits").c_str(),("case_h1d_Leftoverhits_stat2_"+key+";Hits").c_str() ,20,0,20);
         
         case_h1d_aco[key] = new TH1D( ("case_h1d_aco_"+key).c_str(),("case_h1d_aco_"+key).c_str(),100,0,10 );
 
         for(int j = 0; j<6;j++){
 
-            case_h1d_LeftOverhits0perModule[j][key] = new TH1D( ("case_h1d_LeftOverhits0perModule_"+key+"_Module_"+std::to_string(j)+";Hits").c_str(),("case_h1d_LeftOverhits0perModule_"+key+"_"+std::to_string(j)+";Hits").c_str() ,20,0,20);
-            case_h1d_LeftOverhits1perModule[j][key] = new TH1D( ("case_h1d_LeftOverhits1perModule_"+key+"_Module_"+std::to_string(j)+";Hits").c_str(),("case_h1d_LeftOverhits1perModule_"+key+"_"+std::to_string(j)+";Hits").c_str() ,20,0,20);
-            case_h1d_LeftOverhits2perModule[j][key] = new TH1D( ("case_h1d_LeftOverhits2perModule_"+key+"_Module_"+std::to_string(j)+";Hits").c_str(),("case_h1d_LeftOverhits2perModule_"+key+"_"+std::to_string(j)+";Hits").c_str() ,20,0,20);
+            case_h1d_LeftOverhits0perModule[j][key] = new TH1D( ("case_h1d_LeftoverhitsPerModule_stat0_"+"_Module_"+std::to_string(j)+"_"+key+";Hits").c_str(),("case_h1d_LeftoverhitsPerModule_stat0_"+"_Module_"+std::to_string(j)+"_"+key+";Hits").c_str() ,20,0,20);
+            case_h1d_LeftOverhits1perModule[j][key] = new TH1D( ("case_h1d_LeftoverhitsPerModule_stat1_"+"_Module_"+std::to_string(j)+"_"+key+";Hits").c_str(),("case_h1d_LeftoverhitsPerModule_stat1_"+"_Module_"+std::to_string(j)+"_"+key+";Hits").c_str() ,20,0,20);
+            case_h1d_LeftOverhits2perModule[j][key] = new TH1D( ("case_h1d_LeftoverhitsPerModule_stat2_"+"_Module_"+std::to_string(j)+"_"+key+";Hits").c_str(),("case_h1d_LeftoverhitsPerModule_stat2_"+"_Module_"+std::to_string(j)+"_"+key+";Hits").c_str() ,20,0,20);
         }
 
         for(int j = 0; j<3;j++){

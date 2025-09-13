@@ -802,6 +802,14 @@ void FairMUanalyzer::AnalyzeTRK() {
                         for (auto const& hit : LeftOverHits1)case_h1d_LeftOverhits1perModule[hit->moduleID()]["t1mmmband"]->Fill(LeftOverHits1.size());
                         for (auto const& hit : LeftOverHits2)case_h1d_LeftOverhits2perModule[hit->moduleID()]["t1mmmband"]->Fill(LeftOverHits2.size());
 
+                        if(angle_e>angle_mu){
+                            case_h2d["t1mmmband"]->Fill(angle_e,angle_mu);
+                        }
+                        else {
+                            case_h2d["t1mmmband"]->Fill(angle_mu,angle_e);
+                        }
+                        
+
                     }
                     else{
 
@@ -815,6 +823,13 @@ void FairMUanalyzer::AnalyzeTRK() {
                         for (auto const& hit : LeftOverHits0)case_h1d_LeftOverhits0perModule[hit->moduleID()]["t1mmmoutofband"]->Fill(LeftOverHits0.size());
                         for (auto const& hit : LeftOverHits1)case_h1d_LeftOverhits1perModule[hit->moduleID()]["t1mmmoutofband"]->Fill(LeftOverHits1.size());
                         for (auto const& hit : LeftOverHits2)case_h1d_LeftOverhits2perModule[hit->moduleID()]["t1mmmoutofband"]->Fill(LeftOverHits2.size());
+
+                        if(angle_e>angle_mu){
+                            case_h2d["t1mmmoutofband"]->Fill(angle_e,angle_mu);
+                        }
+                        else {
+                            case_h2d["t1mmmoutofband"]->Fill(angle_mu,angle_e);
+                        }
 
                     }
 
