@@ -232,6 +232,8 @@ void FairMUanalyzer::AnalyzeTRK() {
 
             }
 
+            //if(LeftOverHit)continue;
+
             if (isGolden) {
 
                 goldenevents_++;
