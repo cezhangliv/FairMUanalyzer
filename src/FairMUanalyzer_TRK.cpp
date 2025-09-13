@@ -77,7 +77,7 @@ void FairMUanalyzer::AnalyzeTRK() {
                 }
                 if (found) break;
             }
-            if (!found) {
+            if (!found && hit.z()<1000) { // some hits not found because from MF
                 switch (hit.stationID()) {
                     case 0:
                         LeftOverHits0.push_back(&hit);
