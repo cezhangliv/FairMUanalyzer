@@ -70,7 +70,7 @@ void FairMUanalyzer::AnalyzeTRK() {
 
             for (const auto& track : tracks) {
                 for (const auto& trkHit : track.hits()) {
-                    if (trkHit->index() == hit.index()) {
+                    if (trkHit.index() == hit.index()) {
                         found = true;
                         break;
                     }
