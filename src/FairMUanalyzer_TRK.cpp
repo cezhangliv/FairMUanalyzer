@@ -746,7 +746,7 @@ void FairMUanalyzer::AnalyzeTRK() {
                     case_counts["t1all"]++; 
 
                     
-                    if( bestvtx.muonTheta()>0.0003 && (bestvtx.zPositionFit()<600 || bestvtx.zPositionFit()>1200))std::cout<<"strange mmm: "<<bestvtx.zPositionFit()<<std::endl;
+                    //if( bestvtx.muonTheta()>0.0003 && (bestvtx.zPositionFit()<600 || bestvtx.zPositionFit()>1200))std::cout<<"checking strange mmm: "<<bestvtx.zPositionFit()<<std::endl;
                     
                     if(angle_e>angle_mu){
                         case_h2d["t1mmm"]->Fill(angle_e,angle_mu);case_h2d["t1all"]->Fill(angle_e,angle_mu);
