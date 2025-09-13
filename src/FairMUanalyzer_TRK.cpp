@@ -78,7 +78,7 @@ void FairMUanalyzer::AnalyzeTRK() {
                 if (found) break;
             }
             if (!found) {
-                switch (hit.sector()) {
+                switch (hit.stationID()) {
                     case 0:
                         LeftOverHits0.push_back(&hit);
                         break;
@@ -89,7 +89,7 @@ void FairMUanalyzer::AnalyzeTRK() {
                         LeftOverHits2.push_back(&hit);
                         break;
                     default:
-                        std::cerr << "Warning: unexpected sector " << hit.sector()
+                        std::cerr << "Warning: unexpected stationID " << hit.stationID()
                                   << " for hit index " << hit.index() << std::endl;
                         break;
                 }
