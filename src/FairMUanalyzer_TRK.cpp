@@ -32,8 +32,6 @@ void FairMUanalyzer::AnalyzeTRK() {
         const auto& hits = reco_->reconstructedHits();
         const auto& bestvtx = reco_->bestVertex();
 
-        
-        
         /// total
         case_counts["Total"]++;
         case_h1d_vertex["Total"]->Fill(bestvtx.zPositionFit());
@@ -41,6 +39,7 @@ void FairMUanalyzer::AnalyzeTRK() {
 
         h_totalE->Fill(totalE_);
         h_clusterE->Fill(clusterE_);
+        h_Ntracks->Fill(tracks.size());
 
         // apply cut: ECAL cluster energy <= 2/3 GeV
         //if (clusterE_ < 2.0) continue;//603
@@ -52,19 +51,7 @@ void FairMUanalyzer::AnalyzeTRK() {
         std::vector<const MUonERecoOutputHitAnalysis*> LeftOverHits1;
         std::vector<const MUonERecoOutputHitAnalysis*> LeftOverHits2;
 
-        int n_muons = 0;
-        std::vector<const MUonERecoOutputTrackAnalysis*> muon_tracks;
-        for (auto const& track : tracks) {
-            if (track.isMuon() ) {
-                n_muons++;
-                muon_tracks.push_back(&track);
-            }
-        }
-        h_isMuon->Fill(n_muons);
-        h_Ntracks->Fill(tracks.size());
-        
-
-        int nhits_zcut = 0;
+        int nhits_MF = 0;//MF
         int nhits_sec0=0; 
         int nhits_sec1=0;
         int nhits_sec2=0;
@@ -72,7 +59,7 @@ void FairMUanalyzer::AnalyzeTRK() {
         // MF checks
         for (auto const& hit : hits) {
             if (hit.z() > 1000) {
-                nhits_zcut++;
+                nhits_MF++;
             }
 
             if (hit.stationID()==0)nhits_sec0++;
@@ -80,30 +67,7 @@ void FairMUanalyzer::AnalyzeTRK() {
             if (hit.stationID()==2)nhits_sec2++;
 
         }
-        h_hits_zcut->Fill(nhits_zcut);
-
-        /*
-        if (n_muons >= 1 && n_muons <= 4) {
-            for (auto const* track : muon_tracks) {
-                int nhit_zcut = 0;
-                int trk_muonID = track->muonId();
-
-                for (auto const& hit : hits) {
-                    if (hit.z() > 1000) {
-                        
-                        h_hitsModuleID_zcut[n_muons]->Fill(hit.moduleID());
-
-                        auto const& muIDs = hit.muonIds();  // vector<Int_t>
-                        if (std::find(muIDs.begin(), muIDs.end(), trk_muonID) != muIDs.end()) {
-                            nhit_zcut++;
-                        }
-                    }
-                }
-
-                h_hitsPerMuonTrack_zcut[n_muons]->Fill(nhit_zcut);
-            }
-        }
-        */
+        h_hits_zcut->Fill(nhits_MF);
 
         
         //golden muon step #1: N tracks
