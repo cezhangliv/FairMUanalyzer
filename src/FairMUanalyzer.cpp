@@ -122,9 +122,9 @@ FairMUanalyzer::FairMUanalyzer() : inputFile_(nullptr), cbmsim_(nullptr), reco_(
 
         for(int j = 0; j<6;j++){
 
-            case_h1d_LeftOverhits0perModule[j][key] = new TH1D( ("case_h1d_LeftoverhitsPerModule_stat0_"+"_Module_"+std::to_string(j)+"_"+key+";Hits").c_str(),("case_h1d_LeftoverhitsPerModule_stat0_"+"_Module_"+std::to_string(j)+"_"+key+";Hits").c_str() ,20,0,20);
-            case_h1d_LeftOverhits1perModule[j][key] = new TH1D( ("case_h1d_LeftoverhitsPerModule_stat1_"+"_Module_"+std::to_string(j)+"_"+key+";Hits").c_str(),("case_h1d_LeftoverhitsPerModule_stat1_"+"_Module_"+std::to_string(j)+"_"+key+";Hits").c_str() ,20,0,20);
-            case_h1d_LeftOverhits2perModule[j][key] = new TH1D( ("case_h1d_LeftoverhitsPerModule_stat2_"+"_Module_"+std::to_string(j)+"_"+key+";Hits").c_str(),("case_h1d_LeftoverhitsPerModule_stat2_"+"_Module_"+std::to_string(j)+"_"+key+";Hits").c_str() ,20,0,20);
+            case_h1d_LeftOverhits0perModule[j][key] = new TH1D( ("case_h1d_LeftoverhitsPerModule_stat0_Module_"+std::to_string(j)+"_"+key+";Hits").c_str(),("case_h1d_LeftoverhitsPerModule_stat0_Module_"+std::to_string(j)+"_"+key+";Hits").c_str() ,20,0,20);
+            case_h1d_LeftOverhits1perModule[j][key] = new TH1D( ("case_h1d_LeftoverhitsPerModule_stat1_Module_"+std::to_string(j)+"_"+key+";Hits").c_str(),("case_h1d_LeftoverhitsPerModule_stat1_Module_"+std::to_string(j)+"_"+key+";Hits").c_str() ,20,0,20);
+            case_h1d_LeftOverhits2perModule[j][key] = new TH1D( ("case_h1d_LeftoverhitsPerModule_stat2_Module_"+std::to_string(j)+"_"+key+";Hits").c_str(),("case_h1d_LeftoverhitsPerModule_stat2_Module_"+std::to_string(j)+"_"+key+";Hits").c_str() ,20,0,20);
         }
 
         for(int j = 0; j<3;j++){
