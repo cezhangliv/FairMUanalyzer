@@ -198,25 +198,22 @@ void FairMUanalyzer::AnalyzeTRK() {
 
             bool LeftOverHit = false;
             
-            if(TGT1 && ( !(nhits_sec0==6 && nhits_sec1==12 ) ) ){
-                if(LeftOverHits0.size()==0 && LeftOverHits1.size()==0)std::cerr << "Warning: unexpected LeftOverHit check " << std::endl;
+            if(TGT1 && ( ! (LeftOverHits0.size()==0 && LeftOverHits1.size()==0)  ) ){
                 LeftOverHit = true;//isGolden = false;    
             }
             
             if(TGT2 
                 && useTightTrackCutTgt2_
                 && 
-                //(  !(nhits_sec0==6 && nhits_sec1==6 && nhits_sec2==12) ) 
-                (  !(nhits_sec1==6 ) ) 
+                (  !  ( LeftOverHits1.size()==0 ) ) 
+                //(  !  (LeftOverHits0.size()==0 && LeftOverHits1.size()==0 && LeftOverHits2.size()==0) ) 
                 ){
-                if(LeftOverHits0.size()==0 && LeftOverHits1.size()==0 && LeftOverHits2.size()==0){std::cerr << "Warning: unexpected LeftOverHit check: nhits_sec1:  " <<nhits_sec1<< ", LeftOverHits1.size(): "<<LeftOverHits1.size() <<std::endl;}
                 LeftOverHit = true;//isGolden = false;
             }
             else if(TGT2 
                 && !useTightTrackCutTgt2_
                 && 
-                //( sectors.size() != 3 || !(ntrk_sec0==1 && ntrk_sec1==1 && ntrk_sec2>=2) || (nhits_sec2 > maxNhitInStat_ ) ) // suggested by Giovanni A, can be tested by turning HitCutsOn ON/OFF
-                ( !(nhits_sec0==6 && nhits_sec1>=6 && nhits_sec2>=12) ) // suggested by Giovanni A, can be tested by turning HitCutsOn ON/OFF
+                ( !(LeftOverHits0.size()==0 ) ) // suggested by Giovanni A, can be tested by turning HitCutsOn ON/OFF
                 )LeftOverHit = true;//isGolden = false;
             
 
