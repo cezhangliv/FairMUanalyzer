@@ -209,7 +209,7 @@ void FairMUanalyzer::AnalyzeTRK() {
                 //(  !(nhits_sec0==6 && nhits_sec1==6 && nhits_sec2==12) ) 
                 (  !(nhits_sec1==6 ) ) 
                 ){
-                if(LeftOverHits0.size()==0 && LeftOverHits1.size()==0 && LeftOverHits2.size()==0)std::cerr << "Warning: unexpected LeftOverHit check " << std::endl;
+                if(LeftOverHits0.size()==0 && LeftOverHits1.size()==0 && LeftOverHits2.size()==0){std::cerr << "Warning: unexpected LeftOverHit check: nhits_sec1:  " <<nhits_sec1<< ", LeftOverHits1.size(): "<<LeftOverHits1.size() <<std::endl;}
                 LeftOverHit = true;//isGolden = false;
             }
             else if(TGT2 
