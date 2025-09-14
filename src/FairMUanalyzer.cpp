@@ -114,17 +114,17 @@ FairMUanalyzer::FairMUanalyzer() : inputFile_(nullptr), cbmsim_(nullptr), reco_(
         case_h1d_bstvtx_y[key] = new TH1D(("case_h1d_bstvtx_y_"+key).c_str(),  ("bestvertex y at target "+key+";bestvertex y at target [cm]").c_str(),120,-6,6 );
         case_h1d_bstvtx_r[key] = new TH1D(("case_h1d_bstvtx_r_"+key).c_str(),  ("bestvertex r at target "+key+";bestvertex r at target [cm]").c_str(),120,-6,6 );
 
-        case_h1d_LeftOverhits0[key] = new TH1D( ("case_h1d_Leftoverhits0_"+key+";Hits").c_str(),("case_h1d_Leftoverhits_stat0_"+key+";Hits").c_str() ,20,0,20);
-        case_h1d_LeftOverhits1[key] = new TH1D( ("case_h1d_Leftoverhits1_"+key+";Hits").c_str(),("case_h1d_Leftoverhits_stat1_"+key+";Hits").c_str() ,20,0,20);
-        case_h1d_LeftOverhits2[key] = new TH1D( ("case_h1d_Leftoverhits2_"+key+";Hits").c_str(),("case_h1d_Leftoverhits_stat2_"+key+";Hits").c_str() ,20,0,20);
+        case_h1d_LeftOverhits0[key] = new TH1D( ("case_h1d_Leftoverhits0_"+key).c_str(),("case_h1d_Leftoverhits_stat0_"+key+";Hits").c_str() ,20,0,20);
+        case_h1d_LeftOverhits1[key] = new TH1D( ("case_h1d_Leftoverhits1_"+key).c_str(),("case_h1d_Leftoverhits_stat1_"+key+";Hits").c_str() ,20,0,20);
+        case_h1d_LeftOverhits2[key] = new TH1D( ("case_h1d_Leftoverhits2_"+key).c_str(),("case_h1d_Leftoverhits_stat2_"+key+";Hits").c_str() ,20,0,20);
         
         case_h1d_aco[key] = new TH1D( ("case_h1d_aco_"+key).c_str(),("case_h1d_aco_"+key).c_str(),100,0,10 );
 
         for(int j = 0; j<6;j++){
 
-            case_h1d_LeftOverhits0perModule[j][key] = new TH1D( ("case_h1d_LeftoverhitsPerModule_stat0_Module_"+std::to_string(j)+"_"+key+";Hits").c_str(),("case_h1d_LeftoverhitsPerModule_stat0_Module_"+std::to_string(j)+"_"+key+";Hits").c_str() ,20,0,20);
-            case_h1d_LeftOverhits1perModule[j][key] = new TH1D( ("case_h1d_LeftoverhitsPerModule_stat1_Module_"+std::to_string(j)+"_"+key+";Hits").c_str(),("case_h1d_LeftoverhitsPerModule_stat1_Module_"+std::to_string(j)+"_"+key+";Hits").c_str() ,20,0,20);
-            case_h1d_LeftOverhits2perModule[j][key] = new TH1D( ("case_h1d_LeftoverhitsPerModule_stat2_Module_"+std::to_string(j)+"_"+key+";Hits").c_str(),("case_h1d_LeftoverhitsPerModule_stat2_Module_"+std::to_string(j)+"_"+key+";Hits").c_str() ,20,0,20);
+            case_h1d_LeftOverhits0perModule[j][key] = new TH1D( ("case_h1d_LeftoverhitsPerModule_stat0_Module_"+std::to_string(j)+"_"+key).c_str(),("case_h1d_LeftoverhitsPerModule_stat0_Module_"+std::to_string(j)+"_"+key+";Hits").c_str() ,20,0,20);
+            case_h1d_LeftOverhits1perModule[j][key] = new TH1D( ("case_h1d_LeftoverhitsPerModule_stat1_Module_"+std::to_string(j)+"_"+key).c_str(),("case_h1d_LeftoverhitsPerModule_stat1_Module_"+std::to_string(j)+"_"+key+";Hits").c_str() ,20,0,20);
+            case_h1d_LeftOverhits2perModule[j][key] = new TH1D( ("case_h1d_LeftoverhitsPerModule_stat2_Module_"+std::to_string(j)+"_"+key).c_str(),("case_h1d_LeftoverhitsPerModule_stat2_Module_"+std::to_string(j)+"_"+key+";Hits").c_str() ,20,0,20);
         }
 
         for(int j = 0; j<3;j++){
