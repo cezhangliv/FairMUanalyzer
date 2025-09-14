@@ -15,6 +15,7 @@ root/
 *.pdf
 *.log
 *.zip
+*.png
 # 可执行文件
 run_FairMUanalyzer
 batch_run
