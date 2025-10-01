@@ -49,9 +49,27 @@ public:
     bool GetUseTightTrackCut(int tgt=1) const { return tgt==1?useTightTrackCutTgt2_:useTightTrackCutTgt1_; }
 
     static constexpr int kNModules = 6;
-    template <typename HitsContainer, typename H1Map>
-    void processLeftoverHits(const HitsContainer& hits, H1Map& case_h1d_map, const std::string& histKey) const;
 
+    template <typename HitsContainer, typename H1MapArray>
+    void processLeftoverHits(const HitsContainer& hits,
+                             H1MapArray& perModuleHists,   // 例如 std::map<std::string,TH1D*> (&)[6]
+                             const std::string& histKey) const
+    {
+        std::array<int, kNModules> nHitsPerMod{}; nHitsPerMod.fill(0);
+
+        for (const auto& hit : hits) {
+            int m;
+            if constexpr (std::is_pointer_v<std::decay_t<decltype(hit)>>) m = hit->moduleID();
+            else                                                         m = hit.moduleID();
+            if (m >= 0 && m < kNModules) ++nHitsPerMod[m];
+        }
+
+        for (int m = 0; m < kNModules; ++m) {
+            auto it = perModuleHists[m].find(histKey);
+            if (it && it->second) it->second->Fill(nHitsPerMod[m]);     // 你已创建好的直方图
+            else { /* 可选：警告或忽略 */ }
+        }
+    }
 
 
 private:
