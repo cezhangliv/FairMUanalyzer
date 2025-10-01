@@ -48,7 +48,7 @@ public:
     }
     bool GetUseTightTrackCut(int tgt=1) const { return tgt==1?useTightTrackCutTgt2_:useTightTrackCutTgt1_; }
 
-    constexpr int kNModules = 6;
+    static constexpr int kNModules = 6;
     template <typename HitsContainer, typename H1Map>
     void processLeftoverHits(const HitsContainer& hits, H1Map& case_h1d_map, const std::string& histKey) const;
 
