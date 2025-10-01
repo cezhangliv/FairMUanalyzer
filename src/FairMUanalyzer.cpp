@@ -6,6 +6,8 @@
 #include <set>
 #include <algorithm>
 #include <cmath>
+#include <array>
+#include <type_traits>
 
 template <typename HitsContainer, typename H1Map>
 void FairMUanalyzer::processLeftoverHits(const HitsContainer& hits,
