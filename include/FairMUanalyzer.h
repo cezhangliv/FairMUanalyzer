@@ -52,7 +52,7 @@ public:
 
     template <typename HitsContainer, typename H1MapArray>
     void processLeftoverHits(const HitsContainer& hits,
-                             H1MapArray& perModuleHists,   // 例如 std::map<std::string,TH1D*> (&)[6]
+                             H1MapArray& perModuleHists,
                              const std::string& histKey) const
     {
         std::array<int, kNModules> nHitsPerMod{}; nHitsPerMod.fill(0);
@@ -65,9 +65,13 @@ public:
         }
 
         for (int m = 0; m < kNModules; ++m) {
-            auto it = perModuleHists[m].find(histKey);
-            if (it && it->second) it->second->Fill(nHitsPerMod[m]);     // 你已创建好的直方图
-            else { /* 可选：警告或忽略 */ }
+            auto& mp = perModuleHists[m];
+            auto it  = mp.find(histKey);
+            if (it != mp.end() && it->second) {
+                it->second->Fill(nHitsPerMod[m]);
+            } else {
+                fprintf(stderr, "WARN: hist missing for module %d, key=%s\n", m, histKey.c_str());
+            }
         }
     }
 
