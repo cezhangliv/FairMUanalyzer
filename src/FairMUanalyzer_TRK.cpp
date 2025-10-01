@@ -316,9 +316,12 @@ void FairMUanalyzer::AnalyzeTRK() {
                     case_h1d_LeftOverhits0["t1mem"]->Fill(LeftOverHits0.size());
                     case_h1d_LeftOverhits1["t1mem"]->Fill(LeftOverHits1.size());
                     case_h1d_LeftOverhits2["t1mem"]->Fill(LeftOverHits2.size());
-                    for (auto const& hit : LeftOverHits0)case_h1d_LeftOverhits0perModule[hit->moduleID()]["t1mem"]->Fill(LeftOverHits0.size());
-                    for (auto const& hit : LeftOverHits1)case_h1d_LeftOverhits1perModule[hit->moduleID()]["t1mem"]->Fill(LeftOverHits1.size());
-                    for (auto const& hit : LeftOverHits2)case_h1d_LeftOverhits2perModule[hit->moduleID()]["t1mem"]->Fill(LeftOverHits2.size());
+                    //for (auto const& hit : LeftOverHits0)case_h1d_LeftOverhits0perModule[hit->moduleID()]["t1mem"]->Fill(LeftOverHits0.size());
+                    //for (auto const& hit : LeftOverHits1)case_h1d_LeftOverhits1perModule[hit->moduleID()]["t1mem"]->Fill(LeftOverHits1.size());
+                    //for (auto const& hit : LeftOverHits2)case_h1d_LeftOverhits2perModule[hit->moduleID()]["t1mem"]->Fill(LeftOverHits2.size());
+                    processLeftoverHits(LeftOverHits0, case_h1d_LeftOverhits0perModule, "t1mem");
+                    processLeftoverHits(LeftOverHits1, case_h1d_LeftOverhits1perModule, "t1mem");
+                    processLeftoverHits(LeftOverHits2, case_h1d_LeftOverhits2perModule, "t1mem");
 
                     case_h1d_aco["t1all"]->Fill(abs(bestvtx.modifiedAcoplanarity()));
                     case_h1d_vertex["t1all"]->Fill(bestvtx.zPositionFit());

@@ -7,6 +7,28 @@
 #include <algorithm>
 #include <cmath>
 
+template <typename HitsContainer, typename H1Map>
+void FairMUanalyzer::processLeftoverHits(const HitsContainer& hits,
+                                 H1Map& case_h1d_map,
+                                 const std::string& histKey) const
+{
+    std::array<int, kNModules> nHitsPerMod{};
+    nHitsPerMod.fill(0);
+
+    for (const auto& hit : hits) {
+        int m;
+        if constexpr (std::is_pointer_v<std::decay_t<decltype(hit)>>) {
+            m = hit->moduleID();
+        } else {
+            m = hit.moduleID();
+        }
+        if (m >= 0 && m < kNModules) ++nHitsPerMod[m];
+    }
+
+    for (int m = 0; m < kNModules; ++m) {
+        case_h1d_map[m][histKey]->Fill(nHitsPerMod[m]);
+    }
+}
 
 FairMUanalyzer::FairMUanalyzer() : inputFile_(nullptr), cbmsim_(nullptr), reco_(nullptr), 
     MuonFilterHits_(3), outputPrefix_("result/FairMUanalyzer"), 
