@@ -260,7 +260,7 @@ void FairMUanalyzer::AnalyzeTRK() {
                 if(TGT2 && bestvtx.zPositionFit()<=z_tgt2_+2 && bestvtx.zPositionFit()>=z_tgt2_-2)intgt=1;
                 if(TGT1 && bestvtx.zPositionFit()<=z_tgt1_+2 && bestvtx.zPositionFit()>=z_tgt1_-2)intgt=1;
                 //Elastic step #1: tgt position
-                //if(!intgt)continue;
+                if(!intgt)continue;
 
                 //h_vtxchi2->Fill(bestvtx.chi2perDegreeOfFreedom());
                 //Elastic step #2 (optional): bestvtx chi2perDOF
@@ -286,7 +286,7 @@ void FairMUanalyzer::AnalyzeTRK() {
                 std::vector<const MUonERecoOutputTrackAnalysis*> muone_outmuon; muone_outmuon.reserve(12);
 
                 //Elastic step #3: aco (following)
-                int acocut = 0;
+                int acocut = 1;
 
 
                 if(TGT2 && !useTightTrackCutTgt2_){

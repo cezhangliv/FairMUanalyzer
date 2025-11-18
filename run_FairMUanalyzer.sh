@@ -125,5 +125,6 @@
 # test bug fix 1 Oct
 #./run_FairMUanalyzer1001 root/single_muon_interaction_1_CDbugfix11July25_run8_muedaq04-1750227094-1750228937_MF1.root result/FairMUanalyzer_01Oct25_GA1001_single_muon_interaction_1_CDbugfix11July25_run8_muedaq04-1750227094-1750228937_MF1 -1 1
 
-./run_FairMUanalyzer /eos/experiment/mu-e/reco/2025/RelVal/TEST_v0.17.2/Data2025_run32_singleMu1_sharedHit0_recoTEST_v0.17.2.root result/FairMUanalyzer_TEST_v0.17.2_Data2025_run32_singleMu1_sharedHit0_recoTEST_v0.17.2 -1 1
+#./run_FairMUanalyzer /eos/experiment/mu-e/reco/2025/RelVal/TEST_v0.17.2/Data2025_run32_singleMu1_sharedHit0_recoTEST_v0.17.2.root result/FairMUanalyzer_TEST_v0.17.2_Data2025_run32_singleMu1_sharedHit0_recoTEST_v0.17.2 -1 1
+./run_FairMUanalyzer /eos/experiment/mu-e/reco/2025/RelVal/TEST_v0.17.2/Data2025_run32_singleMu1_sharedHit0_recoTEST_v0.17.2.root result/FairMUanalyzer_TEST_v0.17.2_Data2025_run32_singleMu1_sharedHit0_recoTEST_v0.17.2_tgtaco -1 1
 
