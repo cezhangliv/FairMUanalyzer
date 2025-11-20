@@ -101,6 +101,8 @@ void FairMUanalyzer::AnalyzeTRK() {
         
         //golden muon step #1: N tracks
 
+        if(useTightTrackCutTgt2_ && tracks.size()==4)std::cout<<"good"<<endl;
+
         if ( (TGT2 && (useTightTrackCutTgt2_ ? tracks.size() == 4 : tracks.size() >= 4)) 
             || 
             (TGT1 && (useTightTrackCutTgt1_?tracks.size() == 5: tracks.size() >= 3))
