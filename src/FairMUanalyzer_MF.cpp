@@ -59,9 +59,10 @@ void FairMUanalyzer::AnalyzeMF() {
         }
 
         if (tracks.size() == 3 &&
-            tracks[0].hits().size() == 6 &&
-            tracks[1].hits().size() == 6 &&
-            tracks[2].hits().size() == 6) {
+            //tracks[0].hits().size() == 6 &&
+            //tracks[1].hits().size() == 6 &&
+            //tracks[2].hits().size() == 6) {
+            ){
 
             bool isGolden = true;
             std::set<int> sectors;
@@ -94,7 +95,9 @@ void FairMUanalyzer::AnalyzeMF() {
                     int muID = muonTrack.muonId();
                     TVector3 p(muonTrack.xSlope(), muonTrack.ySlope(), 1.0);
                     p = p.Unit();
-                    TVector3 x0(muonTrack.x0(), muonTrack.y0(), muonTrack.z0());
+                    //TVector3 x0(muonTrack.x0(), muonTrack.y0(), muonTrack.z0());
+                    // need to fix - new version 0.17.6
+                    TVector3 x0(muonTrack.x0(), muonTrack.y0(), 0);
 
                     for (const auto& hit : hits) {
                         if (hit.z() < 1000) continue;
