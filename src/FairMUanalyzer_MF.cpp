@@ -67,9 +67,13 @@ void FairMUanalyzer::AnalyzeMF() {
             std::set<int> sectors;
             for (auto const& track : tracks) {
                 std::set<int> modules;
-                for (auto const& h : track.hits()) {
-                    modules.insert(h.moduleID());
-                }
+
+
+                /// need a further fix - new version 21Nov25, 0.17.6
+                //for (auto const& h : track.hits()) {
+                //    modules.insert(h.moduleID());
+                //}
+                
                 if (modules.size() != 6) {
                     isGolden = false;
                     break;
