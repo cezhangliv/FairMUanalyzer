@@ -41,9 +41,11 @@ void FairMUanalyzer::ProcessEvent(Long64_t i, int debug) {
         int ntrk_sec2=0;
         for (auto const& track : tracks) {
             std::set<int> modules;
-            for (auto const& h : track.hits()) {
-                modules.insert(h.moduleID());
-            }
+
+            //currently WRONG -need to fix later, new version 21Nov25, 0.17.6
+            //for (auto const& h : track.hits()) {
+            //    modules.insert(h.moduleID());
+            //}
             if(debug)std::cout<<"modules.size(): "<<modules.size()<<std::endl;
 
             if(track.sector()==0)ntrk_sec0++;
@@ -67,7 +69,7 @@ void FairMUanalyzer::ProcessEvent(Long64_t i, int debug) {
             std::set<int> modules;
             
             // need a further dealing - 21Nov25 - see chat GPT msg, for new 0.17.6 version
-            
+
             //for (auto const& h : track.hits()) {
             //    modules.insert(h.moduleID());
             //}
