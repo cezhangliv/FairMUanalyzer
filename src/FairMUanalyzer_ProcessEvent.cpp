@@ -65,9 +65,13 @@ void FairMUanalyzer::ProcessEvent(Long64_t i, int debug) {
 
         for (auto const& track : tracks) {
             std::set<int> modules;
-            for (auto const& h : track.hits()) {
-                modules.insert(h.moduleID());
-            }
+            
+            // need a further dealing - 21Nov25 - see chat GPT msg, for new 0.17.6 version
+            
+            //for (auto const& h : track.hits()) {
+            //    modules.insert(h.moduleID());
+            //}
+            
             if(debug)std::cout<<"modules.size(): "<<modules.size()<<std::endl;
             if (modules.size() != 6) {
                 //golden muon step #2: 1 hit/module
