@@ -128,5 +128,7 @@
 #./run_FairMUanalyzer /eos/experiment/mu-e/reco/2025/RelVal/TEST_v0.17.2/Data2025_run32_singleMu1_sharedHit0_recoTEST_v0.17.2.root result/FairMUanalyzer_TEST_v0.17.2_Data2025_run32_singleMu1_sharedHit0_recoTEST_v0.17.2 -1 1
 #./run_FairMUanalyzer /eos/experiment/mu-e/reco/2025/RelVal/TEST_v0.17.2/Data2025_run32_singleMu1_sharedHit0_recoTEST_v0.17.2.root result/FairMUanalyzer_TEST_v0.17.2_Data2025_run32_singleMu1_sharedHit0_recoTEST_v0.17.2_tgtaco -1 1
 
-./run_FairMUanalyzer /eos/experiment/mu-e/reco/2025/RelVal/v0.17.6/Data2025_run32_singleMu1_sharedHit0_recov0.17.6.root result/FairMUanalyzer_v0.17.6_Data2025_run32_singleMu1_sharedHit0_recov0.17.6 -1 1
+#./run_FairMUanalyzer /eos/experiment/mu-e/reco/2025/RelVal/v0.17.6/Data2025_run32_singleMu1_sharedHit0_recov0.17.6.root result/FairMUanalyzer_v0.17.6_Data2025_run32_singleMu1_sharedHit0_recov0.17.6 -1 1
+
+run_FairMUanalyzer_compare /eos/experiment/mu-e/reco/2025/RelVal/TEST_v0.17.2/Data2025_run32_singleMu1_sharedHit0_recoTEST_v0.17.2.root /eos/experiment/mu-e/reco/2025/RelVal/v0.17.6/Data2025_run32_singleMu1_sharedHit0_recov0.17.6.root
 
