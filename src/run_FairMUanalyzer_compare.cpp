@@ -71,9 +71,9 @@ int main(int argc, char** argv) {
         if(!CompareEvents(analyzer1, analyzer2, i)){
             mismatch++;
             if(!analyzer1.IsGoldenEvent())continue;
-            std::cout<<"HS0"<<std::endl;
-            analyzer1.ProcessEvent(i,1);
-            std::cout<<"HS2"<<std::endl;
+            //std::cout<<"HS0"<<std::endl;
+            analyzer1.ProcessEvent(i,1); // event, debug
+            //std::cout<<"HS2"<<std::endl;
             analyzer2.ProcessEvent(i,1);
         }
         if(mismatch>1)break;

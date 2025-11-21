@@ -74,8 +74,12 @@ void FairMUanalyzer::ProcessEvent(Long64_t i, int debug) {
                 isGolden = false;
                 break;
             }
+            
+
+
             //golden muon step #3: reduced chi2
-            if(track.chi2perDegreeOfFreedom()>=2)isGolden = false;
+            // changed 21Nov2025 - not necessary 
+            //if(track.chi2perDegreeOfFreedom()>=2)isGolden = false;
 
             sectors.insert(track.sector());
             if(track.sector()<2)sectors01.insert(track.sector());
