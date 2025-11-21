@@ -58,7 +58,8 @@ void FairMUanalyzer::AnalyzeMF() {
             }
         }
 
-        if (tracks.size() == 3 &&
+        if (tracks.size() == 3 
+            //&&
             //tracks[0].hits().size() == 6 &&
             //tracks[1].hits().size() == 6 &&
             //tracks[2].hits().size() == 6) {
