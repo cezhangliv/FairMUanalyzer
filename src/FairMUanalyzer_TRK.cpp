@@ -70,8 +70,8 @@ void FairMUanalyzer::AnalyzeTRK() {
             bool found = false;
 
             for (const auto& track : tracks) {
-                for (const auto& trkHit : track.hits()) {
-                    if (trkHit.index() == hit.index()) {
+                for (const auto& trkHitIds : track.hitIds()) {
+                    if (trkHitIds == hit.index()) {
                         found = true;
                         break;
                     }
@@ -99,6 +99,15 @@ void FairMUanalyzer::AnalyzeTRK() {
         }
         h_hits_zcut->Fill(nhits_MF);
 
+
+        std::unordered_map<int, const MUonERecoOutputHitAnalysis*> hitMap;
+        hitMap.reserve(hits.size());
+
+        for (const auto& h : hits) {
+            hitMap[h.index()] = &h;
+        }
+
+
         
         //golden muon step #1: N tracks
 
@@ -119,11 +128,28 @@ void FairMUanalyzer::AnalyzeTRK() {
 
             for (auto const& track : tracks) {
                 std::set<int> modules;
-                for (auto const& h : track.hits()) {
-                    modules.insert(h.moduleID());
+
+                // debug: collect all moduleIDs (possibly duplicated)
+                std::vector<int> moduleList;
+                moduleList.reserve(track.hitIds().size());
+
+                for (auto const& hitId : track.hitIds()) {
+
+                    auto it = hitMap.find(hitId);
+                    if (it != hitMap.end()) {
+                        const MUonERecoOutputHitAnalysis* h = it->second;
+                        modules.insert(h->moduleID());
+                        moduleList.push_back(h->moduleID());
+
+                    }
+                    else {
+                        moduleList.push_back(-999); // debug: missing hit
+                    }
+
                 }
 
-                if (track.hits().size() != 6) {
+                //if (track.hits().size() != 6) {
+                if (track.hitIds().size() != 6) {
                     isGolden = false;
                     break;
                 }
@@ -134,9 +160,9 @@ void FairMUanalyzer::AnalyzeTRK() {
                     break;
                 }
                 else if (modules.size() != 6   && (TGT2 && useTightTrackCutTgt2_)  ) {
-
                     //golden muon step #2: 1 hit/module
                     isGolden = false;
+
                     break;
                 }
                 else if (modules.size() < 5   && (TGT2 && !useTightTrackCutTgt2_)  ) {
@@ -146,34 +172,23 @@ void FairMUanalyzer::AnalyzeTRK() {
                 }
 
                 if(i==26 || i==44 || i==59 || i==96){
-                    // === DEBUG start ===
 
-                    std::cout <<"event: "<<i<< " [DEBUG] modules.size() = " << modules.size() << ", expected 6." << std::endl;
-
-                    // print raw moduleID list including duplicates
-                    std::cout << "[DEBUG] moduleID list for this track: ";
-                    std::vector<int> moduleList;
-                    moduleList.reserve(track.hits().size());
-                    for (auto const& h : track.hits()) {
-                        moduleList.push_back(h.moduleID());
-                        std::cout << h.moduleID() << " ";
-                    }
+                    std::cout << "DEBUG Event: "<<i<<std::endl;
+                    std::cout << "DEBUG modules for this track: ";
+                    for (auto m : moduleList) std::cout << m << " ";
                     std::cout << std::endl;
 
                     // find duplicates
                     std::unordered_map<int,int> freq;
                     for (auto m : moduleList) freq[m]++;
-                    std::cout << "[DEBUG] duplicates: ";
-                    bool hasDup = false;
+
+                    std::cout << "Duplicates: ";
                     for (auto& kv : freq) {
                         if (kv.second > 1) {
-                            hasDup = true;
-                            std::cout << "module " << kv.first << " x" << kv.second << "; ";
+                            std::cout << "module " << kv.first << " appears " << kv.second << " times; ";
                         }
                     }
-                    if (!hasDup) std::cout << "none";
                     std::cout << std::endl;
-                    // === DEBUG end ===
                 }
 
                 //golden muon step #3: reduced chi2
