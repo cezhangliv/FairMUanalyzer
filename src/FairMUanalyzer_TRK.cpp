@@ -69,8 +69,8 @@ void FairMUanalyzer::AnalyzeTRK() {
             bool found = false;
 
             for (const auto& track : tracks) {
-                for (const auto& trkHit : track.hits()) {
-                    if (trkHit.index() == hit.index()) {
+                for (const auto& trkHitIds : track.hitIds()) {
+                    if (trkHitIds == hit.index()) {
                         found = true;
                         break;
                     }
@@ -98,6 +98,15 @@ void FairMUanalyzer::AnalyzeTRK() {
         }
         h_hits_zcut->Fill(nhits_MF);
 
+
+        std::unordered_map<int, const MUonERecoOutputHitAnalysis*> hitMap;
+        hitMap.reserve(hits.size());
+
+        for (const auto& h : hits) {
+            hitMap[h.index()] = &h;
+        }
+
+
         
         //golden muon step #1: N tracks
 
@@ -118,11 +127,19 @@ void FairMUanalyzer::AnalyzeTRK() {
 
             for (auto const& track : tracks) {
                 std::set<int> modules;
-                for (auto const& h : track.hits()) {
-                    modules.insert(h.moduleID());
+                for (auto const& hitId : track.hitIds()) {
+
+                    auto it = hitMap.find(hitId);
+                    if (it != hitMap.end()) {
+                        const MUonERecoOutputHitAnalysis* h = it->second;
+                        modules.insert(h->moduleID());
+                    }
+
+                    //modules.insert(h.moduleID());
                 }
 
-                if (track.hits().size() != 6) {
+                //if (track.hits().size() != 6) {
+                if (track.hitIds().size() != 6) {
                     isGolden = false;
                     break;
                 }
