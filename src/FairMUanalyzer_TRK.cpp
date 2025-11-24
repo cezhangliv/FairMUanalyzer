@@ -163,6 +163,26 @@ void FairMUanalyzer::AnalyzeTRK() {
                     //golden muon step #2: 1 hit/module
                     isGolden = false;
 
+                    if(i==26 || i==44 || i==59 || i==96){
+
+                        std::cout << "DEBUG Event: "<<i<<std::endl;
+                        std::cout << "DEBUG modules for this track: ";
+                        for (auto m : moduleList) std::cout << m << " ";
+                        std::cout << std::endl;
+
+                        // find duplicates
+                        std::unordered_map<int,int> freq;
+                        for (auto m : moduleList) freq[m]++;
+
+                        std::cout << "Duplicates: ";
+                        for (auto& kv : freq) {
+                            if (kv.second > 1) {
+                                std::cout << "module " << kv.first << " appears " << kv.second << " times; ";
+                            }
+                        }
+                        std::cout << std::endl;
+                    }
+
                     break;
                 }
                 else if (modules.size() < 5   && (TGT2 && !useTightTrackCutTgt2_)  ) {
@@ -171,25 +191,7 @@ void FairMUanalyzer::AnalyzeTRK() {
                     break;
                 }
 
-                if(i==26 || i==44 || i==59 || i==96){
-
-                    std::cout << "DEBUG Event: "<<i<<std::endl;
-                    std::cout << "DEBUG modules for this track: ";
-                    for (auto m : moduleList) std::cout << m << " ";
-                    std::cout << std::endl;
-
-                    // find duplicates
-                    std::unordered_map<int,int> freq;
-                    for (auto m : moduleList) freq[m]++;
-
-                    std::cout << "Duplicates: ";
-                    for (auto& kv : freq) {
-                        if (kv.second > 1) {
-                            std::cout << "module " << kv.first << " appears " << kv.second << " times; ";
-                        }
-                    }
-                    std::cout << std::endl;
-                }
+                
 
                 //golden muon step #3: reduced chi2
                 //if(track.chi2perDegreeOfFreedom()>=2)isGolden = false;
