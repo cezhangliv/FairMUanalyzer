@@ -133,6 +133,9 @@ void FairMUanalyzer::AnalyzeTRK() {
                 std::vector<int> moduleList;
                 moduleList.reserve(track.hitIds().size());
 
+                std::vector<int> hitIDList;
+                hitIDList.reserve(track.hitIds().size());
+
                 for (auto const& hitId : track.hitIds()) {
 
                     auto it = hitMap.find(hitId);
@@ -140,10 +143,12 @@ void FairMUanalyzer::AnalyzeTRK() {
                         const MUonERecoOutputHitAnalysis* h = it->second;
                         modules.insert(h->moduleID());
                         moduleList.push_back(h->moduleID());
+                        hitIDList.push_back(h->index());
 
                     }
                     else {
                         moduleList.push_back(-999); // debug: missing hit
+                        hitIDList.push_back(-999); // 
                     }
 
                 }
@@ -160,6 +165,10 @@ void FairMUanalyzer::AnalyzeTRK() {
                     std::cout << "DEBUG Event: "<<i<<std::endl;
                     std::cout << "DEBUG modules for this track: ";
                     for (auto m : moduleList) std::cout << m << " ";
+                    std::cout << std::endl;
+
+                    std::cout << "DEBUG hitid for this track: ";
+                    for (auto m : hitIDList) std::cout << m << " ";
                     std::cout << std::endl;
 
                     // find duplicates
@@ -188,6 +197,12 @@ void FairMUanalyzer::AnalyzeTRK() {
                     for (auto const& h : trackhits) {
                         moduleList2.push_back(h.moduleID());
                         std::cout << h.moduleID() << " ";
+                    }
+                    std::cout << std::endl;
+
+                    std::cout << "[DEBUG] hit id for this track: ";
+                    for (auto const& h : trackhits) {
+                        std::cout << h.index() << " ";
                     }
                     std::cout << std::endl;
 
