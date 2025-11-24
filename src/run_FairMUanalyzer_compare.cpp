@@ -62,6 +62,9 @@ int main(int argc, char** argv) {
     
     int mismatch = 0;
     for (Long64_t i = 0; i < nEntries; ++i) {
+
+        cout<<i<<endl;
+
         chain1->GetEntry(i);
         chain2->GetEntry(i);
 

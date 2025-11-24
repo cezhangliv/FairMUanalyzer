@@ -42,10 +42,21 @@ void FairMUanalyzer::ProcessEvent(Long64_t i, int debug) {
         for (auto const& track : tracks) {
             std::set<int> modules;
 
-            //currently WRONG -need to fix later, new version 21Nov25, 0.17.6
+            //currently WRONG - need to fix later, new version 21Nov25, 0.17.6
             //for (auto const& h : track.hits()) {
             //    modules.insert(h.moduleID());
             //}
+
+            for (auto const& hitId : track.hitIds()) {
+                auto it = hitMap.find(hitId);
+                if (it != hitMap.end()) {
+                    const MUonERecoOutputHitAnalysis* h = it->second;
+                    modules.insert(h->moduleID());
+                }
+
+                //modules.insert(h.moduleID());
+            }
+
             if(debug)std::cout<<"modules.size(): "<<modules.size()<<std::endl;
 
             if(track.sector()==0)ntrk_sec0++;
@@ -73,6 +84,16 @@ void FairMUanalyzer::ProcessEvent(Long64_t i, int debug) {
             //for (auto const& h : track.hits()) {
             //    modules.insert(h.moduleID());
             //}
+
+            for (auto const& hitId : track.hitIds()) {
+                auto it = hitMap.find(hitId);
+                if (it != hitMap.end()) {
+                    const MUonERecoOutputHitAnalysis* h = it->second;
+                    modules.insert(h->moduleID());
+                }
+
+                //modules.insert(h.moduleID());
+            }
             
             if(debug)std::cout<<"modules.size(): "<<modules.size()<<std::endl;
             if (modules.size() != 6) {
