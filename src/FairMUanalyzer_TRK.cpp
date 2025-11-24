@@ -180,12 +180,12 @@ void FairMUanalyzer::AnalyzeTRK() {
                     isGolden = false;
                     break;
                 }
-                else if (modules.size() != 6   && (TGT2 && useTightTrackCutTgt2_)  ) {
-                    //golden muon step #2: 1 hit/module
-                    
-                    isGolden = false;
-                    break;
-                }
+                //else if (modules.size() != 6   && (TGT2 && useTightTrackCutTgt2_)  ) {
+                //    //golden muon step #2: 1 hit/module
+                //    
+                //    isGolden = false;
+                //    break;
+                //}
                 else if (modules.size() < 5   && (TGT2 && !useTightTrackCutTgt2_)  ) {
                     //golden muon step #2: 1 hit/module
                     isGolden = false;
