@@ -21,7 +21,8 @@ void FairMUanalyzer::AnalyzeTRK() {
     std::cout << "Processing " << N << Form(" ** interaction tgt%d ** events with MF tag %s...",tgt_, mf_?"ON":"OFF") << std::endl;
     
     int igraph = 0;
-    for (Long64_t i = 0; i < N; ++i) {
+    //for (Long64_t i = 0; i < N; ++i) {
+    for (Long64_t i = 0; i < 100; ++i) {
 
         if (i % (N / 10) == 0 || i == N - 1) {double progress = 100.0 * i / N;printf("Processing: %.1f%% (%lld/%lld)\n", progress, i, N);}
         
@@ -144,7 +145,7 @@ void FairMUanalyzer::AnalyzeTRK() {
                     break;
                 }
 
-                if(i==6){
+                if(i==26){
                     // === DEBUG start ===
                     std::cout << "[DEBUG] modules.size() = " << modules.size() << ", expected 6." << std::endl;
 
