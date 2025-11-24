@@ -161,7 +161,7 @@ void FairMUanalyzer::AnalyzeTRK() {
                 }
                 else if (modules.size() != 6   && (TGT2 && useTightTrackCutTgt2_)  ) {
                     //golden muon step #2: 1 hit/module
-                    isGolden = false;
+                    
 
                     if(i==26 || i==44 || i==59 || i==96){
 
@@ -182,7 +182,7 @@ void FairMUanalyzer::AnalyzeTRK() {
                         }
                         std::cout << std::endl;
                     }
-
+                    //isGolden = false;
                     //break;
                 }
                 else if (modules.size() < 5   && (TGT2 && !useTightTrackCutTgt2_)  ) {
