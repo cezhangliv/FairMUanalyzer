@@ -50,10 +50,11 @@ void FairMUanalyzer::ProcessEvent(Long64_t i, int debug) {
             std::set<int> modules;
 
             //currently WRONG - need to fix later, new version 21Nov25, 0.17.6
-            //for (auto const& h : track.hits()) {
-            //    modules.insert(h.moduleID());
-            //}
+            for (auto const& h : track.hits()) {
+                modules.insert(h.moduleID());
+            }
 
+            /*
             for (auto const& hitId : track.hitIds()) {
                 auto it = hitMap.find(hitId);
                 if (it != hitMap.end()) {
@@ -63,6 +64,7 @@ void FairMUanalyzer::ProcessEvent(Long64_t i, int debug) {
 
                 //modules.insert(h.moduleID());
             }
+            */
 
             if(debug)std::cout<<"modules.size(): "<<modules.size()<<std::endl;
 
@@ -88,10 +90,10 @@ void FairMUanalyzer::ProcessEvent(Long64_t i, int debug) {
             
             // need a further dealing - 21Nov25 - see chat GPT msg, for new 0.17.6 version
 
-            //for (auto const& h : track.hits()) {
-            //    modules.insert(h.moduleID());
-            //}
-
+            for (auto const& h : track.hits()) {
+                modules.insert(h.moduleID());
+            }
+            /*
             for (auto const& hitId : track.hitIds()) {
                 auto it = hitMap.find(hitId);
                 if (it != hitMap.end()) {
@@ -101,6 +103,7 @@ void FairMUanalyzer::ProcessEvent(Long64_t i, int debug) {
 
                 //modules.insert(h.moduleID());
             }
+            */
             
             if(debug)std::cout<<"modules.size(): "<<modules.size()<<std::endl;
             if (modules.size() != 6) {
