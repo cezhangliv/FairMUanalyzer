@@ -177,6 +177,35 @@ void FairMUanalyzer::AnalyzeTRK() {
 
                     const auto& trackhits = track.hits(hits);// reco_->reconstructedHits();
 
+                    // === DEBUG start ===
+
+                    std::cout <<"event: "<<i<< " [DEBUG] modules.size() = " << modules.size() << ", expected 6." << std::endl;
+
+                    // print raw moduleID list including duplicates
+                    std::cout << "[DEBUG] moduleID list for this track: ";
+                    std::vector<int> moduleList2;
+                    moduleList2.reserve(trackhits.size());
+                    for (auto const& h : trackhits) {
+                        moduleList2.push_back(h.moduleID());
+                        std::cout << h.moduleID() << " ";
+                    }
+                    std::cout << std::endl;
+
+                    // find duplicates
+                    std::unordered_map<int,int> freq;
+                    for (auto m : moduleList2) freq[m]++;
+                    std::cout << "[DEBUG] duplicates: ";
+                    bool hasDup = false;
+                    for (auto& kv : freq) {
+                        if (kv.second > 1) {
+                            hasDup = true;
+                            std::cout << "module " << kv.first << " x" << kv.second << "; ";
+                        }
+                    }
+                    if (!hasDup) std::cout << "none";
+                    std::cout << std::endl;
+                    // === DEBUG end ===
+
                 }
 
                 if (modules.size() != 6   && (TGT1) && track.sector()<2 ) {
