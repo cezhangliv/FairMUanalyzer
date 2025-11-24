@@ -1,8 +1,8 @@
 # === FairSoft and FairRoot paths ===
 FAIRSOFT_BASE  = /cvmfs/fairsoft.gsi.de/centos8/fairsoft/nov22p1
 #FAIRROOT_BASE  = /afs/cern.ch/user/c/cez/eos/Soft/fair_install/FairRoot/install_11July25
-FAIRROOT_BASE  = /afs/cern.ch/user/c/cez/eos/Soft/fair_install/FairRoot/install_09Oct25
-#FAIRROOT_BASE  = /afs/cern.ch/user/c/cez/eos/Soft/fair_install/FairRoot/install_21Nov25_v0176
+#FAIRROOT_BASE  = /afs/cern.ch/user/c/cez/eos/Soft/fair_install/FairRoot/install_09Oct25
+FAIRROOT_BASE  = /afs/cern.ch/user/c/cez/eos/Soft/fair_install/FairRoot/install_21Nov25_v0176
 
 # === Compiler and Flags ===
 CXX = g++
