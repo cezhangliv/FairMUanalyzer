@@ -154,6 +154,27 @@ void FairMUanalyzer::AnalyzeTRK() {
                     break;
                 }
 
+
+                if(i==26 || i==44 || i==59 || i==96){
+
+                    std::cout << "DEBUG Event: "<<i<<std::endl;
+                    std::cout << "DEBUG modules for this track: ";
+                    for (auto m : moduleList) std::cout << m << " ";
+                    std::cout << std::endl;
+
+                    // find duplicates
+                    std::unordered_map<int,int> freq;
+                    for (auto m : moduleList) freq[m]++;
+
+                    std::cout << "Duplicates: ";
+                    for (auto& kv : freq) {
+                        if (kv.second > 1) {
+                            std::cout << "module " << kv.first << " appears " << kv.second << " times; ";
+                        }
+                    }
+                    std::cout << std::endl;
+                }
+
                 if (modules.size() != 6   && (TGT1) && track.sector()<2 ) {
                     //golden muon step #2: 1 hit/module
                     isGolden = false;
@@ -162,28 +183,8 @@ void FairMUanalyzer::AnalyzeTRK() {
                 else if (modules.size() != 6   && (TGT2 && useTightTrackCutTgt2_)  ) {
                     //golden muon step #2: 1 hit/module
                     
-
-                    if(i==26 || i==44 || i==59 || i==96){
-
-                        std::cout << "DEBUG Event: "<<i<<std::endl;
-                        std::cout << "DEBUG modules for this track: ";
-                        for (auto m : moduleList) std::cout << m << " ";
-                        std::cout << std::endl;
-
-                        // find duplicates
-                        std::unordered_map<int,int> freq;
-                        for (auto m : moduleList) freq[m]++;
-
-                        std::cout << "Duplicates: ";
-                        for (auto& kv : freq) {
-                            if (kv.second > 1) {
-                                std::cout << "module " << kv.first << " appears " << kv.second << " times; ";
-                            }
-                        }
-                        std::cout << std::endl;
-                    }
-                    //isGolden = false;
-                    //break;
+                    isGolden = false;
+                    break;
                 }
                 else if (modules.size() < 5   && (TGT2 && !useTightTrackCutTgt2_)  ) {
                     //golden muon step #2: 1 hit/module
