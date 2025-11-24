@@ -32,6 +32,13 @@ void FairMUanalyzer::ProcessEvent(Long64_t i, int debug) {
 
     }
 
+    std::unordered_map<int, const MUonERecoOutputHitAnalysis*> hitMap;
+    hitMap.reserve(hits.size());
+
+    for (const auto& h : hits) {
+        hitMap[h.index()] = &h;
+    }
+
     bool isGolden = true;
 
     if(debug){
