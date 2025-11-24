@@ -137,7 +137,7 @@
 ### remove 1 hit/module cut, to really see step by step difference comparison with 0176
 ./run_FairMUanalyzerv0172_just6hits /eos/experiment/mu-e/reco/2025/RelVal/TEST_v0.17.2/Data2025_run32_singleMu1_sharedHit0_recoTEST_v0.17.2.root result/FairMUanalyzer_TEST_v0.17.2_Data2025_run32_singleMu1_sharedHit0_recoTEST_v0.17.2_just6hits -1 1
 
-
+./run_FairMUanalyzerv0176_just6hits /eos/experiment/mu-e/reco/2025/RelVal/v0.17.6/Data2025_run32_singleMu1_sharedHit0_recov0.17.6.root result/FairMUanalyzer_v0.17.6_Data2025_run32_singleMu1_sharedHit0_recov0.17.6_24Nov_just6hits -1 1
 
 
 
