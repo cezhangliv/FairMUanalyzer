@@ -68,14 +68,14 @@ int main(int argc, char** argv) {
         chain1->GetEntry(i);
         chain2->GetEntry(i);
 
-        analyzer1.ProcessEvent(i);
+        analyzer1.ProcessEvent(i,false);
         analyzer2.ProcessEvent(i);
 
         if(!CompareEvents(analyzer1, analyzer2, i)){
             mismatch++;
             if(!analyzer1.IsGoldenEvent())continue;
             //std::cout<<"HS0"<<std::endl;
-            analyzer1.ProcessEvent(i,1); // event, debug
+            analyzer1.ProcessEvent(i,1,false); // event, debug
             //std::cout<<"HS2"<<std::endl;
             analyzer2.ProcessEvent(i,1);
         }
