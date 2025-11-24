@@ -62,20 +62,17 @@ int main(int argc, char** argv) {
     
     int mismatch = 0;
     for (Long64_t i = 0; i < nEntries; ++i) {
-
-        std::cout<<i<<std::endl;
-
         chain1->GetEntry(i);
         chain2->GetEntry(i);
 
-        analyzer1.ProcessEvent(i,false);
+        analyzer1.ProcessEvent(i);
         analyzer2.ProcessEvent(i);
 
         if(!CompareEvents(analyzer1, analyzer2, i)){
             mismatch++;
             if(!analyzer1.IsGoldenEvent())continue;
             //std::cout<<"HS0"<<std::endl;
-            analyzer1.ProcessEvent(i,1,false); // event, debug
+            analyzer1.ProcessEvent(i,1); // event, debug
             //std::cout<<"HS2"<<std::endl;
             analyzer2.ProcessEvent(i,1);
         }

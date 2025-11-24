@@ -1,6 +1,6 @@
 #include "FairMUanalyzer.h"
 
-void FairMUanalyzer::ProcessEvent(Long64_t i, int debug, int v0176) {
+void FairMUanalyzer::ProcessEvent(Long64_t i, int debug) {
     
     int TGT1 = tgt_==0?1:0;
     int TGT2 = tgt_==1?1:0;
@@ -54,21 +54,14 @@ void FairMUanalyzer::ProcessEvent(Long64_t i, int debug, int v0176) {
             //    modules.insert(h.moduleID());
             //}
 
-            if(v0176){
-                for (auto const& hitId : track.hitIds()) {
-                    auto it = hitMap.find(hitId);
-                    if (it != hitMap.end()) {
-                        const MUonERecoOutputHitAnalysis* h = it->second;
-                        modules.insert(h->moduleID());
-                    }
+            for (auto const& hitId : track.hitIds()) {
+                auto it = hitMap.find(hitId);
+                if (it != hitMap.end()) {
+                    const MUonERecoOutputHitAnalysis* h = it->second;
+                    modules.insert(h->moduleID());
+                }
 
-                    //modules.insert(h.moduleID());
-                }
-            }
-            else{
-                for (auto const& h : track.hits()) {
-                    modules.insert(h.moduleID());
-                }
+                //modules.insert(h.moduleID());
             }
 
             if(debug)std::cout<<"modules.size(): "<<modules.size()<<std::endl;
@@ -93,21 +86,20 @@ void FairMUanalyzer::ProcessEvent(Long64_t i, int debug, int v0176) {
         for (auto const& track : tracks) {
             std::set<int> modules;
             
-            if(v0176){
-                for (auto const& hitId : track.hitIds()) {
-                    auto it = hitMap.find(hitId);
-                    if (it != hitMap.end()) {
-                        const MUonERecoOutputHitAnalysis* h = it->second;
-                        modules.insert(h->moduleID());
-                    }
+            // need a further dealing - 21Nov25 - see chat GPT msg, for new 0.17.6 version
 
-                    //modules.insert(h.moduleID());
+            //for (auto const& h : track.hits()) {
+            //    modules.insert(h.moduleID());
+            //}
+
+            for (auto const& hitId : track.hitIds()) {
+                auto it = hitMap.find(hitId);
+                if (it != hitMap.end()) {
+                    const MUonERecoOutputHitAnalysis* h = it->second;
+                    modules.insert(h->moduleID());
                 }
-            }
-            else{
-                for (auto const& h : track.hits()) {
-                    modules.insert(h.moduleID());
-                }
+
+                //modules.insert(h.moduleID());
             }
             
             if(debug)std::cout<<"modules.size(): "<<modules.size()<<std::endl;

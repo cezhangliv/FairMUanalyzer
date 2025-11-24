@@ -38,7 +38,7 @@ public:
 
 
 
-    void ProcessEvent(Long64_t i, int debug=0, int v0176=true);
+    void ProcessEvent(Long64_t i, int debug=0);
     bool IsGoldenEvent() const;
 
     void SetUseTightTrackCut(bool flag, int tgt=1) { 
