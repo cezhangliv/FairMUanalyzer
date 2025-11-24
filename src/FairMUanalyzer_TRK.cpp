@@ -145,7 +145,7 @@ void FairMUanalyzer::AnalyzeTRK() {
                     break;
                 }
 
-                if(i==26){
+                if(i==26 || i==44 || i==59 || i==96){
                     // === DEBUG start ===
                     std::cout << "[DEBUG] modules.size() = " << modules.size() << ", expected 6." << std::endl;
 
