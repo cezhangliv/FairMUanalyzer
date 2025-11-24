@@ -173,6 +173,10 @@ void FairMUanalyzer::AnalyzeTRK() {
                         }
                     }
                     std::cout << std::endl;
+
+
+                    const auto& trackhits = track.hits(hits);// reco_->reconstructedHits();
+
                 }
 
                 if (modules.size() != 6   && (TGT1) && track.sector()<2 ) {
