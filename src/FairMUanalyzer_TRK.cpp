@@ -147,7 +147,8 @@ void FairMUanalyzer::AnalyzeTRK() {
 
                 if(i==26 || i==44 || i==59 || i==96){
                     // === DEBUG start ===
-                    std::cout << "[DEBUG] modules.size() = " << modules.size() << ", expected 6." << std::endl;
+
+                    std::cout <<"event: "<<i<< " [DEBUG] modules.size() = " << modules.size() << ", expected 6." << std::endl;
 
                     // print raw moduleID list including duplicates
                     std::cout << "[DEBUG] moduleID list for this track: ";
