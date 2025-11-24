@@ -21,7 +21,8 @@ void FairMUanalyzer::AnalyzeTRK() {
     std::cout << "Processing " << N << Form(" ** interaction tgt%d ** events with MF tag %s...",tgt_, mf_?"ON":"OFF") << std::endl;
     
     int igraph = 0;
-    for (Long64_t i = 0; i < N; ++i) {
+    //for (Long64_t i = 0; i < N; ++i) {
+    for (Long64_t i = 0; i < 100; ++i) {
 
         if (i % (N / 10) == 0 || i == N - 1) {double progress = 100.0 * i / N;printf("Processing: %.1f%% (%lld/%lld)\n", progress, i, N);}
         
@@ -162,7 +163,7 @@ void FairMUanalyzer::AnalyzeTRK() {
                     //golden muon step #2: 1 hit/module
                     isGolden = false;
 
-
+                    std::cout << "DEBUG Event: "<<i<<std::endl;
                     std::cout << "DEBUG modules for this track: ";
                     for (auto m : moduleList) std::cout << m << " ";
                     std::cout << std::endl;
@@ -177,8 +178,10 @@ void FairMUanalyzer::AnalyzeTRK() {
                             std::cout << "module " << kv.first << " appears " << kv.second << " times; ";
                         }
                     }
+                    std::cout << std::endl;
 
-                    
+
+
                     break;
                 }
                 else if (modules.size() < 5   && (TGT2 && !useTightTrackCutTgt2_)  ) {

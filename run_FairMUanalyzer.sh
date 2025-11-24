@@ -139,6 +139,8 @@
 
 ./run_FairMUanalyzerv0176_just6hits /eos/experiment/mu-e/reco/2025/RelVal/v0.17.6/Data2025_run32_singleMu1_sharedHit0_recov0.17.6.root result/FairMUanalyzer_v0.17.6_Data2025_run32_singleMu1_sharedHit0_recov0.17.6_24Nov_just6hits -1 1
 
+./run_FairMUanalyzerv0176_debug /eos/experiment/mu-e/reco/2025/RelVal/v0.17.6/Data2025_run32_singleMu1_sharedHit0_recov0.17.6.root result/FairMUanalyzer_v0.17.6_Data2025_run32_singleMu1_sharedHit0_recov0.17.6_24Nov_debug -1 1
+
 
 
 
