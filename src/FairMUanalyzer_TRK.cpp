@@ -192,11 +192,11 @@ void FairMUanalyzer::AnalyzeTRK() {
                     std::cout << std::endl;
 
                     // find duplicates
-                    std::unordered_map<int,int> freq;
-                    for (auto m : moduleList2) freq[m]++;
+                    std::unordered_map<int,int> freq2;
+                    for (auto m : moduleList2) freq2[m]++;
                     std::cout << "[DEBUG] duplicates: ";
                     bool hasDup = false;
-                    for (auto& kv : freq) {
+                    for (auto& kv : freq2) {
                         if (kv.second > 1) {
                             hasDup = true;
                             std::cout << "module " << kv.first << " x" << kv.second << "; ";
