@@ -183,7 +183,7 @@ void FairMUanalyzer::AnalyzeTRK() {
                         std::cout << std::endl;
                     }
 
-                    break;
+                    //break;
                 }
                 else if (modules.size() < 5   && (TGT2 && !useTightTrackCutTgt2_)  ) {
                     //golden muon step #2: 1 hit/module
