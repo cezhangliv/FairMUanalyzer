@@ -127,6 +127,7 @@ void FairMUanalyzer::AnalyzeTRK() {
             int ntrk_sec2=0;
 
             for (auto const& track : tracks) {
+                
                 std::set<int> modules;
 
                 // debug: collect all moduleIDs (possibly duplicated)
@@ -137,6 +138,13 @@ void FairMUanalyzer::AnalyzeTRK() {
                 hitIDList.reserve(track.hitIds().size());
 
                 for (auto const& hitId : track.hitIds()) {
+
+                    if(i==26){
+                        std::cout<<"hitid: "<<hitId<<std::endl;
+                        std::cout<<"h->moduleID(): "<<h->moduleID()<<std::endl;
+                        std::cout<<"h->index(): "<<h->index()<<std::endl;
+
+                    }
 
                     auto it = hitMap.find(hitId);
                     if (it != hitMap.end()) {
@@ -220,6 +228,8 @@ void FairMUanalyzer::AnalyzeTRK() {
                     if (!hasDup) std::cout << "none";
                     std::cout << std::endl;
                     // === DEBUG end ===
+
+                    cout<<"track sector: "<<track.sector()<<endl;
 
                 }
 
