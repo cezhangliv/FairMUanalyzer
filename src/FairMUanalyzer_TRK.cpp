@@ -21,8 +21,8 @@ void FairMUanalyzer::AnalyzeTRK() {
     std::cout << "Processing " << N << Form(" ** interaction tgt%d ** events with MF tag %s...",tgt_, mf_?"ON":"OFF") << std::endl;
     
     int igraph = 0;
-    //for (Long64_t i = 0; i < N; ++i) {
-    for (Long64_t i = 0; i < 100; ++i) {
+    for (Long64_t i = 0; i < N; ++i) {
+    //for (Long64_t i = 0; i < 100; ++i) {
 
         if (i % (N / 10) == 0 || i == N - 1) {double progress = 100.0 * i / N;printf("Processing: %.1f%% (%lld/%lld)\n", progress, i, N);}
         
@@ -140,9 +140,9 @@ void FairMUanalyzer::AnalyzeTRK() {
 
                 for (auto const& hitId : track.hitIds()) {
 
-                    if(i==26){
-                        std::cout<<"hitid: "<<hitId<<std::endl;
-                    }
+                    //if(i==26){
+                    //    std::cout<<"hitid: "<<hitId<<std::endl;
+                    //}
 
                     auto it = hitMap.find(hitId);
                     if (it != hitMap.end()) {
@@ -151,10 +151,10 @@ void FairMUanalyzer::AnalyzeTRK() {
                         moduleList.push_back(h->moduleID());
                         hitIDList.push_back(h->index());
 
-                        if(i==26){
-                            std::cout<<"h->moduleID(): "<<h->moduleID()<<std::endl;
-                            std::cout<<"h->index(): "<<h->index()<<std::endl;
-                        }
+                        //if(i==26){
+                        //    std::cout<<"h->moduleID(): "<<h->moduleID()<<std::endl;
+                        //    std::cout<<"h->index(): "<<h->index()<<std::endl;
+                        //}
 
                     }
                     else {
@@ -170,7 +170,7 @@ void FairMUanalyzer::AnalyzeTRK() {
                     break;
                 }
 
-
+                /* //debug
                 if(i==26 || i==44 || i==59 || i==96){
 
                     std::cout << "DEBUG Event: "<<i<<std::endl;
@@ -235,18 +235,19 @@ void FairMUanalyzer::AnalyzeTRK() {
                     std::cout<<"track sector: "<<track.sector()<<std::endl;
 
                 }
+                */
 
                 if (modules.size() != 6   && (TGT1) && track.sector()<2 ) {
                     //golden muon step #2: 1 hit/module
                     isGolden = false;
                     break;
                 }
-                //else if (modules.size() != 6   && (TGT2 && useTightTrackCutTgt2_)  ) {
-                //    //golden muon step #2: 1 hit/module
-                //    
-                //    isGolden = false;
-                //    break;
-                //}
+                else if (modules.size() != 6   && (TGT2 && useTightTrackCutTgt2_)  ) {
+                    //golden muon step #2: 1 hit/module
+                    
+                    isGolden = false;
+                    break;
+                }
                 else if (modules.size() < 5   && (TGT2 && !useTightTrackCutTgt2_)  ) {
                     //golden muon step #2: 1 hit/module
                     isGolden = false;
