@@ -141,9 +141,6 @@ void FairMUanalyzer::AnalyzeTRK() {
 
                     if(i==26){
                         std::cout<<"hitid: "<<hitId<<std::endl;
-                        std::cout<<"h->moduleID(): "<<h->moduleID()<<std::endl;
-                        std::cout<<"h->index(): "<<h->index()<<std::endl;
-
                     }
 
                     auto it = hitMap.find(hitId);
@@ -152,6 +149,11 @@ void FairMUanalyzer::AnalyzeTRK() {
                         modules.insert(h->moduleID());
                         moduleList.push_back(h->moduleID());
                         hitIDList.push_back(h->index());
+
+                        if(i==26){
+                            std::cout<<"h->moduleID(): "<<h->moduleID()<<std::endl;
+                            std::cout<<"h->index(): "<<h->index()<<std::endl;
+                        }
 
                     }
                     else {
@@ -229,7 +231,7 @@ void FairMUanalyzer::AnalyzeTRK() {
                     std::cout << std::endl;
                     // === DEBUG end ===
 
-                    cout<<"track sector: "<<track.sector()<<endl;
+                    std::cout<<"track sector: "<<track.sector()<<std::endl;
 
                 }
 
