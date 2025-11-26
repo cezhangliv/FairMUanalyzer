@@ -318,11 +318,13 @@ double FairMUanalyzer::acoplanarity(const TVector3 in, const TVector3 out1, cons
 
 double FairMUanalyzer::CalculateXtgt(const MUonERecoOutputTrackAnalysis* track, double zTgt){
     //return track->xSlope()*(zTgt-track->z0())+track->x0();
+    //z0=0
     return track->xSlope()*(zTgt)+track->x0();
 }
 
 double FairMUanalyzer::CalculateYtgt(const MUonERecoOutputTrackAnalysis* track, double zTgt){
     //return track->ySlope()*(zTgt-track->z0())+track->y0();
+    //z0=0
     return track->ySlope()*(zTgt)+track->y0();
 }
 
