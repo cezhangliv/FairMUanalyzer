@@ -4,7 +4,8 @@
 #include <TH2.h>
 #include <iostream>
 
-void list_hists(const char* filename = "/Users/zhangce/WorkArea/MUonE/TB25/FairMUanalyzer/result/FairMUanalyzer_v0.17.6_Data2025_run32_singleMu1_sharedHit0_recov0.17.6_output.root") {
+void list_hists(const char* filename = 
+    "../result/25Nov_FairMUanalyzer_TEST_v0.17.2_Data2025_run32_passingMu_sharedHit0_recoTEST_v0.17.2_output.root") {
     TFile *f = TFile::Open(filename);
     if (!f || f->IsZombie()) {
         std::cerr << "Error opening file: " << filename << std::endl;
