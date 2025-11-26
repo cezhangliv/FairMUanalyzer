@@ -9,7 +9,8 @@ void FairMUanalyzer::AnalyzeMF() {
     Long64_t N = runN_>0?runN_:cbmsim_->GetEntries();
     std::cout << "Processing " << N << " ** passing muon ** events..." << std::endl;
 
-    for (Long64_t i = 0; i < N; ++i) {
+    //for (Long64_t i = 0; i < N; ++i) {
+    for (Long64_t i = 0; i < 100; ++i) {
         
         if (i % (N / 10) == 0 || i == N - 1) {double progress = 100.0 * i / N;printf("Processing: %.1f%% (%lld/%lld)\n", progress, i, N);}
 
@@ -37,6 +38,16 @@ void FairMUanalyzer::AnalyzeMF() {
         }
         h_hits_zcut->Fill(nhits_zcut);
 
+        
+
+        std::unordered_map<int, MUonERecoOutputHitAnalysis> hitMap;
+        hitMap.reserve(hits.size());
+
+        for (const auto& h : hits) {
+            if (h.stationID() == 3) continue;
+            hitMap[h.index()] = h;  
+        }
+
         if (n_muons >= 1 && n_muons <= 4) {
             for (auto const* track : muon_tracks) {
                 int nhit_zcut = 0;
@@ -60,9 +71,9 @@ void FairMUanalyzer::AnalyzeMF() {
 
         if (tracks.size() == 3 
             &&
-            tracks[0].hits().size() == 6 &&
-            tracks[1].hits().size() == 6 &&
-            tracks[2].hits().size() == 6
+            tracks[0].hitIds().size() == 6 &&
+            tracks[1].hitIds().size() == 6 &&
+            tracks[2].hitIds().size() == 6
             ){
 
             bool isGolden = true;
@@ -70,15 +81,19 @@ void FairMUanalyzer::AnalyzeMF() {
             for (auto const& track : tracks) {
                 std::set<int> modules;
 
-                /// need a further fix - new version 21Nov25, 0.17.6
-                for (auto const& h : track.hits()) {
-                    modules.insert(h.moduleID());
+                for (auto const& hitId : track.hitIds()) {
+                    auto it = hitMap.find(hitId);
+                    if (it != hitMap.end()) {
+                        const auto& h = it->second;
+                        modules.insert(h.moduleID());
+                    }
                 }
-                
+
                 if (modules.size() != 6) {
                     isGolden = false;
                     break;
                 }
+
                 sectors.insert(track.sector());
             }
 
@@ -95,15 +110,29 @@ void FairMUanalyzer::AnalyzeMF() {
                     int muID = muonTrack.muonId();
                     TVector3 p(muonTrack.xSlope(), muonTrack.ySlope(), 1.0);
                     p = p.Unit();
-                    TVector3 x0(muonTrack.x0(), muonTrack.y0(), muonTrack.z0());
+                    
+                    TVector3 x0(muonTrack.x0(), muonTrack.y0(), 0);
 
-                    if(muonTrack.z0()!=0)std::cout<<"muonTrack.z0(): "<<muonTrack.z0()<<std::endl;
+                    int ihit = 0;
 
                     for (const auto& hit : hits) {
+
                         if (hit.z() < 1000) continue;
                         if (hit.moduleID() > 3 || hit.stationID() != 3) continue;
                         TVector3 pos = getXYfromHitMF(hit);
                         double dist = computeSigned2DResidualMF(p, x0, pos, hit.moduleID());
+
+                        if(abs(dist)>2){
+                            std::cout<<i<<" event with a dist "<<dist<<" at hit "<<ihit
+                            <<" "<<hit.moduleID()
+                            <<" "<<hit.muonIds()
+                            <<" "<<muonTrack.x0()
+                            <<" "<<muonTrack.y0()
+                            <<" "<<muonTrack.xSlope()
+                            <<" "<<muonTrack.ySlope()
+                            <<" "<<muonTrack.muonId()
+                            <<std::endl;
+                        }
 
                         const auto& muIDs = hit.muonIds();
                         if (std::find(muIDs.begin(), muIDs.end(), muID) != muIDs.end()) {
@@ -115,6 +144,8 @@ void FairMUanalyzer::AnalyzeMF() {
                             h_residual_hitOffTrackModule[t][hit.moduleID()]->Fill(dist);
                             h_residual_hitAllTrackModule[t][hit.moduleID()]->Fill(dist);
                         }
+
+                        ihit++;
                     }
                 }
             }
