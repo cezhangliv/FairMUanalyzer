@@ -100,6 +100,8 @@ void FairMUanalyzer::AnalyzeMF() {
 
                     if(muonTrack.z0()!=0)std::cout<<"muonTrack.z0(): "<<muonTrack.z0()<<std::endl;
 
+                    int ihit = 0;
+
                     for (const auto& hit : hits) {
                         if (hit.z() < 1000) continue;
                         if (hit.moduleID() > 3 || hit.stationID() != 3) continue;
@@ -129,6 +131,8 @@ void FairMUanalyzer::AnalyzeMF() {
                             h_residual_hitOffTrackModule[t][hit.moduleID()]->Fill(dist);
                             h_residual_hitAllTrackModule[t][hit.moduleID()]->Fill(dist);
                         }
+
+                        ihit++;
                     }
                 }
             }
