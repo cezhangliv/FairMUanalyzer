@@ -70,8 +70,8 @@ void FairMUanalyzer::AnalyzeTRK() {
             bool found = false;
 
             for (const auto& track : tracks) {
-                for (const auto& trkHit : track.hits()) {
-                    if (trkHit.index() == hit.index()) {
+                for (const auto& trkHitIds : track.hitIds()) {
+                    if (trkHitIds == hit.index()) {
                         found = true;
                         break;
                     }
@@ -99,6 +99,26 @@ void FairMUanalyzer::AnalyzeTRK() {
         }
         h_hits_zcut->Fill(nhits_MF);
 
+        /*
+        std::unordered_map<int, const MUonERecoOutputHitAnalysis*> hitMap;
+        hitMap.reserve(hits.size());
+
+        for (const auto& h : hits) {
+            if(h.stationID() == 3) continue;
+            hitMap[h.index()] = &h;
+        }
+        */
+
+        std::unordered_map<int, MUonERecoOutputHitAnalysis> hitMap;
+        hitMap.reserve(hits.size());
+
+        for (const auto& h : hits) {
+            if (h.stationID() == 3) continue;
+            hitMap[h.index()] = h;  
+        }
+
+
+
         
         //golden muon step #1: N tracks
 
@@ -118,54 +138,105 @@ void FairMUanalyzer::AnalyzeTRK() {
             int ntrk_sec2=0;
 
             for (auto const& track : tracks) {
+                
                 std::set<int> modules;
-                for (auto const& h : track.hits()) {
-                    modules.insert(h.moduleID());
+
+                // debug: collect all moduleIDs (possibly duplicated)
+                std::vector<int> moduleList;
+                moduleList.reserve(track.hitIds().size());
+
+                std::vector<int> hitIDList;
+                hitIDList.reserve(track.hitIds().size());
+
+                for (auto const& hitId : track.hitIds()) {
+
+                    //if(i==26){
+                    //    std::cout<<"hitid: "<<hitId<<std::endl;
+                    //}
+
+                    auto it = hitMap.find(hitId);
+                    if (it != hitMap.end()) {
+                        
+                        const auto& h = it->second;   
+                        modules.insert(h.moduleID());
+
+                        //const MUonERecoOutputHitAnalysis* h = it->second;
+                        //modules.insert(h->moduleID());
+                        moduleList.push_back(h.moduleID());
+                        hitIDList.push_back(h.index());
+
+                        //if(i==26){
+                        //    std::cout<<"h->moduleID(): "<<h->moduleID()<<std::endl;
+                        //    std::cout<<"h->index(): "<<h->index()<<std::endl;
+                        //}
+
+                    }
+                    else {
+                        moduleList.push_back(-999); // debug: missing hit
+                        hitIDList.push_back(-999); // 
+                    }
+
                 }
 
-                if (track.hits().size() != 6) {
+                //if (track.hits().size() != 6) {
+                if (track.hitIds().size() != 6) {
                     isGolden = false;
                     break;
                 }
 
-                if (modules.size() != 6   && (TGT1) && track.sector()<2 ) {
-                    //golden muon step #2: 1 hit/module
-                    isGolden = false;
-                    break;
-                }
-                else if (modules.size() != 6   && (TGT2 && useTightTrackCutTgt2_)  ) {
-
-                    //golden muon step #2: 1 hit/module
-                    isGolden = false;
-                    break;
-                }
-                else if (modules.size() < 5   && (TGT2 && !useTightTrackCutTgt2_)  ) {
-                    //golden muon step #2: 1 hit/module
-                    isGolden = false;
-                    break;
-                }
-                /*
+                /* //debug
                 if(i==26 || i==44 || i==59 || i==96){
+
+                    std::cout << "DEBUG Event: "<<i<<std::endl;
+                    std::cout << "DEBUG modules for this track: ";
+                    for (auto m : moduleList) std::cout << m << " ";
+                    std::cout << std::endl;
+
+                    std::cout << "DEBUG hitid for this track: ";
+                    for (auto m : hitIDList) std::cout << m << " ";
+                    std::cout << std::endl;
+
+                    // find duplicates
+                    std::unordered_map<int,int> freq;
+                    for (auto m : moduleList) freq[m]++;
+
+                    std::cout << "Duplicates: ";
+                    for (auto& kv : freq) {
+                        if (kv.second > 1) {
+                            std::cout << "module " << kv.first << " appears " << kv.second << " times; ";
+                        }
+                    }
+                    std::cout << std::endl;
+
+
+                    const auto& trackhits = track.hits(hits);// reco_->reconstructedHits();
+
                     // === DEBUG start ===
 
                     std::cout <<"event: "<<i<< " [DEBUG] modules.size() = " << modules.size() << ", expected 6." << std::endl;
 
                     // print raw moduleID list including duplicates
                     std::cout << "[DEBUG] moduleID list for this track: ";
-                    std::vector<int> moduleList;
-                    moduleList.reserve(track.hits().size());
-                    for (auto const& h : track.hits()) {
-                        moduleList.push_back(h.moduleID());
+                    std::vector<int> moduleList2;
+                    moduleList2.reserve(trackhits.size());
+                    for (auto const& h : trackhits) {
+                        moduleList2.push_back(h.moduleID());
                         std::cout << h.moduleID() << " ";
                     }
                     std::cout << std::endl;
 
+                    std::cout << "[DEBUG] hit id for this track: ";
+                    for (auto const& h : trackhits) {
+                        std::cout << h.index() << " ";
+                    }
+                    std::cout << std::endl;
+
                     // find duplicates
-                    std::unordered_map<int,int> freq;
-                    for (auto m : moduleList) freq[m]++;
+                    std::unordered_map<int,int> freq2;
+                    for (auto m : moduleList2) freq2[m]++;
                     std::cout << "[DEBUG] duplicates: ";
                     bool hasDup = false;
-                    for (auto& kv : freq) {
+                    for (auto& kv : freq2) {
                         if (kv.second > 1) {
                             hasDup = true;
                             std::cout << "module " << kv.first << " x" << kv.second << "; ";
@@ -174,8 +245,30 @@ void FairMUanalyzer::AnalyzeTRK() {
                     if (!hasDup) std::cout << "none";
                     std::cout << std::endl;
                     // === DEBUG end ===
+
+                    std::cout<<"track sector: "<<track.sector()<<std::endl;
+
                 }
                 */
+
+                if (modules.size() != 6   && (TGT1) && track.sector()<2 ) {
+                    //golden muon step #2: 1 hit/module
+                    isGolden = false;
+                    break;
+                }
+                else if (modules.size() != 6   && (TGT2 && useTightTrackCutTgt2_)  ) {
+                    //golden muon step #2: 1 hit/module
+                    
+                    isGolden = false;
+                    break;
+                }
+                else if (modules.size() < 5   && (TGT2 && !useTightTrackCutTgt2_)  ) {
+                    //golden muon step #2: 1 hit/module
+                    isGolden = false;
+                    break;
+                }
+
+                
 
                 //golden muon step #3: reduced chi2
                 //if(track.chi2perDegreeOfFreedom()>=2)isGolden = false;
