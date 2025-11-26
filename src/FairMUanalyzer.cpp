@@ -261,17 +261,17 @@ void FairMUanalyzer::SetOutputPrefix(const std::string& prefix) {
 
 
 TVector3 FairMUanalyzer::getXYfromHitMF(const MUonERecoOutputHitAnalysis& hit) {
-    double pos = hit.positionPerpendicular();
+    double perp = hit.positionPerpendicular();
     double x = 0, y = 0;
     int moduleID = hit.moduleID();
 
     switch(moduleID) {
         case 0:
         case 2:
-            x = pos; y = 0; break;
+            x = perp; y = 0; break;
         case 1:
         case 3:
-            x = 0; y = pos; break;
+            x = 0; y = perp; break;
         default:
             std::cerr << "Unknown moduleID: " << moduleID << std::endl;
             break;
