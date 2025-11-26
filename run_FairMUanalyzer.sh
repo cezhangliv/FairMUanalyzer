@@ -144,8 +144,9 @@
 #./run_FairMUanalyzerv0172_debug /eos/experiment/mu-e/reco/2025/RelVal/TEST_v0.17.2/Data2025_run32_singleMu1_sharedHit0_recoTEST_v0.17.2.root result/FairMUanalyzer_TEST_v0.17.2_Data2025_run32_singleMu1_sharedHit0_recoTEST_v0.17.2_debug -1 1
 
 ### after debug, final validation
+### 26 Nov version - good!!!!!
 
-: '
+
 ./run_FairMUanalyzer_v0176 /eos/experiment/mu-e/reco/2025/RelVal/v0.17.6/Data2025_run32_singleMu1_sharedHit0_recov0.17.6.root result/25Nov_FairMUanalyzer_v0.17.6_Data2025_run32_singleMu1_sharedHit0_recov0.17.6 -1 1
 ./run_FairMUanalyzer_v0176 /eos/experiment/mu-e/reco/2025/RelVal/v0.17.6/Data2025_run32_singleMu0_sharedHit0_recov0.17.6.root result/25Nov_FairMUanalyzer_v0.17.6_Data2025_run32_singleMu0_sharedHit0_recov0.17.6 -1 0
 
@@ -154,8 +155,6 @@
 
 ./run_FairMUanalyzer_v0176 /eos/experiment/mu-e/reco/2025/RelVal/v0.17.6/Data2025_run32_singleMu1_sharedHit2_recov0.17.6.root result/25Nov_FairMUanalyzer_v0.17.6_Data2025_run32_singleMu1_sharedHit2_recov0.17.6 -1 1
 ./run_FairMUanalyzer_v0176 /eos/experiment/mu-e/reco/2025/RelVal/v0.17.6/Data2025_run32_singleMu0_sharedHit2_recov0.17.6.root result/25Nov_FairMUanalyzer_v0.17.6_Data2025_run32_singleMu0_sharedHit2_recov0.17.6 -1 0
-'
-
 
 ./run_FairMUanalyzer_v0172 /eos/experiment/mu-e/reco/2025/RelVal/TEST_v0.17.2/Data2025_run32_singleMu1_sharedHit0_recoTEST_v0.17.2.root result/25Nov_FairMUanalyzer_TEST_v0.17.2_Data2025_run32_singleMu1_sharedHit0_recoTEST_v0.17.2 -1 1
 ./run_FairMUanalyzer_v0172 /eos/experiment/mu-e/reco/2025/RelVal/TEST_v0.17.2/Data2025_run32_singleMu0_sharedHit0_recoTEST_v0.17.2.root result/25Nov_FairMUanalyzer_TEST_v0.17.2_Data2025_run32_singleMu0_sharedHit0_recoTEST_v0.17.2 -1 0
@@ -171,14 +170,17 @@
 ./run_FairMUanalyzer_v0176_MF /eos/experiment/mu-e/reco/2025/RelVal/v0.17.6/Data2025_run32_passingMu_sharedHit0_recov0.17.6.root result/25Nov_FairMUanalyzer_v0.17.6_Data2025_run32_passingMu_sharedHit0_recov0.17.6 -1 -1
 
 
+### not useful anymore
+
+: '
 ./run_FairMUanalyzerv0176_debug /eos/experiment/mu-e/reco/2025/RelVal/v0.17.6/Data2025_run32_singleMu1_sharedHit0_recov0.17.6.root result/26Nov_debug_FairMUanalyzer_v0.17.6_Data2025_run32_singleMu1_sharedHit0_recov0.17.6 -1 1
 
 ./run_FairMUanalyzer_v0172_MF_debug /eos/experiment/mu-e/reco/2025/RelVal/TEST_v0.17.2/Data2025_run32_passingMu_sharedHit0_recoTEST_v0.17.2.root result/25Nov_debug_FairMUanalyzer_TEST_v0.17.2_Data2025_run32_passingMu_sharedHit0_recoTEST_v0.17.2 -1 -1
 
 ./run_FairMUanalyzer_v0176_MF_debug /eos/experiment/mu-e/reco/2025/RelVal/v0.17.6/Data2025_run32_passingMu_sharedHit0_recov0.17.6.root result/25Nov_debug_FairMUanalyzer_v0.17.6_Data2025_run32_passingMu_sharedHit0_recov0.17.6 -1 -1
+'
 
 
-
-
+##################
 
 
