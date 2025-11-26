@@ -37,16 +37,6 @@ void FairMUanalyzer::AnalyzeMF() {
         }
         h_hits_zcut->Fill(nhits_zcut);
 
-        
-
-        std::unordered_map<int, MUonERecoOutputHitAnalysis> hitMap;
-        hitMap.reserve(hits.size());
-
-        for (const auto& h : hits) {
-            if (h.stationID() == 3) continue;
-            hitMap[h.index()] = h;  
-        }
-
         if (n_muons >= 1 && n_muons <= 4) {
             for (auto const* track : muon_tracks) {
                 int nhit_zcut = 0;
@@ -70,9 +60,9 @@ void FairMUanalyzer::AnalyzeMF() {
 
         if (tracks.size() == 3 
             &&
-            tracks[0].hitIds().size() == 6 &&
-            tracks[1].hitIds().size() == 6 &&
-            tracks[2].hitIds().size() == 6
+            tracks[0].hits().size() == 6 &&
+            tracks[1].hits().size() == 6 &&
+            tracks[2].hits().size() == 6
             ){
 
             bool isGolden = true;
@@ -80,19 +70,15 @@ void FairMUanalyzer::AnalyzeMF() {
             for (auto const& track : tracks) {
                 std::set<int> modules;
 
-                for (auto const& hitId : track.hitIds()) {
-                    auto it = hitMap.find(hitId);
-                    if (it != hitMap.end()) {
-                        const auto& h = it->second;
-                        modules.insert(h.moduleID());
-                    }
+                /// need a further fix - new version 21Nov25, 0.17.6
+                for (auto const& h : track.hits()) {
+                    modules.insert(h.moduleID());
                 }
-
+                
                 if (modules.size() != 6) {
                     isGolden = false;
                     break;
                 }
-
                 sectors.insert(track.sector());
             }
 
@@ -109,9 +95,9 @@ void FairMUanalyzer::AnalyzeMF() {
                     int muID = muonTrack.muonId();
                     TVector3 p(muonTrack.xSlope(), muonTrack.ySlope(), 1.0);
                     p = p.Unit();
-                    //TVector3 x0(muonTrack.x0(), muonTrack.y0(), muonTrack.z0());
-                    // need to fix - new version 0.17.6
-                    TVector3 x0(muonTrack.x0(), muonTrack.y0(), 0);
+                    TVector3 x0(muonTrack.x0(), muonTrack.y0(), muonTrack.z0());
+
+                    if(muonTrack.z0()!=0)std::cout<<"muonTrack.z0(): "<<muonTrack.z0()<<std::endl;
 
                     for (const auto& hit : hits) {
                         if (hit.z() < 1000) continue;
