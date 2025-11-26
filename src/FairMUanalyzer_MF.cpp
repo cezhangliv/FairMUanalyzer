@@ -11,6 +11,8 @@ void FairMUanalyzer::AnalyzeMF() {
 
     //for (Long64_t i = 0; i < N; ++i) {
     for (Long64_t i = 0; i < 100; ++i) {
+
+        if(i!=6)continue;
         
         if (i % (N / 10) == 0 || i == N - 1) {double progress = 100.0 * i / N;printf("Processing: %.1f%% (%lld/%lld)\n", progress, i, N);}
 

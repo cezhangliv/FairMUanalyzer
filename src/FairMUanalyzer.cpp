@@ -277,7 +277,17 @@ TVector3 FairMUanalyzer::getXYfromHitMF(const MUonERecoOutputHitAnalysis& hit) {
             break;
     }
 
-    return TVector3(x, y, hit.z());
+    //return TVector3(x, y, hit.z());
+    TVector3 v(x, y, hit.z());
+
+    std::cout << "[INSIDE] perp=" << perp 
+              << "  x=" << x 
+              << "  y=" << y 
+              << "  z=" << hit.z() 
+              << "  v=" << v.X() << "," << v.Y() << "," << v.Z() 
+              << std::endl;
+
+    return v;
 }
 
 
