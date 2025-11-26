@@ -259,7 +259,7 @@ void FairMUanalyzer::SetOutputPrefix(const std::string& prefix) {
     std::cout << "outputPrefix set to: " << outputPrefix_.Data() << std::endl;
 }
 
-
+/*
 TVector3 FairMUanalyzer::getXYfromHitMF(const MUonERecoOutputHitAnalysis& hit) {
     double perp = hit.positionPerpendicular();
     double x = 0, y = 0;
@@ -288,6 +288,20 @@ TVector3 FairMUanalyzer::getXYfromHitMF(const MUonERecoOutputHitAnalysis& hit) {
               << std::endl;
 
     return v;
+}
+*/
+TVector3 FairMUanalyzer::getXYfromHitMF(const MUonERecoOutputHitAnalysis& hit) {
+    double perp = hit.positionPerpendicular();
+    double x=0, y=0;
+
+    switch(hit.moduleID()){
+        case 0: case 2: x = perp; break;
+        case 1: case 3: y = perp; break;
+        default: std::cerr << "Unknown moduleID: " << hit.moduleID() << std::endl; break;
+    }
+
+    TVector3 v(x, y, hit.z());  
+    return v;                   
 }
 
 

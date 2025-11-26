@@ -107,7 +107,7 @@ void FairMUanalyzer::AnalyzeTRK() {
             if(h.stationID() == 3) continue;
             hitMap[h.index()] = &h;
         }
-        */
+
 
         std::unordered_map<int, MUonERecoOutputHitAnalysis> hitMap;
         hitMap.reserve(hits.size());
@@ -116,10 +116,17 @@ void FairMUanalyzer::AnalyzeTRK() {
             if (h.stationID() == 3) continue;
             hitMap[h.index()] = h;  
         }
+        */
+
+        std::unordered_map<int, const MUonERecoOutputHitAnalysis*> hitMap;
+        hitMap.reserve(hits.size());
+
+        for (const auto& h : hits) {
+            if (h.stationID() == 3) continue;
+            hitMap[h.index()] = &h;  
+        }
 
 
-
-        
         //golden muon step #1: N tracks
 
         //if(useTightTrackCutTgt2_ && tracks.size()==4)std::cout<<"good"<<std::endl;
@@ -162,8 +169,11 @@ void FairMUanalyzer::AnalyzeTRK() {
 
                         //const MUonERecoOutputHitAnalysis* h = it->second;
                         //modules.insert(h->moduleID());
-                        moduleList.push_back(h.moduleID());
-                        hitIDList.push_back(h.index());
+
+                        const MUonERecoOutputHitAnalysis* h = it->second;  
+                        modules.insert(h->moduleID());
+                        moduleList.push_back(h->moduleID());
+                        hitIDList.push_back(h->index());
 
                         //if(i==26){
                         //    std::cout<<"h->moduleID(): "<<h->moduleID()<<std::endl;

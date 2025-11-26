@@ -41,13 +41,22 @@ void FairMUanalyzer::AnalyzeMF() {
         h_hits_zcut->Fill(nhits_zcut);
 
         
-
+        /*
         std::unordered_map<int, MUonERecoOutputHitAnalysis> hitMap;
         hitMap.reserve(hits.size());
 
         for (const auto& h : hits) {
             if (h.stationID() == 3) continue;
             hitMap[h.index()] = h;  
+        }
+        */
+
+        std::unordered_map<int, const MUonERecoOutputHitAnalysis*> hitMap;
+        hitMap.reserve(hits.size());
+
+        for (const auto& h : hits) {
+            if (h.stationID() == 3) continue;
+            hitMap[h.index()] = &h;  
         }
 
         if (n_muons >= 1 && n_muons <= 4) {
@@ -86,8 +95,10 @@ void FairMUanalyzer::AnalyzeMF() {
                 for (auto const& hitId : track.hitIds()) {
                     auto it = hitMap.find(hitId);
                     if (it != hitMap.end()) {
-                        const auto& h = it->second;
-                        modules.insert(h.moduleID());
+                        //const auto& h = it->second;
+                        //modules.insert(h.moduleID());
+                        const MUonERecoOutputHitAnalysis* h = it->second;  // 取指针
+                        modules.insert(h->moduleID());
                     }
                 }
 
