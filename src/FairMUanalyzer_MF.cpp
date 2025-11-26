@@ -107,9 +107,9 @@ void FairMUanalyzer::AnalyzeMF() {
                     int muID = muonTrack.muonId();
                     TVector3 p(muonTrack.xSlope(), muonTrack.ySlope(), 1.0);
                     p = p.Unit();
-                    TVector3 x0(muonTrack.x0(), muonTrack.y0(), muonTrack.z0());
+                    //TVector3 x0(muonTrack.x0(), muonTrack.y0(), muonTrack.z0());
                     // need to fix - new version 0.17.6
-                    //TVector3 x0(muonTrack.x0(), muonTrack.y0(), 0);
+                    TVector3 x0(muonTrack.x0(), muonTrack.y0(), 0);
 
                     for (const auto& hit : hits) {
                         if (hit.z() < 1000) continue;
