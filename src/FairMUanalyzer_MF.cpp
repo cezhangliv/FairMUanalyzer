@@ -122,10 +122,15 @@ void FairMUanalyzer::AnalyzeMF() {
                         TVector3 pos = getXYfromHitMF(hit);
                         double dist = computeSigned2DResidualMF(p, x0, pos, hit.moduleID());
 
-                        if(abs(dist)>2){
+                        //if(abs(dist)>2){
+                        if(i==6){
                             std::cout<<i<<" event with a dist "<<dist<<" at hit "<<ihit
                             <<" "<<hit.moduleID()
                             //<<" "<<hit.muonIds()
+                            <<" "<<hit.positionPerpendicular()
+                            <<" "<<pos.X()
+                            <<" "<<pos.Y()
+                            <<" "<<pos.Z()
                             <<" "<<muonTrack.x0()
                             <<" "<<muonTrack.y0()
                             <<" "<<muonTrack.xSlope()
