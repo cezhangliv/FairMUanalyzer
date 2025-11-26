@@ -164,8 +164,8 @@ void FairMUanalyzer::AnalyzeTRK() {
                     auto it = hitMap.find(hitId);
                     if (it != hitMap.end()) {
                         
-                        const auto& h = it->second;   
-                        modules.insert(h.moduleID());
+                        //const auto& h = it->second;   
+                        //modules.insert(h.moduleID());
 
                         //const MUonERecoOutputHitAnalysis* h = it->second;
                         //modules.insert(h->moduleID());
