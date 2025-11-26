@@ -9,10 +9,10 @@ void FairMUanalyzer::AnalyzeMF() {
     Long64_t N = runN_>0?runN_:cbmsim_->GetEntries();
     std::cout << "Processing " << N << " ** passing muon ** events..." << std::endl;
 
-    //for (Long64_t i = 0; i < N; ++i) {
-    for (Long64_t i = 0; i < 100; ++i) {
+    for (Long64_t i = 0; i < N; ++i) {
+    //for (Long64_t i = 0; i < 100; ++i) {
 
-        if(i!=6)continue;
+        //if(i!=6)continue;
         
         if (i % (N / 10) == 0 || i == N - 1) {double progress = 100.0 * i / N;printf("Processing: %.1f%% (%lld/%lld)\n", progress, i, N);}
 
@@ -136,6 +136,7 @@ void FairMUanalyzer::AnalyzeMF() {
                         double dist = computeSigned2DResidualMF(p, x0, pos, hit.moduleID());
 
                         //if(abs(dist)>2){
+                        /*
                         if(i==6){
                             std::cout<<i<<" event with a dist "<<dist<<" at hit "<<ihit
                             <<" "<<hit.moduleID()
@@ -151,6 +152,7 @@ void FairMUanalyzer::AnalyzeMF() {
                             <<" "<<muonTrack.muonId()
                             <<std::endl;
                         }
+                        */
 
                         const auto& muIDs = hit.muonIds();
                         if (std::find(muIDs.begin(), muIDs.end(), muID) != muIDs.end()) {
