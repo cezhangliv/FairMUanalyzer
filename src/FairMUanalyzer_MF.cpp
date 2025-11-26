@@ -125,7 +125,7 @@ void FairMUanalyzer::AnalyzeMF() {
                         if(abs(dist)>2){
                             std::cout<<i<<" event with a dist "<<dist<<" at hit "<<ihit
                             <<" "<<hit.moduleID()
-                            <<" "<<hit.muonIds()
+                            //<<" "<<hit.muonIds()
                             <<" "<<muonTrack.x0()
                             <<" "<<muonTrack.y0()
                             <<" "<<muonTrack.xSlope()
