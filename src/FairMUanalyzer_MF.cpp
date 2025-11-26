@@ -41,7 +41,7 @@ void FairMUanalyzer::AnalyzeMF() {
         hitMap.reserve(hits.size());
 
         for (const auto& h : hits) {
-            if(h.stationID() != 3) continue;
+            if(h.stationID() == 3) continue;
             hitMap[h.index()] = &h;
         }
 
